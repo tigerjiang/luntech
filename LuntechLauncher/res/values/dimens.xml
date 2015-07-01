@@ -1,0 +1,41 @@
+<resources>
+
+    <dimen name="global_height">1080px</dimen>
+    <dimen name="global_width">1920px</dimen>
+    <dimen name="global_margin_left">95px</dimen>
+    <dimen name="global_margin_right">95px</dimen>
+    <dimen name="global_margin_top">20px</dimen>
+    <dimen name="global_margin_bottom">50px</dimen>
+    <dimen name="global_thumb_1_width">1080px</dimen>
+    <dimen name="global_thumb_1_height">610px</dimen>
+    <dimen name="global_thumb_2_width">630px</dimen>
+    <dimen name="global_thumb_2_height">295px</dimen>
+    <dimen name="global_thumb_3_width">630px</dimen>
+    <dimen name="global_thumb_3_height">295px</dimen>
+    <dimen name="global_thumb_shadow_height">70px</dimen>
+    <dimen name="global_category_item_width">230px</dimen>
+    <dimen name="global_category_item_height">190px</dimen>
+    <dimen name="global_horizontal_devider_height">20px</dimen>
+    <dimen name="global_vertical_devider_height">20px</dimen>
+     <dimen name="global_category_app_logo_margin_top">10px</dimen>
+    <dimen name="global_category_layout_wiith">1710px</dimen>
+    <dimen name="global_category_layout_height">190px</dimen>
+    <dimen name="global_category_app_logo_width">148px</dimen>
+    <dimen name="global_category_app_logo_height">136px</dimen>
+    <dimen name="global_category_app_shadow_height">60px</dimen>
+    <dimen name="global_ad_layout_width">1710px</dimen>
+    <dimen name="global_ad_layout_height">60px</dimen>
+    <dimen name="global_ad_content_devider">250px</dimen>
+    <dimen name="global_status_layout_width">1730px</dimen>
+    <dimen name="global_status_layout_height">90px</dimen>
+    <dimen name="global_status_horizontal_devider_1">16px</dimen>
+     <dimen name="global_status_horizontal_devider_2">12px</dimen>
+    <dimen name="global_iptv_logo_layout_height">90px</dimen>
+    <dimen name="global_iptv_logo_layout_width">236px</dimen>
+    <dimen name="global_vertical_devider_height_1">50px</dimen>
+    <dimen name="global_vertical_devider_height_2">30px</dimen>
+    <dimen name="global_text_size_large">40px</dimen>
+    <dimen name="global_text_size_small">24px</dimen>
+    <dimen name="global_text_size_middle">30px</dimen>
+
+</resources>

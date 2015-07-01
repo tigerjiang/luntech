@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/status_layout"
+    android:layout_width="@dimen/global_status_layout_width"
+    android:layout_height="@dimen/global_status_layout_height"
+    android:gravity="bottom" >
+
+    <ImageView
+        android:id="@+id/iptv_icon"
+        android:layout_width="@dimen/global_iptv_logo_layout_width"
+        android:layout_height="@dimen/global_iptv_logo_layout_height"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/iptv_logo" >
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/luntech_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
+        android:src="@drawable/luntech_logo" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/time_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/global_vertical_devider_height_1"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
+        android:layout_toLeftOf="@+id/luntech_icon"
+        android:text="@string/time"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_text_size_large" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/wifi_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/global_status_horizontal_devider_1"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
+        android:layout_toLeftOf="@+id/time_view"
+        android:src="@drawable/wifi_signal" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/temperature_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/global_horizontal_devider_height"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
+        android:layout_toLeftOf="@+id/wifi_status"
+        android:text="@string/temperature"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_text_size_large" >
+    </TextView>
+
+    <ImageView
+        android:id="@+id/weather_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/global_status_horizontal_devider_2"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
+        android:layout_toLeftOf="@+id/temperature_view" >
+    </ImageView>
+
+    <ImageView
+        android:id="@+id/usb_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
+        android:layout_toLeftOf="@+id/weather_status" >
+    </ImageView>
+
+</merge>

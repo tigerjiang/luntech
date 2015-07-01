@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">CustomLauncher</string>
+    <string name="global_thumb_2_label">红石在线</string>
+    <string name="global_thumb_3_label">物业服务</string>
+    <string name="categore_app_1_label">影视点播</string>
+    <string name="categore_app_2_label">智慧社区</string>
+    <string name="categore_app_3_label">智能家居</string>
+    <string name="categore_app_4_label">应用市场</string>
+    <string name="categore_app_5_label">更多应用</string>
+    <string name="categore_app_6_label">本地播放</string>
+    <string name="categore_app_7_label">系统设置</string>
+    
+    <string name="time">8:20</string>
+    <string name="temperature">20</string>
+
+</resources>

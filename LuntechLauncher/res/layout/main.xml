@@ -1,0 +1,103 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:paddingBottom="@dimen/global_margin_bottom"
+    android:paddingLeft="@dimen/global_margin_left"
+    android:paddingRight="@dimen/global_margin_right"
+    android:paddingTop="@dimen/global_margin_top" >
+
+    <com.luntech.launcher.view.TvStatusBar
+        android:id="@+id/status_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/middle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/status_layout"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2" >
+
+        <ImageView
+            android:id="@+id/thumb_1_view"
+            android:layout_width="@dimen/global_thumb_1_width"
+            android:layout_height="@dimen/global_thumb_1_height"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/global_thumb_1_logo" />
+
+        <RelativeLayout
+            android:id="@+id/thumb_2_view"
+            android:layout_width="@dimen/global_thumb_2_width"
+            android:layout_height="@dimen/global_thumb_2_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/global_horizontal_devider_height"
+            android:layout_toRightOf="@+id/thumb_1_view"
+            android:background="@drawable/global_thumb_2_logo" >
+
+            <ImageView
+                android:id="@+id/thumb_2_cover_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/global_thumb_2_shadow" />
+
+            <TextView
+                android:id="@+id/thumb_2_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="@string/global_thumb_2_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_large" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/thumb_3_view"
+            android:layout_width="@dimen/global_thumb_3_width"
+            android:layout_height="@dimen/global_thumb_3_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/thumb_2_view"
+            android:layout_marginLeft="@dimen/global_horizontal_devider_height"
+            android:layout_marginTop="@dimen/global_vertical_devider_height"
+            android:layout_toRightOf="@+id/thumb_1_view"
+            android:background="@drawable/global_thumb_3_logo" >
+
+            <ImageView
+                android:id="@+id/thumb_3_cover_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:src="@drawable/global_thumb_3_shadow" />
+
+            <TextView
+                android:id="@+id/thumb_3_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="@string/global_thumb_3_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_large" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/category_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/global_vertical_devider_height" >
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ad_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/global_vertical_devider_height" >
+    </RelativeLayout>
+
+</RelativeLayout>
