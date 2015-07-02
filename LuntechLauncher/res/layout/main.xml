@@ -86,18 +86,79 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <RelativeLayout
+    <GridView
         android:id="@+id/category_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/global_vertical_devider_height" >
-    </RelativeLayout>
+        android:layout_height="@dimen/global_category_layout_height"
+        android:layout_below="@+id/middle_layout"
+        android:layout_marginTop="@dimen/global_vertical_devider_height"
+        android:columnWidth="@dimen/global_horizontal_devider_height"
+        android:numColumns="7" />
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/ad_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/global_vertical_devider_height" >
-    </RelativeLayout>
+        android:layout_height="@dimen/global_ad_layout_height"
+        android:layout_below="@+id/category_layout"
+        android:layout_marginTop="@dimen/global_vertical_devider_height"
+        android:background="@drawable/ad_information_bg"
+        android:orientation="horizontal"
+        android:weightSum="2" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/logo_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/global_ad_content_devider_1"
+                android:src="@drawable/ad_star" />
+
+            <TextView
+                android:id="@+id/ad_content_1"
+                android:layout_width="@dimen/global_ad_text_width"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/global_ad_content_devider_2"
+                android:ellipsize="marquee"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:gravity="center|left"
+                android:singleLine="true"
+                android:text="@string/ad_text_1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_small" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/logo_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/global_ad_content_devider_1"
+                android:src="@drawable/ad_star" />
+
+            <TextView
+                android:id="@+id/ad_content_2"
+                android:layout_width="@dimen/global_ad_text_width"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/global_ad_content_devider_2"
+                android:ellipsize="end"
+                android:gravity="center|left"
+                android:singleLine="true"
+                android:text="@string/ad_text_2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_small" />
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>

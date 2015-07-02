@@ -11,7 +11,8 @@
     <string name="categore_app_5_label">更多应用</string>
     <string name="categore_app_6_label">本地播放</string>
     <string name="categore_app_7_label">系统设置</string>
-    
+    <string name="ad_text_1">智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现...</string>
+    <string name="ad_text_2">智能社区，为你带来智能的自然之家...</string>
     <string name="time">8:20</string>
     <string name="temperature">20</string>
 

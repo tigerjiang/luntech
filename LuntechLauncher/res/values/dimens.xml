@@ -25,7 +25,9 @@
     <dimen name="global_category_app_shadow_height">60px</dimen>
     <dimen name="global_ad_layout_width">1710px</dimen>
     <dimen name="global_ad_layout_height">60px</dimen>
-    <dimen name="global_ad_content_devider">250px</dimen>
+    <dimen name="global_ad_content_devider_1">4px</dimen>
+    <dimen name="global_ad_text_width">580px</dimen>
+     <dimen name="global_ad_content_devider_2">8px</dimen>
     <dimen name="global_status_layout_width">1730px</dimen>
     <dimen name="global_status_layout_height">90px</dimen>
     <dimen name="global_status_horizontal_devider_1">16px</dimen>

@@ -2,25 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/category_app_view"
     android:layout_width="@dimen/global_category_item_width"
-    android:layout_height="@dimen/global_category_item_height"
-    android:background="@drawable/categore_app_1_bg" >
+    android:layout_height="@dimen/global_category_item_height" >
+
+    <ImageView
+        android:id="@+id/app_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/categore_app_1_bg" />
+
     <ImageView
         android:id="@+id/app_logo"
         android:layout_width="@dimen/global_category_app_logo_width"
         android:layout_height="@dimen/global_category_app_logo_height"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/categore_app_1_logo"
-        android:layout_marginTop="@dimen/global_category_app_logo_margin_top" />
-    
+        android:layout_marginTop="@dimen/global_category_app_logo_margin_top"
+        android:src="@drawable/categore_app_1_logo" />
+
     <ImageView
-        android:id="@+id/category_cover_view"
+        android:id="@+id/cover_view"
         android:layout_width="match_parent"
-        android:src="@drawable/categore_app_1_shadow"
         android:layout_height="@dimen/global_category_app_shadow_height"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/categore_app_1_shadow" />
 
     <TextView
-        android:id="@+id/thumb_2_label"
+        android:id="@+id/app_label"
         android:layout_width="match_parent"
         android:layout_height="@dimen/global_category_app_shadow_height"
         android:layout_alignParentBottom="true"
