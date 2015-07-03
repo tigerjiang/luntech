@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -32,10 +33,10 @@ public class Launcher extends Activity {
         mContext = getApplicationContext();
         parseCategoryItem();
         initView();
-        Intent intentService = new Intent();
-        intentService.setClass(this, ChangeService.class);
-        startService(intentService);
-        registerReceiver();
+//        Intent intentService = new Intent();
+//        intentService.setClass(this, ChangeService.class);
+//        startService(intentService);
+//        registerReceiver();
     }
 
     private void initView() {
@@ -104,5 +105,10 @@ public class Launcher extends Activity {
         item7.mShadowIcon = mResources.getDrawable(R.drawable.categore_app_7_shadow);
         item7.mLabel = mResources.getString(R.string.categore_app_7_label);
         mAppList.add(6, item7);
+    }
+    
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

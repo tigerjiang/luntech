@@ -1,5 +1,5 @@
-bin
-gen
-obj
+/bin
+/gen
+/obj
 .settings
 

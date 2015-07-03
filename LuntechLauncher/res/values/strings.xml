@@ -15,5 +15,27 @@
     <string name="ad_text_2">智能社区，为你带来智能的自然之家...</string>
     <string name="time">8:20</string>
     <string name="temperature">20</string>
+    <string name="date_time_today">今天</string>
+    <string name="date_time_yesterday">昨天</string>
+    <string name="date_time_hr">小时</string>
+    <string name="date_time_hrs">小时</string>
+    <string name="date_time_min">分钟</string>
+    <string name="date_time_mins">分钟</string>
+    <string name="date_time_sec">秒</string>
+    <string name="date_time_section">期</string>
+    <string name="date_thounsand">%1$s万</string>
+    <string name="date_less_than_thounsand">%1$s</string>
+    <string name="date_time_format_time_short">H:mm</string>
+    <string name="date_time_format_time_short_12">h:mm</string>
+    <string name="date_time_format_time_am_pm">h:mm a</string>
+    <string name="date_time_format_am_pm">a</string>
+    <string name="date_time_format_date_short_full">MM/dd/yy</string>
+    <string name="date_time_format_month_day">MMM d</string>
+    <string name="date_time_format_month_year">MMM yyyy</string>
+    <string name="date_time_format_date_long">MMM dd, yyyy</string>
+    <string name="date_time_format_year">yyyy</string>
+    <string name="date_time_format_day_of_week">EEEE</string>
+    <string name="date_time_format_duration">mm:ss</string>
+    <string name="date_time_format_day_of_week_month_day">EEE, MMM d</string>
 
 </resources>
