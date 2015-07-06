@@ -74,7 +74,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private Resources mResources;
 
-    private long mDelayTime = 3 * 60 * 1000; // 3min
+    private long mDelayTime = 5*1000;// 3 * 60 * 1000; // 3min
     // keep in sync with System Settings -> Network Settings
     private static final String PPPOE_ENABLED = "pppoe_enabled";
     private static final String PPPOE_CONNECTED = "pppoe_connected";
@@ -127,8 +127,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         // register content observers
         final ContentResolver cr = context.getContentResolver();
         // observe PPPoE be enabled or not
-        cr.registerContentObserver(
-                Settings.System.getUriFor(PPPOE_ENABLED), false,
+        cr.registerContentObserver(Settings.System.getUriFor(PPPOE_ENABLED), false,
                 new ContentObserver(mHandler) {
                     @Override
                     public void onChange(boolean selfChange) {
@@ -143,8 +142,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 });
 
         // observe PPPoE connection change
-        cr.registerContentObserver(
-                Settings.System.getUriFor(PPPOE_CONNECTED), false,
+        cr.registerContentObserver(Settings.System.getUriFor(PPPOE_CONNECTED), false,
                 new ContentObserver(mHandler) {
                     @Override
                     public void onChange(boolean selfChange) {
@@ -251,8 +249,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                 // WifiManager uses a handler thread, so we
                                 // don't want
                                 // to keep the reference around forever
-                                final WifiManager wifiManager = (WifiManager)
-                                        mContext.getSystemService(Context.WIFI_SERVICE);
+                                final WifiManager wifiManager = (WifiManager) mContext
+                                        .getSystemService(Context.WIFI_SERVICE);
                                 if (wifiManager != null) {
                                     final WifiInfo info = wifiManager.getConnectionInfo();
                                     rssi = info.getRssi();
@@ -265,7 +263,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             notifyStateChange();
                         }
                     }
-                    break;
+                break;
 
                 case MSG_UPDATE_DATE_TIME:
                     if (DEBUG_MSG) {
@@ -289,37 +287,36 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             }
                         }
                     }
-                    break;
+                break;
                 case MSG_ON_WEATHER_INFO_CHANGED:
                     if (DEBUG_MSG) {
                         Log.d(TAG, "handleMessage(Non UI): MSG_UPDATE_WEATHER_INFO");
                     }
-                    if (mTimeManager != null) {
-                        final long time;
-                        if (msg.obj instanceof Long) {
-                            time = ((Long) msg.obj).longValue();
-                        } else {
-                            time = System.currentTimeMillis();
-                        }
-
-                        synchronized (mState) {
-                            mState.setDate(mTimeManager.formatDateTime(time,
-                                    TimeManager.DateTimeFormat.DAY_OF_WEEK_MONTH_DAY));
-                            mState.setTime(mTimeManager.formatDateTime(time,
-                                    TimeManager.DateTimeFormat.TIME_SHORT));
-                            if (mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
-                                notifyStateChange();
-                            }
+                    final String[] weatherInfo;
+                    if (msg.obj instanceof String[]) {
+                        weatherInfo = (String[]) msg.obj;
+                    } else {
+                        weatherInfo = new String[] {
+                                "", ""
+                        };
+                    }
+                    Log.d(TAG, "weather info "+weatherInfo);
+                    synchronized (mState) {
+                        Drawable weatherIcon = getWeatherIcon(weatherInfo[0]);
+                        mState.setWeatherIcon(weatherIcon);
+                        mState.setTemperature(weatherInfo[1]);
+                        if (mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
+                            notifyStateChange();
                         }
                     }
-                    break;
+                break;
 
                 default:
                     if (DEBUG_MSG) {
                         Log.d(TAG, "handleMessage(Non UI): unhandled msg=" + msg);
                     }
                     super.handleMessage(msg);
-                    break;
+                break;
             }
         }
     }
@@ -358,8 +355,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
     @Override
     public void onTimeChanged(long time) {
         // always send this so that we don't miss any time updates
-        mHandler.obtainMessage(NonUIHandler.MSG_UPDATE_DATE_TIME,
-                new Long(time)).sendToTarget();
+        mHandler.obtainMessage(NonUIHandler.MSG_UPDATE_DATE_TIME, new Long(time)).sendToTarget();
     }
 
     private void processState(boolean refreshAll) {
@@ -380,7 +376,12 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     mTimeView.setText(mState.getTime());
                     mState.clearChanges(TvStatus.DATE_TIME_INFO);
                 }
-
+                // Weather info
+                if (refreshAll || mState.hasChanges(TvStatus.WEATHER_INFO)) {
+                    mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
+                    mTemperatureView.setText(mState.getTemperature());
+                    mState.clearChanges(TvStatus.DATE_TIME_INFO);
+                }
             }
         }
     }
@@ -416,11 +417,11 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             switch (msg.what) {
                 case MSG_STATE_CHANGE:
                     layout.processState(false);
-                    break;
+                break;
 
                 default:
                     super.handleMessage(msg);
-                    break;
+                break;
             }
         }
     }
@@ -465,8 +466,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         String cityString = null;
         try {
             URL url = new URL("http://whois.pconline.com.cn/ip.jsp?ip=" + ipString);
-            HttpURLConnection connect = (HttpURLConnection) url
-                    .openConnection();
+            HttpURLConnection connect = (HttpURLConnection) url.openConnection();
             InputStream is = connect.getInputStream();
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
             byte[] buff = new byte[256];
@@ -514,13 +514,11 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 URL url = new URL("http://php.weather.sina.com.cn/xml.php?city="
                         + URLEncoder.encode(cityString, "gb2312")
                         + "&password=DJOYnieT8234jlsK&day=0");
-                connection = (HttpURLConnection) url
-                        .openConnection();
+                connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 is = connection.getInputStream();
 
-                DocumentBuilderFactory factory = DocumentBuilderFactory
-                        .newInstance();
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder dombuilder = factory.newDocumentBuilder();
                 Document doc = null;
                 doc = dombuilder.parse(is);
@@ -536,29 +534,24 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                     .getNextSibling()) {
                                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                                     if (node.getNodeName().equals("figure1")) {
-                                        today_conditon = node.getFirstChild()
-                                                .getNodeValue();
+                                        today_conditon = node.getFirstChild().getNodeValue();
                                         String chString = changeWeatherToChinese(today_conditon);
                                         mWeatherDetail = chString;
-                                        mState.setWeatherIcon(icon);
                                     }
                                     if (node.getNodeName().equals("temperature1")) {
-                                        today_temphigh = node.getFirstChild()
-                                                .getNodeValue();
+                                        today_temphigh = node.getFirstChild().getNodeValue();
                                     }
                                     if (node.getNodeName().equals("temperature2")) {
-                                        today_templow = node.getFirstChild()
-                                                .getNodeValue();
+                                        today_templow = node.getFirstChild().getNodeValue();
                                     }
 
-                                    if (today_conditon != null
-                                            && today_temphigh != null && today_templow != null) {
+                                    if (today_conditon != null && today_temphigh != null
+                                            && today_templow != null) {
                                         // TODO
                                         mTemperature = today_templow
                                                 + mResources.getString(R.string.temp_degree) + "~"
                                                 + today_temphigh
                                                 + mResources.getString(R.string.temp_degree);
-                                        mState.setTemperature(mTemperature);
                                         break;
                                     } else {
                                     }
@@ -731,33 +724,27 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
                         if (weather.getNodeType() == Node.ELEMENT_NODE) {
                             for (Node node = weather.getFirstChild(); node != null; node = node
-                                    .getNextSibling())
-                            {
+                                    .getNextSibling()) {
                                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                                     if (node.getNodeName().equals("figure1")) {
-                                        today_conditon = node.getFirstChild()
-                                                .getNodeValue();
+                                        today_conditon = node.getFirstChild().getNodeValue();
                                         String chString = changeWeatherToChinese(today_conditon);
                                         mWeatherDetail = chString;
-                                        mState.setWeatherIcon(icon);
                                     }
                                     if (node.getNodeName().equals("temperature1")) {
-                                        today_temphigh = node.getFirstChild()
-                                                .getNodeValue();
+                                        today_temphigh = node.getFirstChild().getNodeValue();
                                     }
                                     if (node.getNodeName().equals("temperature2")) {
-                                        today_templow = node.getFirstChild()
-                                                .getNodeValue();
+                                        today_templow = node.getFirstChild().getNodeValue();
                                     }
 
-                                    if (today_conditon != null
-                                            && today_temphigh != null && today_templow != null) {
+                                    if (today_conditon != null && today_temphigh != null
+                                            && today_templow != null) {
                                         // TODO
                                         mTemperature = today_templow
                                                 + mResources.getString(R.string.temp_degree) + "~"
                                                 + today_temphigh
                                                 + mResources.getString(R.string.temp_degree);
-                                        mState.setTemperature(mTemperature);
                                         break;
                                     } else {
                                     }
@@ -768,17 +755,14 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 } else {
                     mWeatherDetail = "";
                     mTemperature = mResources.getString(R.string.city_weather_error);
-                    mState.setTemperature(mTemperature);
                 }
             } catch (Exception e) {
                 // TODO: handle exception
                 r = -1;
                 mWeatherDetail = "";
                 mTemperature = mResources.getString(R.string.city_weather_error);
-                mState.setTemperature(mTemperature);
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 try {
                     if (connection != null) {
                         connection.disconnect();
@@ -796,7 +780,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
     private String getUserCity() {
         String cityString = null;
         try {
-            cityString = Settings.Global.getString(mContext.getContentResolver(), "city");
+            cityString = Settings.System.getString(mContext.getContentResolver(), "city");
         } catch (Exception e) {
             Log.e(TAG, "Can't get the use set city");
         }
@@ -810,18 +794,21 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             String localIPString = getCityIP();
             String cityString = getCityByIp(localIPString);
             mCity = cityString;
-            Settings.Global.putString(mContext.getContentResolver(),
-                    "city", mCity);
+            Settings.System.putString(mContext.getContentResolver(), "city", mCity);
             getWeatherByCity(cityString);
 
-        } else
-        {
+        } else {
             searchWeather(userCityString);
         }
 
         if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
-            mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED,
-                    new String[]{mWeatherDetail,mTemperature}).sendToTarget();
+            mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
+                    mWeatherDetail, mTemperature
+            }).sendToTarget();
         }
+    }
+    
+    private Drawable getWeatherIcon(String key){
+        return null;
     }
 }
