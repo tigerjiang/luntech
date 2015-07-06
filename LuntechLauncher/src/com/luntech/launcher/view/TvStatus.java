@@ -11,10 +11,10 @@ public class TvStatus {
 
     public static final int NETWORK_INFO = 0x1;
     public static final int DATE_TIME_INFO = 0x2;
+    public static final int WEATHER_INFO = 0x3;
     public static final int ALL_INFO =
-            NETWORK_INFO | DATE_TIME_INFO;
+            NETWORK_INFO | DATE_TIME_INFO | WEATHER_INFO;
     private int mChanges;
-
 
     // Network info
     private int mNetworkType;
@@ -26,13 +26,19 @@ public class TvStatus {
     private String mDate;
     private String mTime;
 
+    // Weather info
+    private Drawable mWeatherIcon;
+    private String mTemperature;
+
     public TvStatus() {
         mNetworkType = -1;
         mNetworkIcon = null;
         mNetworkName = null;
+        mWeatherIcon = null;
         mNetworkRSSI = 0;
         mDate = null;
         mTime = null;
+        mTemperature = null;
 
     }
 
@@ -47,11 +53,40 @@ public class TvStatus {
         return mNetworkType;
     }
 
+    public void setWeatherIcon(Drawable icon) {
+        if (mWeatherIcon != icon) {
+            mWeatherIcon = icon;
+            mChanges |= WEATHER_INFO;
+        }
+    }
+
+    public Drawable getWeatherIcon() {
+        return mWeatherIcon;
+    }
+
     public void setNetworkIcon(Drawable icon) {
         if (mNetworkIcon != icon) {
             mNetworkIcon = icon;
             mChanges |= NETWORK_INFO;
         }
+    }
+
+    public void setTemperature(String temperature) {
+        if (mTemperature != null) {
+            if (!mTemperature.equals(temperature)) {
+                mTemperature = temperature;
+                mChanges |= WEATHER_INFO;
+            }
+        } else {
+            if (mTemperature != null) {
+                mTime = temperature;
+                mChanges |= WEATHER_INFO;
+            }
+        }
+    }
+
+    public String getTemperature() {
+        return mTemperature;
     }
 
     public Drawable getNetworkIcon() {

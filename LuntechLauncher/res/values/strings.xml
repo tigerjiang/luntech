@@ -37,5 +37,47 @@
     <string name="date_time_format_day_of_week">EEEE</string>
     <string name="date_time_format_duration">mm:ss</string>
     <string name="date_time_format_day_of_week_month_day">EEE, MMM d</string>
-
+    
+    <!-- weather -->
+    <string name="temp_degree">℃</string>
+    <string name="qing">晴</string>
+    <string name="duoyun">多云</string>
+    <string name="dafeng">大风</string>
+    <string name="ying">阴</string>
+    <string name="zhenyu">阵雨</string>
+    <string name="leizhenyu">雷阵雨</string>
+    <string name="binbao_leizhenyu">冰雹</string>
+    <string name="yujiaxue">雨夹雪</string>
+    <string name="xiaoyu">小雨</string>
+    <string name="zhongyu">中雨</string>
+    <string name="dayu">大雨</string>
+    <string name="dongyu">冻雨</string>
+    <string name="baoyu">暴雨</string>
+    <string name="dabaoyu">大暴雨</string>
+    <string name="te_dabaoyu">特大暴雨</string>
+    <string name="xiaoxue">小雪</string>
+    <string name="zhongxue">中雪</string>
+    <string name="daxue">大雪</string>
+    <string name="baoxue">暴雪</string>
+    <string name="shachengbao">沙尘暴</string>
+    <string name="qiang_shachengbao">强沙尘暴</string>
+    <string name="wu">雾</string>
+    <string name="fuchen">浮尘</string>
+    <string name="yangsha">扬沙</string>
+    <string name="mai">霾</string>
+    <string name="zhenxue">阵雪</string>
+    
+    <!--  city -->
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="string_sheng">省</string>
+    <string name="string_shi">市</string>
+    <string name="string_qu">区</string>
+    <string name="string_xian">县</string>
+    <string name="string_sha">沙</string>
+    <string name="city_config">天气城市设置</string>
+    <string name="default_city">青岛</string>
+    <string name="current_city">当前城市是:</string>
+    <string name="change_city">,请输入新的城市：</string>
+    <string name="city_weather_error">无法获取</string>
 </resources>

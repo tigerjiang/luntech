@@ -197,6 +197,10 @@ public final class R {
         public static final int ad_text_1=0x7f06000a;
         public static final int ad_text_2=0x7f06000b;
         public static final int app_name=0x7f060000;
+        public static final int baoxue=0x7f060037;
+        public static final int baoyu=0x7f060031;
+        public static final int binbao_leizhenyu=0x7f06002b;
+        public static final int cancel=0x7f060040;
         public static final int categore_app_1_label=0x7f060003;
         public static final int categore_app_2_label=0x7f060004;
         public static final int categore_app_3_label=0x7f060005;
@@ -204,6 +208,12 @@ public final class R {
         public static final int categore_app_5_label=0x7f060007;
         public static final int categore_app_6_label=0x7f060008;
         public static final int categore_app_7_label=0x7f060009;
+        public static final int change_city=0x7f060049;
+        public static final int city_config=0x7f060046;
+        public static final int city_weather_error=0x7f06004a;
+        public static final int current_city=0x7f060048;
+        public static final int dabaoyu=0x7f060032;
+        public static final int dafeng=0x7f060027;
         public static final int date_less_than_thounsand=0x7f060017;
         public static final int date_thounsand=0x7f060016;
         public static final int date_time_format_am_pm=0x7f06001b;
@@ -226,10 +236,43 @@ public final class R {
         public static final int date_time_section=0x7f060015;
         public static final int date_time_today=0x7f06000e;
         public static final int date_time_yesterday=0x7f06000f;
+        public static final int daxue=0x7f060036;
+        public static final int dayu=0x7f06002f;
+        public static final int default_city=0x7f060047;
+        public static final int dongyu=0x7f060030;
+        public static final int duoyun=0x7f060026;
+        public static final int fuchen=0x7f06003b;
         public static final int global_thumb_2_label=0x7f060001;
         public static final int global_thumb_3_label=0x7f060002;
+        public static final int leizhenyu=0x7f06002a;
+        public static final int mai=0x7f06003d;
+        /**   city 
+         */
+        public static final int ok=0x7f06003f;
+        public static final int qiang_shachengbao=0x7f060039;
+        public static final int qing=0x7f060025;
+        public static final int shachengbao=0x7f060038;
+        public static final int string_qu=0x7f060043;
+        public static final int string_sha=0x7f060045;
+        public static final int string_sheng=0x7f060041;
+        public static final int string_shi=0x7f060042;
+        public static final int string_xian=0x7f060044;
+        public static final int te_dabaoyu=0x7f060033;
+        /**  weather 
+         */
+        public static final int temp_degree=0x7f060024;
         public static final int temperature=0x7f06000d;
         public static final int time=0x7f06000c;
+        public static final int wu=0x7f06003a;
+        public static final int xiaoxue=0x7f060034;
+        public static final int xiaoyu=0x7f06002d;
+        public static final int yangsha=0x7f06003c;
+        public static final int ying=0x7f060028;
+        public static final int yujiaxue=0x7f06002c;
+        public static final int zhenxue=0x7f06003e;
+        public static final int zhenyu=0x7f060029;
+        public static final int zhongxue=0x7f060035;
+        public static final int zhongyu=0x7f06002e;
     }
     public static final class style {
         /** 
