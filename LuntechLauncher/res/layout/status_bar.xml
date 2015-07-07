@@ -39,6 +39,7 @@
         android:id="@+id/wifi_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:scaleType="fitXY"
         android:layout_marginRight="@dimen/global_status_horizontal_devider_1"
         android:layout_marginTop="@dimen/global_vertical_devider_height_2"
         android:layout_toLeftOf="@+id/time_view"
@@ -54,7 +55,8 @@
         android:layout_toLeftOf="@+id/wifi_status"
         android:text="@string/temperature"
         android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_large" >
+        android:textSize="@dimen/global_text_size_large"
+        android:visibility="gone" >
     </TextView>
 
     <ImageView
@@ -63,7 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/global_status_horizontal_devider_2"
         android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/temperature_view" >
+        android:layout_toLeftOf="@+id/temperature_view"
+        android:visibility="gone" >
     </ImageView>
 
     <ImageView
@@ -71,7 +74,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/weather_status" >
+        android:layout_toLeftOf="@+id/weather_status" 
+        android:src="@drawable/ic_device_usb"
+        android:visibility="gone">
     </ImageView>
 
 </merge>

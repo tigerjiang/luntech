@@ -11,6 +11,7 @@ import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Handler;
@@ -21,6 +22,7 @@ import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -167,7 +169,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
             @Override
             public void run() {
-                captureWeatherFromInternet();
+//                captureWeatherFromInternet();
             }
         }, mDelayTime);
         // update the network info
@@ -181,6 +183,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
+        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        filter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         context.registerReceiver(mBroadcastReceiver, filter);
     }
 
@@ -335,6 +339,14 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     final NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
                     onNetworkInfoChanged(networkInfo);
                 }
+            } else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
+                Uri uri = intent.getData();
+                String path = uri == null ? "" : uri.getPath();
+                mUsbStatusView.setVisibility(View.VISIBLE);
+                if (DEBUG)
+                    Log.d(TAG, "action: " + action + " path: " + path);
+            } else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+                mUsbStatusView.setVisibility(View.GONE);
             }
         }
     };
