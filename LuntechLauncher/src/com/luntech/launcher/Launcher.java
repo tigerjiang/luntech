@@ -8,9 +8,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,12 +20,15 @@ import android.widget.Toast;
 
 public class Launcher extends Activity {
 
+    private static final String TAG = "Launcher";
+    private static final boolean DEBUG = true;
     private GridView mGridView;
     private Resources mResources;
     private List<CategoryItem> mAppList = new ArrayList<CategoryItem>();
     private CategoryItemAdapter mCategoryItemAdapter;
     private Context mContext;
     private ChangeReceiver mChangeReceiver;
+    private Configuration mConfig = new Configuration();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +111,20 @@ public class Launcher extends Activity {
         item7.mLabel = mResources.getString(R.string.categore_app_7_label);
         mAppList.add(6, item7);
     }
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        int changes = newConfig.diff(mConfig);
+        if (DEBUG) {
+            Log.d(TAG, "newConfig " + newConfig.locale + "-----------------");
+            Log.d(TAG, "OnConfiguration changed was called: " + newConfig + "diff is:" + changes);
+        }
+        if ((changes & ActivityInfo.CONFIG_LOCALE) != 0) {
+
+        }
+        // set our copy of the configuration for comparing with in
+        // onConfigurationChanged
+        mConfig.setTo(getResources().getConfiguration());
     }
 }

@@ -35,7 +35,10 @@ import com.luntech.launcher.R;
 import com.luntech.launcher.TimeManager;
 import com.luntech.launcher.TimeManager.OnFormatChangedListener;
 import com.luntech.launcher.TimeManager.OnTimeChangedListener;
+import com.luntech.launcher.WeatherForm;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.w3c.dom.NodeList;
 
@@ -169,7 +172,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
             @Override
             public void run() {
-//                captureWeatherFromInternet();
+                captureWeatherFromInternet();
             }
         }, mDelayTime);
         // update the network info
@@ -440,158 +443,6 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private UiHandler mUiHandler;
 
-    public String getCityIP() {
-        URL url;
-        URLConnection conn = null;
-        InputStream is = null;
-        InputStreamReader isr = null;
-        BufferedReader br = null;
-        String str = "";
-        String localIPString = null;
-        try {
-            url = new URL("http://iframe.ip138.com/ic.asp");
-            conn = url.openConnection();
-            is = conn.getInputStream();
-            isr = new InputStreamReader(is);
-            br = new BufferedReader(isr);
-            String input = "";
-            org.jsoup.nodes.Document doc;
-            while ((input = br.readLine()) != null) {
-                str += input;
-            }
-            doc = Jsoup.parse(str);
-
-            String ip1 = doc.body().toString();
-            int start = ip1.indexOf("[");
-            int end = ip1.indexOf("]");
-
-            localIPString = ip1.substring(start + 1, end);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return localIPString;
-
-    }
-
-    public String getCityByIp(String ipString) {
-        String cityString = null;
-        try {
-            URL url = new URL("http://whois.pconline.com.cn/ip.jsp?ip=" + ipString);
-            HttpURLConnection connect = (HttpURLConnection) url.openConnection();
-            InputStream is = connect.getInputStream();
-            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            byte[] buff = new byte[256];
-            int rc = 0;
-            while ((rc = is.read(buff, 0, 256)) > 0) {
-                outStream.write(buff, 0, rc);
-
-            }
-
-            byte[] b = outStream.toByteArray();
-
-            // 关闭
-            outStream.close();
-            is.close();
-            connect.disconnect();
-            String address = new String(b, "GBK");
-
-            if (address.startsWith("北") || address.startsWith("上") || address.startsWith("重")) {
-                cityString = (address.substring(0, address.indexOf("市")));
-            }
-            if (address.startsWith("香")) {
-                cityString = (address.substring(0, address.indexOf("港")));
-            }
-            if (address.startsWith("澳")) {
-                cityString = (address.substring(0, address.indexOf("门")));
-            }
-            if (address.indexOf("省") != -1) {
-                cityString = (address.substring(address.indexOf("省") + 1, address.indexOf("市")));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return cityString;
-    }
-
-    public int getWeatherByCity(String cityString) {
-        int r = 0;
-        String today_templow = null, today_temphigh = null;
-        String today_conditon = null;
-        InputStream is = null;
-        HttpURLConnection connection = null;
-        synchronized (mState) {
-            try {
-                // today forecast
-                URL url = new URL("http://php.weather.sina.com.cn/xml.php?city="
-                        + URLEncoder.encode(cityString, "gb2312")
-                        + "&password=DJOYnieT8234jlsK&day=0");
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-                is = connection.getInputStream();
-
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder dombuilder = factory.newDocumentBuilder();
-                Document doc = null;
-                doc = dombuilder.parse(is);
-                Element element = doc.getDocumentElement();
-
-                NodeList Profiles = element.getChildNodes();
-
-                if ((Profiles != null) && Profiles.getLength() > 1) {
-                    for (int i = 0; i < Profiles.getLength(); i++) {
-                        Node weather = Profiles.item(i);
-                        if (weather.getNodeType() == Node.ELEMENT_NODE) {
-                            for (Node node = weather.getFirstChild(); node != null; node = node
-                                    .getNextSibling()) {
-                                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                    if (node.getNodeName().equals("figure1")) {
-                                        today_conditon = node.getFirstChild().getNodeValue();
-                                        String chString = changeWeatherToChinese(today_conditon);
-                                        mWeatherDetail = chString;
-                                    }
-                                    if (node.getNodeName().equals("temperature1")) {
-                                        today_temphigh = node.getFirstChild().getNodeValue();
-                                    }
-                                    if (node.getNodeName().equals("temperature2")) {
-                                        today_templow = node.getFirstChild().getNodeValue();
-                                    }
-
-                                    if (today_conditon != null && today_temphigh != null
-                                            && today_templow != null) {
-                                        // TODO
-                                        mTemperature = today_templow
-                                                + mResources.getString(R.string.temp_degree) + "~"
-                                                + today_temphigh
-                                                + mResources.getString(R.string.temp_degree);
-                                        break;
-                                    } else {
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                }
-
-            } catch (Exception e) {
-                r = -1;
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
-                    if (is != null)
-                        is.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return r;
-    }
-
     public String changeWeatherToChinese(String engString) {
         if (engString.equals("qing"))
             return mResources.getString(R.string.qing);
@@ -669,7 +520,6 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         if (engString.equals("zhenxue")) {
             return mResources.getString(R.string.zhenxue);
         }
-
         return "";
     }
 
@@ -698,99 +548,39 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private void searchWeather(String cityString) {
         String weatherCity = null;
-        String today_templow = null, today_temphigh = null;
-        String today_conditon = null;
-        HttpURLConnection connection = null;
-        InputStream isInputStream = null;
         int r = 0;
         synchronized (mState) {
-            try {
-                weatherCity = filterSuffix(cityString);
-                mCity = weatherCity;
-
-                if (mCity == "") {
-                    mWeatherDetail = "";
-                    mTemperature = "";
-                    return;
-                }
-
-                URL url = new URL("http://php.weather.sina.com.cn/xml.php?city="
-                        + URLEncoder.encode(weatherCity, "gb2312")
-                        + "&password=DJOYnieT8234jlsK&day=0");
-                Log.d(TAG, "weather search: " + url.toString());
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-                isInputStream = connection.getInputStream();
-
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder domBuilder = factory.newDocumentBuilder();
-                Document doc = null;
-                doc = domBuilder.parse(isInputStream);
-                org.w3c.dom.Element element = doc.getDocumentElement();
-
-                NodeList profilesList = element.getChildNodes();
-                if ((profilesList != null) && (profilesList.getLength() > 1)) {
-
-                    for (int i = 0; i < profilesList.getLength(); i++) {
-                        Node weather = profilesList.item(i);
-
-                        if (weather.getNodeType() == Node.ELEMENT_NODE) {
-                            for (Node node = weather.getFirstChild(); node != null; node = node
-                                    .getNextSibling()) {
-                                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                                    if (node.getNodeName().equals("figure1")) {
-                                        today_conditon = node.getFirstChild().getNodeValue();
-                                        String chString = changeWeatherToChinese(today_conditon);
-                                        mWeatherDetail = chString;
-                                    }
-                                    if (node.getNodeName().equals("temperature1")) {
-                                        today_temphigh = node.getFirstChild().getNodeValue();
-                                    }
-                                    if (node.getNodeName().equals("temperature2")) {
-                                        today_templow = node.getFirstChild().getNodeValue();
-                                    }
-
-                                    if (today_conditon != null && today_temphigh != null
-                                            && today_templow != null) {
-                                        // TODO
-                                        mTemperature = today_templow
-                                                + mResources.getString(R.string.temp_degree) + "~"
-                                                + today_temphigh
-                                                + mResources.getString(R.string.temp_degree);
-                                        break;
-                                    } else {
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    mWeatherDetail = "";
-                    mTemperature = mResources.getString(R.string.city_weather_error);
-                }
-            } catch (Exception e) {
-                // TODO: handle exception
-                r = -1;
+            weatherCity = filterSuffix(cityString);
+            mCity = weatherCity;
+            if (mCity == "") {
                 mWeatherDetail = "";
-                mTemperature = mResources.getString(R.string.city_weather_error);
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
-                    if (isInputStream != null) {
-                        isInputStream.close();
-                    }
-                } catch (Exception e2) {
-                    // TODO: handle exception
-                }
+                mTemperature = "";
+                return;
             }
+            String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
+            String jasonResult = requestWeather(url, mCity);
+            try {
+                JSONObject 
+                jb = new JSONObject(jasonResult);
+                String errNum = jb.getString("errNum");
+                String errMessage = jb.getString("errMsg");
+                JSONObject jb1 = jb.getJSONObject("retData");
+                WeatherForm weather = new  WeatherForm();
+                weather.setTemp(jb1.getString("l_tmp")+"-"+jb1.getString("h_tmp"));
+                weather.setWeather(jb1.getString("weather"));
+                weather.setDdate(jb1.getString("date"));
+                weather.setName(jb1.getString("city"));
+                weather.setId(jb1.getString("citycode"));
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+             
         }
     }
 
     private String getUserCity() {
-        String cityString = null;
+        String cityString = "青岛";
         try {
             cityString = Settings.System.getString(mContext.getContentResolver(), "city");
         } catch (Exception e) {
@@ -801,26 +591,48 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private void captureWeatherFromInternet() {
         String userCityString = getUserCity();
-        if ((userCityString == null)) {
-            Log.d(TAG, "#### set city by ip ####");
-            String localIPString = getCityIP();
-            String cityString = getCityByIp(localIPString);
-            mCity = cityString;
-            Settings.System.putString(mContext.getContentResolver(), "city", mCity);
-            getWeatherByCity(cityString);
-
-        } else {
-            searchWeather(userCityString);
-        }
-
+        searchWeather(userCityString);
         if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
             mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
                     mWeatherDetail, mTemperature
             }).sendToTarget();
         }
     }
-    
-    private Drawable getWeatherIcon(String key){
+
+    /**
+     * @param urlAll :请求接口
+     * @param httpArg :参数
+     * @return 返回结果
+     */
+    public static String requestWeather(String httpUrl, String httpArg) {
+        BufferedReader reader = null;
+        String result = null;
+        StringBuffer sbf = new StringBuffer();
+        httpUrl = httpUrl + "?" + httpArg;
+        try {
+            URL url = new URL(httpUrl);
+            HttpURLConnection connection = (HttpURLConnection) url
+                    .openConnection();
+            connection.setRequestMethod("GET");
+            // 填入apikey到HTTP header
+            connection.setRequestProperty("apikey", "ad30c50fa431bbcacdd06c03ad3e9542");
+            connection.connect();
+            InputStream is = connection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            String strRead = null;
+            while ((strRead = reader.readLine()) != null) {
+                sbf.append(strRead);
+                sbf.append("\r\n");
+            }
+            reader.close();
+            result = sbf.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private Drawable getWeatherIcon(String key) {
         return null;
     }
 }
