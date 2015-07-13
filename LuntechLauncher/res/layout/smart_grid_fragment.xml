@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/apps_title_height"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white"
+        android:textSize="36dp"
+        />
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/list_divider"
+        android:scaleType="fitCenter" />
+
+    <RelativeLayout
+        android:id="@+id/apps_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:id="@+id/first_app_layout"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/focus_selector"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/first_app_icon"
+                android:layout_width="250dp"
+                android:layout_height="380dp"
+                android:paddingBottom="@dimen/collection_app_icon_image_padding_bottom"
+                android:paddingLeft="@dimen/collection_app_icon_image_padding_left"
+                android:paddingRight="@dimen/collection_app_icon_image_padding_right"
+                android:paddingTop="@dimen/collection_app_icon_image_padding_top"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/first_app_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/collection_app_icon_text_view_layout_height"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:lines="1"
+                android:paddingLeft="@dimen/collection_app_icon_text_padding_left"
+                android:paddingRight="@dimen/collection_app_icon_text_padding_right"
+                android:singleLine="false"
+                android:textColor="@android:color/white"
+                android:textSize="26dp" />
+
+            <requestFocus />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/all_apps"
+            android:layout_width="500dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="-5dp"
+            android:layout_toRightOf="@+id/first_app_layout"
+            android:alwaysDrawnWithCache="true"
+            android:columnWidth="@dimen/custom_grid_column_width"
+            android:horizontalSpacing="5dp"
+            android:listSelector="@drawable/focus_selector"
+            android:numColumns="2"
+            android:paddingLeft="-5dp"
+            android:verticalSpacing="@dimen/custom_grid_vertical_spacing" />
+    </RelativeLayout>
+
+</LinearLayout>

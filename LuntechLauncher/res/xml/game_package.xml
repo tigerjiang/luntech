@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <GameActivity packagename="com.egame.tv" >
+    </GameActivity>
+    <GameActivity packagename="com.csidea.kikilobby" >
+    </GameActivity>
+    <GameActivity packagename="com.app.xjiajia" >
+    </GameActivity>
+    <GameActivity packagename="com.andlisoft.station.game" >
+    </GameActivity>
+    <GameActivity packagename="com.Coocaa.BjLbs.mole" >
+    </GameActivity>
+    <GameActivity packagename="com.game.gameobstructrun" >
+    </GameActivity>
+    <GameActivity packagename="com.thfd.d9.disneyhurdle" >
+    </GameActivity>
+    <GameActivity packagename="com.dygame.gamezone2" >
+    </GameActivity>
+    <GameActivity packagename="com.shenyou.up" >
+    </GameActivity>
+
+</resources>

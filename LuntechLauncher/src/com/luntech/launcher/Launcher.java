@@ -13,10 +13,13 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import com.luntech.launcher.secondary.AppManager;
 
 public class Launcher extends Activity {
 
@@ -29,7 +32,7 @@ public class Launcher extends Activity {
     private Context mContext;
     private ChangeReceiver mChangeReceiver;
     private Configuration mConfig = new Configuration();
-
+    private AppManager mAppManager ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,13 +41,14 @@ public class Launcher extends Activity {
         mContext = getApplicationContext();
         parseCategoryItem();
         initView();
-//        Intent intentService = new Intent();
-//        intentService.setClass(this, ChangeService.class);
-//        startService(intentService);
-//        registerReceiver();
+        // Intent intentService = new Intent();
+        // intentService.setClass(this, ChangeService.class);
+        // startService(intentService);
+        // registerReceiver();
     }
 
     private void initView() {
+        mAppManager = AppManager.getInstance();
         mGridView = (GridView) findViewById(R.id.category_layout);
         mCategoryItemAdapter = new CategoryItemAdapter(mAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
@@ -58,15 +62,14 @@ public class Launcher extends Activity {
             }
         });
     }
-    
-    private void registerReceiver(){
+
+    private void registerReceiver() {
         mChangeReceiver = new ChangeReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         registerReceiver(mChangeReceiver, filter);
     }
 
-    
     private void parseCategoryItem() {
         CategoryItem item1 = new CategoryItem();
         item1.mAppIcon = mResources.getDrawable(R.drawable.categore_app_1_logo);
@@ -126,5 +129,33 @@ public class Launcher extends Activity {
         // set our copy of the configuration for comparing with in
         // onConfigurationChanged
         mConfig.setTo(getResources().getConfiguration());
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        int action = event.getAction();
+        Log.d(TAG, "action "+ action + "    keycode"+keyCode);
+        if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+            if (keyCode == KeyEvent.KEYCODE_MENU) {
+                Intent intent = new Intent();
+                intent.setClass(mContext, AppSelectedActivity.class);
+                startActivityForResult(intent, 0);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (resultCode) {
+            case RESULT_OK:
+                Bundle bundle = data.getExtras();
+                break;
+            case RESULT_CANCELED:
+                break;
+            default:
+                break;
+        }
+
     }
 }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/app_icon_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/collection_app_icon_image_view_layout_height"
+        android:paddingBottom="@dimen/collection_app_icon_image_padding_bottom"
+        android:paddingTop="@dimen/collection_app_icon_image_padding_top"
+        android:paddingLeft="@dimen/collection_app_icon_image_padding_left"
+        android:paddingRight="@dimen/collection_app_icon_image_padding_right"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/app_icon_label"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/collection_app_icon_text_view_layout_height"
+        android:layout_gravity="center"
+        android:paddingLeft="@dimen/collection_app_icon_text_padding_left"
+        android:paddingRight="@dimen/collection_app_icon_text_padding_right"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:lines="2"
+        android:singleLine="false"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/app_icon_image"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

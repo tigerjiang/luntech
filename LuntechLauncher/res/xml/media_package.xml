@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <MediaActivity packagename="cn.com.wasu.main" >
+    </MediaActivity>
+    <MediaActivity packagename="com.duomi.androidtv" >
+    </MediaActivity>
+    <MediaActivity packagename="com.youku.tv" >
+    </MediaActivity>
+    <MediaActivity packagename="com.letv.tv" >
+    </MediaActivity>
+    <MediaActivity packagename="com.pplive.androidtv" >
+    </MediaActivity>
+    <MediaActivity packagename="com.qiyi.video" >
+    </MediaActivity>
+    <MediaActivity packagename="com.tencent.qqlivehd" >
+    </MediaActivity>
+    <MediaActivity packagename="com.sohutv.tv" >
+    </MediaActivity>
+    <MediaActivity packagename="com.voole.epg" >
+    </MediaActivity>
+
+</resources>

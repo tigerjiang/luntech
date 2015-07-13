@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <HouseActivity packagename="com.eastsoft.android.ihome" >
+    </HouseActivity>
+    <HouseActivity packagename="com.example.newsdevelop" >
+    </HouseActivity>
+    <HouseActivity packagename="com.dianping.v1" >
+    </HouseActivity>
+    <HouseActivity packagename="com.luntech.maplivingarea" >
+    </HouseActivity>
+    <HouseActivity packagename="com.douguo.recipetv" >
+    </HouseActivity>
+    <HouseActivity packagename="com.jingdong.app.tv" >
+    </HouseActivity>
+    <HouseActivity packagename="com.seeme.tvframe" >
+    </HouseActivity>
+    <HouseActivity packagename="com.mfw.roadbook" >
+    </HouseActivity>
+    <HouseActivity packagename="com.suning.tv.ebuy" >
+    </HouseActivity>
+
+</resources>

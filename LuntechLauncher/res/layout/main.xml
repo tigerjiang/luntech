@@ -93,6 +93,7 @@
         android:layout_below="@+id/middle_layout"
         android:layout_marginTop="@dimen/global_vertical_devider_height"
         android:columnWidth="@dimen/global_horizontal_devider_height"
+        android:listSelector="@drawable/focus_selector"
         android:numColumns="7" />
 
     <LinearLayout

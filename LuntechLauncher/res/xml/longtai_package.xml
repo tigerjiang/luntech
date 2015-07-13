@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+
+    <LonActivity packagename="com.example.newsdevelop" >
+    </LonActivity>
+    <LonActivity packagename="com.dianping.v1" >
+    </LonActivity>
+    <LonActivity packagename="com.luntech.maplivingarea" >
+    </LonActivity>
+    <LonActivity packagename="com.douguo.recipetv" >
+    </LonActivity>
+    <LonActivity packagename="com.jingdong.app.tv" >
+    </LonActivity>
+    <LonActivity packagename="com.seeme.tvframe" >
+    </LonActivity>
+    <LonActivity packagename="com.mfw.roadbook" >
+    </LonActivity>
+    <LonActivity packagename="com.suning.tv.ebuy" >
+    </LonActivity>
+    <LonActivity packagename="com.wowotuan.tv" >
+    </LonActivity>
+
+</resources>

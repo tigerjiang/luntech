@@ -557,11 +557,14 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 mTemperature = "";
                 return;
             }
+            Log.d(TAG, "mCity" + mCity+ "   "+cityString);
             String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
-            String jasonResult = requestWeather(url, mCity);
+            String httpArg = "cityname="+mCity;
+            String jasonResult = requestWeather(url, httpArg);
             try {
                 JSONObject 
                 jb = new JSONObject(jasonResult);
+                Log.d(TAG, "weather "+ jasonResult);
                 String errNum = jb.getString("errNum");
                 String errMessage = jb.getString("errMsg");
                 JSONObject jb1 = jb.getJSONObject("retData");
@@ -574,6 +577,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            }catch (Exception e) {
+                // TODO: handle exception
             }
              
         }
@@ -591,13 +596,21 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private void captureWeatherFromInternet() {
         String userCityString = getUserCity();
-        searchWeather(userCityString);
+        searchWeather(null,userCityString);
         if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
             mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
                     mWeatherDetail, mTemperature
             }).sendToTarget();
         }
     }
+    
+    private static void searchWeather(String time,String cityString) {
+        String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
+        String httpArg = "cityname=北京";
+        String jasonResult = requestWeather(url, httpArg);
+       Log.d(TAG,"weather " + jasonResult);
+         
+}
 
     /**
      * @param urlAll :请求接口

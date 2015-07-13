@@ -3,35 +3,50 @@ package com.luntech.launcher;
 
 import android.graphics.drawable.Drawable;
 
+import com.luntech.launcher.secondary.ApplicationInfo;
+
+
 public class CategoryItem {
-    public String mComponentName;
-    public String mLabel;
+    public String mPackageName;
+    public CharSequence mLabel;
     public Drawable mAppIcon;
     public Drawable mBackgroundIcon;
     public Drawable mShadowIcon;
+    public ApplicationInfo mApplicationInfo;
 
     public CategoryItem() {
 
     }
 
-    public CategoryItem(String mComponentName, String mLabel, Drawable mAppIcon,
+    public CategoryItem(ApplicationInfo applicationInfo,
             Drawable mBackgroundIcon, Drawable mShadowIcon) {
-        this.mComponentName = mComponentName;
+        mApplicationInfo = applicationInfo;
+        this.mLabel = mApplicationInfo.getTitle();
+        this.mAppIcon = mApplicationInfo.getIcon();
+        this.mBackgroundIcon = mBackgroundIcon;
+        this.mShadowIcon = mShadowIcon;
+    }
+    
+
+    public CategoryItem(String mPackageName, CharSequence mLabel, Drawable mAppIcon,
+            Drawable mBackgroundIcon, Drawable mShadowIcon) {
+        super();
+        this.mPackageName = mPackageName;
         this.mLabel = mLabel;
         this.mAppIcon = mAppIcon;
         this.mBackgroundIcon = mBackgroundIcon;
         this.mShadowIcon = mShadowIcon;
     }
 
-    public String getComponentName() {
-        return mComponentName;
+    public String getPackageName() {
+        return mPackageName;
     }
 
-    public void setComponentName(String componentName) {
-        this.mComponentName = componentName;
+    public void setPackageName(String packagename) {
+        this.mPackageName = packagename;
     }
 
-    public String getLabel() {
+    public CharSequence getLabel() {
         return mLabel;
     }
 
@@ -61,6 +76,10 @@ public class CategoryItem {
 
     public void setShadowIcon(Drawable shadowIcon) {
         this.mShadowIcon = shadowIcon;
+    }
+
+    public ApplicationInfo getApplicationInfo() {
+        return mApplicationInfo;
     }
 
 }
