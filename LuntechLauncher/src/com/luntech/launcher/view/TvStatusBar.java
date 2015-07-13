@@ -68,6 +68,9 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
     private ImageView mWifiStatusView;
     private ImageView mUsbStatusView;
     private ImageView mWeatherStatusView;
+    private int mTryCount = 10;
+    private boolean mIsGetWeather;
+    private boolean mIsInternetConnected;
 
     private String mCity;
     private String mWeatherDetail;
@@ -265,6 +268,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                 mState.setNetworkIcon(networkIcon);
                                 mState.setNetworkRSSI(rssi);
                             }
+                            mIsInternetConnected = true;
                         }
                         if (mState.hasChanges(TvStatus.NETWORK_INFO)) {
                             notifyStateChange();
@@ -307,12 +311,12 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                 "", ""
                         };
                     }
-                    Log.d(TAG, "weather info "+weatherInfo);
+                    Log.d(TAG, "weather info "+weatherInfo.toString());
                     synchronized (mState) {
                         Drawable weatherIcon = getWeatherIcon(weatherInfo[0]);
                         mState.setWeatherIcon(weatherIcon);
                         mState.setTemperature(weatherInfo[1]);
-                        if (mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
+                        if (mState.hasChanges(TvStatus.WEATHER_INFO)) {
                             notifyStateChange();
                         }
                     }
@@ -366,7 +370,6 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     new Long(System.currentTimeMillis())).sendToTarget();
         }
     }
-
     @Override
     public void onTimeChanged(long time) {
         // always send this so that we don't miss any time updates
@@ -574,11 +577,23 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 weather.setDdate(jb1.getString("date"));
                 weather.setName(jb1.getString("city"));
                 weather.setId(jb1.getString("citycode"));
+                mIsGetWeather = true;
+                Log.d(TAG,"weather "+weather.toString());
             } catch (JSONException e) {
-                // TODO Auto-generated catch block
+                
+                mIsGetWeather  = false;
                 e.printStackTrace();
             }catch (Exception e) {
-                // TODO: handle exception
+                mIsGetWeather  = false;
+            }
+            if (!mIsGetWeather) {
+                mHandler.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        captureWeatherFromInternet();
+                    }
+                }, mDelayTime);
             }
              
         }
@@ -595,22 +610,20 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
     }
 
     private void captureWeatherFromInternet() {
-        String userCityString = getUserCity();
-        searchWeather(null,userCityString);
-        if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
-            mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
-                    mWeatherDetail, mTemperature
-            }).sendToTarget();
+        if (mIsInternetConnected && !mIsGetWeather && mTryCount <= 10) {
+            mTryCount++;
+            String userCityString = getUserCity();
+            searchWeather(userCityString);
+            if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
+                mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
+                        mWeatherDetail, mTemperature
+                }).sendToTarget();
+            }
+        } else {
+            Log.d(TAG, "cant get weather due to " + "mIsInternetConnected " + mIsInternetConnected
+                    + "mIsGetWeather  " + mIsGetWeather + " mTryCount " + mTryCount);
         }
     }
-    
-    private static void searchWeather(String time,String cityString) {
-        String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
-        String httpArg = "cityname=北京";
-        String jasonResult = requestWeather(url, httpArg);
-       Log.d(TAG,"weather " + jasonResult);
-         
-}
 
     /**
      * @param urlAll :请求接口

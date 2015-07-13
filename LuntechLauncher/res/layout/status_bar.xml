@@ -58,7 +58,7 @@
         android:text="@string/temperature"
         android:textColor="@color/white"
         android:textSize="@dimen/global_text_size_large"
-        android:visibility="gone" >
+        android:visibility="visible" >
     </TextView>
 
     <ImageView
@@ -68,7 +68,7 @@
         android:layout_marginRight="@dimen/global_status_horizontal_devider_2"
         android:layout_marginTop="@dimen/global_vertical_devider_height_2"
         android:layout_toLeftOf="@+id/temperature_view"
-        android:visibility="gone" >
+        android:visibility="visible" >
     </ImageView>
 
     <ImageView
@@ -78,7 +78,7 @@
         android:layout_marginTop="@dimen/global_vertical_devider_height_2"
         android:layout_toLeftOf="@+id/weather_status" 
         android:src="@drawable/ic_device_usb"
-        android:visibility="gone">
+        android:visibility="visible">
     </ImageView>
 
 </merge>
