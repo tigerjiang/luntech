@@ -82,7 +82,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private Resources mResources;
 
-    private long mDelayTime = 5*1000;// 3 * 60 * 1000; // 3min
+    private long mDelayTime = 5 * 1000;// 3 * 60 * 1000; // 3min
     // keep in sync with System Settings -> Network Settings
     private static final String PPPOE_ENABLED = "pppoe_enabled";
     private static final String PPPOE_CONNECTED = "pppoe_connected";
@@ -274,7 +274,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             notifyStateChange();
                         }
                     }
-                break;
+                    break;
 
                 case MSG_UPDATE_DATE_TIME:
                     if (DEBUG_MSG) {
@@ -298,7 +298,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             }
                         }
                     }
-                break;
+                    break;
                 case MSG_ON_WEATHER_INFO_CHANGED:
                     if (DEBUG_MSG) {
                         Log.d(TAG, "handleMessage(Non UI): MSG_UPDATE_WEATHER_INFO");
@@ -311,7 +311,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                 "", ""
                         };
                     }
-                    Log.d(TAG, "weather info "+weatherInfo.toString());
+                    Log.d(TAG, "weather info " + weatherInfo.toString());
                     synchronized (mState) {
                         Drawable weatherIcon = getWeatherIcon(weatherInfo[0]);
                         mState.setWeatherIcon(weatherIcon);
@@ -320,14 +320,14 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             notifyStateChange();
                         }
                     }
-                break;
+                    break;
 
                 default:
                     if (DEBUG_MSG) {
                         Log.d(TAG, "handleMessage(Non UI): unhandled msg=" + msg);
                     }
                     super.handleMessage(msg);
-                break;
+                    break;
             }
         }
     }
@@ -370,6 +370,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     new Long(System.currentTimeMillis())).sendToTarget();
         }
     }
+
     @Override
     public void onTimeChanged(long time) {
         // always send this so that we don't miss any time updates
@@ -435,75 +436,69 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             switch (msg.what) {
                 case MSG_STATE_CHANGE:
                     layout.processState(false);
-                break;
+                    break;
 
                 default:
                     super.handleMessage(msg);
-                break;
+                    break;
             }
         }
     }
 
     private UiHandler mUiHandler;
 
-    public String changeWeatherToChinese(String engString) {
-        if (engString.equals("qing"))
-            return mResources.getString(R.string.qing);
-        if (engString.equals("duoyun")) {
-            return mResources.getString(R.string.duoyun);
+    public Drawable changeWeatherToIcon(String engString) {
+        if (engString.equals(mResources.getString(R.string.qing)))
+            return mResources.getDrawable(R.drawable.ic_weather_qing);
+        if (engString.equals(mResources.getString(R.string.duoyun))) {
+            return mResources.getDrawable(R.drawable.ic_weather_duoyun);
         }
-        if (engString.equals("dafeng"))
-            return mResources.getString(R.string.dafeng);
-        if (engString.equals("ying")) {
-            return mResources.getString(R.string.ying);
+        if (engString.equals(mResources.getString(R.string.ying))) {
+            return mResources.getDrawable(R.drawable.ic_weather_ying);
         }
-        if (engString.equals("zhenyu")) {
-            return mResources.getString(R.string.zhenyu);
+        if (engString.equals(mResources.getString(R.string.zhenyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
+            ;
         }
-        if (engString.equals("leizhenyu")) {
-            return mResources.getString(R.string.leizhenyu);
+        if (engString.equals(mResources.getString(R.string.leizhenyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_leizhenyu);
         }
-        if (engString.equals("binbao_leizhenyu")) {
-            return mResources.getString(R.string.binbao_leizhenyu);
+        if (engString.equals(mResources.getString(R.string.yujiaxue))) {
+            return mResources.getDrawable(R.drawable.ic_weather_yujiaxue);
+            ;
+
         }
-        if (engString.equals("yujiaxue")) {
-            return mResources.getString(R.string.yujiaxue);
+        if (engString.equals(mResources.getString(R.string.xiaoyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_xiaoyu);
+            ;
         }
-        if (engString.equals("xiaoyu")) {
-            return mResources.getString(R.string.xiaoyu);
+        if (engString.equals(mResources.getString(R.string.zhongyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals("zhongyu")) {
-            return mResources.getString(R.string.zhongyu);
+        if (engString.equals(mResources.getString(R.string.dayu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals("dayu")) {
-            return mResources.getString(R.string.dayu);
+        if (engString.equals(mResources.getString(R.string.dongyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals("dongyu")) {
-            return mResources.getString(R.string.dongyu);
+        if (engString.equals(mResources.getString(R.string.baoyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals("baoyu")) {
-            return mResources.getString(R.string.baoyu);
+        if (engString.equals(mResources.getString(R.string.dabaoyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals("dabaoyu")) {
-            return mResources.getString(R.string.dabaoyu);
+        if (engString.equals(mResources.getString(R.string.te_dabaoyu))) {
+            return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals("te_dabaoyu")) {
-            return mResources.getString(R.string.te_dabaoyu);
-        }
-        if (engString.equals("xiaoxue")) {
-            return mResources.getString(R.string.xiaoxue);
-        }
-        if (engString.equals("zhongxue")) {
-            return mResources.getString(R.string.zhongxue);
-        }
-        if (engString.equals("daxue")) {
-            return mResources.getString(R.string.daxue);
-        }
-        if (engString.equals("baoxue")) {
-            return mResources.getString(R.string.baoxue);
-        }
-        if (engString.equals("shachengbao")) {
-            return mResources.getString(R.string.shachengbao);
+        if (engString.equals(mResources.getString(R.string.xiaoxue))
+                || engString.equals(mResources.getString(R.string.zhongxue))
+                || engString.equals(mResources.getString(R.string.daxue))
+                || engString.equals(mResources.getString(R.string.baoxue))
+                || engString.equals(mResources.getString(R.string.zhenxue))
+                || engString.equals(mResources.getString(R.string.baoxue))
+                || engString.equals(mResources.getString(R.string.xue))) {
+            return mResources.getDrawable(R.drawable.ic_weather_xue);
+
         }
         if (engString.equals("qiang_shachengbao")) {
             return mResources.getString(R.string.qiang_shachengbao);
@@ -560,31 +555,37 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 mTemperature = "";
                 return;
             }
-            Log.d(TAG, "mCity" + mCity+ "   "+cityString);
+            Log.d(TAG, "mCity" + mCity + "   " + cityString);
             String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
-            String httpArg = "cityname="+mCity;
+            String httpArg = "cityname=" + mCity;
             String jasonResult = requestWeather(url, httpArg);
             try {
-                JSONObject 
-                jb = new JSONObject(jasonResult);
-                Log.d(TAG, "weather "+ jasonResult);
+                JSONObject jb = new JSONObject(jasonResult);
+                Log.d(TAG, "weather " + jasonResult);
                 String errNum = jb.getString("errNum");
                 String errMessage = jb.getString("errMsg");
                 JSONObject jb1 = jb.getJSONObject("retData");
-                WeatherForm weather = new  WeatherForm();
-                weather.setTemp(jb1.getString("l_tmp")+"-"+jb1.getString("h_tmp"));
+                WeatherForm weather = new WeatherForm();
+                weather.setTemp(jb1.getString("l_tmp") + "-" + jb1.getString("h_tmp"));
                 weather.setWeather(jb1.getString("weather"));
                 weather.setDdate(jb1.getString("date"));
                 weather.setName(jb1.getString("city"));
                 weather.setId(jb1.getString("citycode"));
                 mIsGetWeather = true;
-                Log.d(TAG,"weather "+weather.toString());
+                mWeatherDetail = weather.getWeather();
+                mTemperature = weather.getTemp();
+                Log.d(TAG, "weather " + weather.toString());
+                if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
+                    mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
+                            mWeatherDetail, mTemperature
+                    }).sendToTarget();
+                }
             } catch (JSONException e) {
-                
-                mIsGetWeather  = false;
+
+                mIsGetWeather = false;
                 e.printStackTrace();
-            }catch (Exception e) {
-                mIsGetWeather  = false;
+            } catch (Exception e) {
+                mIsGetWeather = false;
             }
             if (!mIsGetWeather) {
                 mHandler.postDelayed(new Runnable() {
@@ -595,7 +596,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     }
                 }, mDelayTime);
             }
-             
+
         }
     }
 
@@ -614,11 +615,6 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             mTryCount++;
             String userCityString = getUserCity();
             searchWeather(userCityString);
-            if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
-                mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
-                        mWeatherDetail, mTemperature
-                }).sendToTarget();
-            }
         } else {
             Log.d(TAG, "cant get weather due to " + "mIsInternetConnected " + mIsInternetConnected
                     + "mIsGetWeather  " + mIsGetWeather + " mTryCount " + mTryCount);
