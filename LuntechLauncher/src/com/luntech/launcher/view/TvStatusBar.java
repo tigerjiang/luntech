@@ -481,7 +481,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         else if (engString.equals(mResources.getString(R.string.baoyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
-        if (engString.equals(mResources.getString(R.string.dabaoyu))) {
+        else if (engString.equals(mResources.getString(R.string.dabaoyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
         }
         else if (engString.equals(mResources.getString(R.string.te_dabaoyu))) {
