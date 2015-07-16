@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <apps>
+        <app name="LiveTv">
+            <type>LIVE_TV</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>global_thumb_1_label</label>
+            <background>global_thumb_1_logo</background>
+            <shadow>global_thumb_1_shadow</shadow>
+            <logo>global_thumb_1_logo</logo>
+            <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+        <app name="HSYZX">
+            <type>HSYZX</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+             <label>global_thumb_2_label</label>
+            <background>global_thumb_2_logo</background>
+            <shadow>global_thumb_2_shadow</shadow>
+            <logo>global_thumb_2_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+        <app name="WuYue">
+            <type>WuYue</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+             <label>global_thumb_3_label</label>
+            <background>global_thumb_3_logo</background>
+            <shadow>global_thumb_3_shadow</shadow>
+            <logo>global_thumb_3_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+        <app name="category_1">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_1_label</label>
+            <background>categore_app_1_bg</background>
+            <shadow>categore_app_1_shadow</shadow>
+            <logo>categore_app_1_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+              <app name="category_2">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_2_label</label>
+            <background>categore_app_2_bg</background>
+            <shadow>categore_app_2_shadow</shadow>
+            <logo>categore_app_2_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+       <app name="category_3">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_3_label</label>
+            <background>categore_app_3_bg</background>
+            <shadow>categore_app_3_shadow</shadow>
+            <logo>categore_app_3_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+           <app name="category_4">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_4_label</label>
+            <background>categore_app_4_bg</background>
+            <shadow>categore_app_4_shadow</shadow>
+            <logo>categore_app_4_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+        <app name="category_5">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_5_label</label>
+            <background>categore_app_5_bg</background>
+            <shadow>categore_app_5_shadow</shadow>
+            <logo>categore_app_5_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+             <app name="category_6">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_6_label</label>
+            <background>categore_app_6_bg</background>
+            <shadow>categore_app_6_shadow</shadow>
+            <logo>categore_app_6_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>
+        <app name="category_7">
+            <type>category</type>
+            <component>com.jamdeo.tv.vod/.VodActivity</component>
+            <label>categore_app_7_label</label>
+            <background>categore_app_7_bg</background>
+            <shadow>categore_app_7_shadow</shadow>
+            <logo>categore_app_7_logo</logo>
+             <configured>false</configured>
+            <available>false</available>
+            <configured_component>null</configured_component>
+        </app>        
+    </apps>
+
+</resources>

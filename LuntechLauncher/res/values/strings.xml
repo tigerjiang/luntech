@@ -3,6 +3,7 @@
 
     <string name="app_name">CustomLauncher</string>
     <string name="global_thumb_2_label">红石在线</string>
+    <string name="global_thumb_1_label">直播电视</string>
     <string name="global_thumb_3_label">物业服务</string>
     <string name="categore_app_1_label">影视点播</string>
     <string name="categore_app_2_label">智慧社区</string>
