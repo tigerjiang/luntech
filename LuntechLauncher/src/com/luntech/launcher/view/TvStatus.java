@@ -11,7 +11,7 @@ public class TvStatus {
 
     public static final int NETWORK_INFO = 0x1;
     public static final int DATE_TIME_INFO = 0x2;
-    public static final int WEATHER_INFO = 0x3;
+    public static final int WEATHER_INFO = 0x4;
     public static final int ALL_INFO =
             NETWORK_INFO | DATE_TIME_INFO | WEATHER_INFO;
     private int mChanges;
@@ -78,8 +78,8 @@ public class TvStatus {
                 mChanges |= WEATHER_INFO;
             }
         } else {
-            if (mTemperature != null) {
-                mTime = temperature;
+            if (temperature != null) {
+                mTemperature = temperature;
                 mChanges |= WEATHER_INFO;
             }
         }
@@ -186,4 +186,10 @@ public class TvStatus {
         mChanges |= bits;
     }
 
+    @Override
+    public String toString() {
+        return "TvStatus [mChanges=" + mChanges + ", mTemperature=" + mTemperature + "]";
+    }
+
+    
 }

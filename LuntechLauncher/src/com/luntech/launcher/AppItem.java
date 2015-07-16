@@ -1,22 +1,38 @@
 
 package com.luntech.launcher;
 
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
+
 public class AppItem {
     private String mType;
     private String mName;
     private String mComponentName;
     private String mBackground;
-    private boolean mAvailable;
-    private boolean mConfigured;
+    private String mAvailable;
+    private String mConfigured;
     private String mConfiguredComponent;
     private String mLogo;
     private String mShadow;
-    private String mLabel;
+    public CharSequence mLabel;
 
-    public AppItem() {
+    public Drawable mAppIcon;
+    public Drawable mBackgroundIcon;
+    public Drawable mShadowIcon;
+
+    private Context mContext;
+    private Resources mResources;
+    private String mPackageName;
+
+    public AppItem(Context context) {
+        mContext = context;
+        mResources = mContext.getResources();
+        mPackageName = mContext.getPackageName();
 
     }
-    
+
     public String getType() {
         return mType;
     }
@@ -47,21 +63,22 @@ public class AppItem {
 
     public void setBackground(String background) {
         this.mBackground = background;
+        setBackgroundIcon(changeIdtoDrawable(mBackground));
     }
 
-    public boolean isAvailable() {
+    public String isAvailable() {
         return mAvailable;
     }
 
-    public void setAvailable(boolean available) {
+    public void setAvailable(String available) {
         this.mAvailable = available;
     }
 
-    public boolean isConfigured() {
+    public String isConfigured() {
         return mConfigured;
     }
 
-    public void setConfigured(boolean configured) {
+    public void setConfigured(String configured) {
         this.mConfigured = configured;
     }
 
@@ -79,6 +96,7 @@ public class AppItem {
 
     public void setLogo(String logo) {
         this.mLogo = logo;
+        setAppIcon(changeIdtoDrawable(mLogo));
     }
 
     public String getShadow() {
@@ -87,9 +105,10 @@ public class AppItem {
 
     public void setShadow(String shadow) {
         this.mShadow = shadow;
+        setShadowIcon(changeIdtoDrawable(mShadow));
     }
 
-    public String getLabel() {
+    public CharSequence getLabel() {
         return mLabel;
     }
 
@@ -97,4 +116,48 @@ public class AppItem {
         this.mLabel = label;
     }
 
+    public Drawable getAppIcon() {
+        return mAppIcon;
+    }
+
+    public void setAppIcon(Drawable appIcon) {
+        this.mAppIcon = appIcon;
+    }
+
+    public Drawable getBackgroundIcon() {
+        return mBackgroundIcon;
+    }
+
+    public void setBackgroundIcon(Drawable backgroundIcon) {
+        this.mBackgroundIcon = backgroundIcon;
+    }
+
+    public Drawable getShadowIcon() {
+        return mShadowIcon;
+    }
+
+    public void setShadowIcon(Drawable shadowIcon) {
+        this.mShadowIcon = shadowIcon;
+    }
+
+    private Drawable changeIdtoDrawable(String name) {
+        Drawable icon = null;
+        int resId = mResources.getIdentifier(name, "drawable", mPackageName);
+        if (resId == 0) {
+            Log.e("error", "resource not found for " + name);
+        } else {
+            icon = mResources.getDrawable(resId);
+        }
+        return icon;
+    }
+
+    @Override
+    public String toString() {
+        return "AppItem [mType=" + mType + ", mName=" + mName + ", mComponentName="
+                + mComponentName + ", mBackground=" + mBackground + ", mAvailable=" + mAvailable
+                + ", mConfigured=" + mConfigured + ", mConfiguredComponent=" + mConfiguredComponent
+                + ", mLogo=" + mLogo + ", mShadow=" + mShadow + ", mLabel=" + mLabel + "]";
+    }
+    
+    
 }

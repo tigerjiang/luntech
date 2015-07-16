@@ -3,8 +3,8 @@
     <apps>
         <app name="LiveTv">
             <type>LIVE_TV</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>global_thumb_1_label</label>
+            <component>com.xike.xkliveplay/.activity.launch.ActivityLaunch</component>
+            <label>直播电视</label>
             <background>global_thumb_1_logo</background>
             <shadow>global_thumb_1_shadow</shadow>
             <logo>global_thumb_1_logo</logo>
@@ -14,8 +14,8 @@
         </app>
         <app name="HSYZX">
             <type>HSYZX</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-             <label>global_thumb_2_label</label>
+            <component>com.xike.xkliveplay/.activity.launch.ActivityLaunch</component>
+             <label>红石崖在线</label>
             <background>global_thumb_2_logo</background>
             <shadow>global_thumb_2_shadow</shadow>
             <logo>global_thumb_2_logo</logo>
@@ -25,8 +25,8 @@
         </app>
         <app name="WuYue">
             <type>WuYue</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-             <label>global_thumb_3_label</label>
+            <component>com.xike.xkliveplay/.activity.launch.ActivityLaunch</component>
+             <label>物业服务</label>
             <background>global_thumb_3_logo</background>
             <shadow>global_thumb_3_shadow</shadow>
             <logo>global_thumb_3_logo</logo>
@@ -36,8 +36,8 @@
         </app>
         <app name="category_1">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_1_label</label>
+            <component>cn.com.wasu.main/.WasuTVMainActivity</component>
+            <label>影视点播</label>
             <background>categore_app_1_bg</background>
             <shadow>categore_app_1_shadow</shadow>
             <logo>categore_app_1_logo</logo>
@@ -47,8 +47,9 @@
         </app>
               <app name="category_2">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_2_label</label>
+             <component>com.eastsoft.android.ihome/.login.Launcher</component>
+           
+            <label>智慧社区</label>
             <background>categore_app_2_bg</background>
             <shadow>categore_app_2_shadow</shadow>
             <logo>categore_app_2_logo</logo>
@@ -58,8 +59,8 @@
         </app>
        <app name="category_3">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_3_label</label>
+            <component>com.softwine.secondary/.LongTaiAppsGridActivity</component>
+            <label>智能家居</label>
             <background>categore_app_3_bg</background>
             <shadow>categore_app_3_shadow</shadow>
             <logo>categore_app_3_logo</logo>
@@ -69,8 +70,8 @@
         </app>
            <app name="category_4">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_4_label</label>
+            <component>com.luntech.zhihemarket/.LoginActivity</component>
+            <label>应用市场</label>
             <background>categore_app_4_bg</background>
             <shadow>categore_app_4_shadow</shadow>
             <logo>categore_app_4_logo</logo>
@@ -80,8 +81,8 @@
         </app>
         <app name="category_5">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_5_label</label>
+            <component>com.softwine.secondary/.ApplicationsGridActivity</component>
+            <label>更多应用</label>
             <background>categore_app_5_bg</background>
             <shadow>categore_app_5_shadow</shadow>
             <logo>categore_app_5_logo</logo>
@@ -89,10 +90,10 @@
             <available>false</available>
             <configured_component>null</configured_component>
         </app>
-             <app name="category_6">
+        <app name="category_6">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_6_label</label>
+            <component>com.softwinner.TvdFileManager/.MainUI</component>
+            <label>本地播放</label>
             <background>categore_app_6_bg</background>
             <shadow>categore_app_6_shadow</shadow>
             <logo>categore_app_6_logo</logo>
@@ -102,8 +103,8 @@
         </app>
         <app name="category_7">
             <type>category</type>
-            <component>com.jamdeo.tv.vod/.VodActivity</component>
-            <label>categore_app_7_label</label>
+            <component>com.android.settings/.Settings</component>
+            <label>系统设置</label>
             <background>categore_app_7_bg</background>
             <shadow>categore_app_7_shadow</shadow>
             <logo>categore_app_7_logo</logo>

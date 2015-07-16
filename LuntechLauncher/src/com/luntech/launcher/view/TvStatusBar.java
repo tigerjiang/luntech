@@ -311,14 +311,18 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                 "", ""
                         };
                     }
-                    Log.d(TAG, "weather info " + weatherInfo.toString());
+                    Log.d(TAG, "weather info " + weatherInfo[0]+" "+ weatherInfo[1]);
                     synchronized (mState) {
                         Drawable weatherIcon = changeWeatherToIcon(weatherInfo[0]);
                         mState.setWeatherIcon(weatherIcon);
                         mState.setTemperature(weatherInfo[1]);
+//                        mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
+//                        mTemperatureView.setText(mState.getTemperature());
                         if (mState.hasChanges(TvStatus.WEATHER_INFO)) {
+                            Log.d(TAG, "WEATHER_INFO" + mState.toString());
                             notifyStateChange();
                         }
+                        Log.d(TAG, "WEATHER_INFO ---");
                     }
                     break;
 
@@ -397,6 +401,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 }
                 // Weather info
                 if (refreshAll || mState.hasChanges(TvStatus.WEATHER_INFO)) {
+                    Log.d(TAG, "WEATHER_INFO +++");
                     mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
                     mTemperatureView.setText(mState.getTemperature());
                     mState.clearChanges(TvStatus.DATE_TIME_INFO);
@@ -559,6 +564,9 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 mIsGetWeather = true;
                 mWeatherDetail = weather.getWeather();
                 mTemperature = weather.getTemp();
+                Log.d(TAG,  "mWeatherDetail = "+mWeatherDetail + "mTemperature = "+mTemperature);
+                String[] info = new String[]{mWeatherDetail,mTemperature};;
+                Log.d(TAG,  "info = "+info);
                 Log.d(TAG, "weather " + weather.toString());
                 if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
                     mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {

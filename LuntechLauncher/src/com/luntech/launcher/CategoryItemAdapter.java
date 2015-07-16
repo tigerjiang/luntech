@@ -13,11 +13,11 @@ import android.widget.TextView;
 
 public class CategoryItemAdapter extends BaseAdapter {
 
-    private List<CategoryItem> mAppList;
+    private List<AppItem> mAppList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
-    public CategoryItemAdapter(List<CategoryItem> appList, Context context) {
+    public CategoryItemAdapter(List<AppItem> appList, Context context) {
         super();
         this.mAppList = appList;
         this.mContext = context;
@@ -41,7 +41,7 @@ public class CategoryItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final CategoryItem categoryItem = mAppList.get(position);
+        final AppItem categoryItem = mAppList.get(position);
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
