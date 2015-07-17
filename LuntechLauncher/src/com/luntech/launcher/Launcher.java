@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.luntech.launcher.secondary.AppManager;
+import com.luntech.launcher.secondary.ApplicationInfo;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,7 +35,9 @@ public class Launcher extends Activity {
     private GridView mGridView;
     private Resources mResources;
     // private List<CategoryItem> mAppList = new ArrayList<CategoryItem>();
-    private List<AppItem> mAppList = new ArrayList<AppItem>();
+    private ArrayList<AppItem> mAllAppList = new ArrayList<AppItem>();
+    private ArrayList<AppItem> mCatgoryAppList = new ArrayList<AppItem>();
+    private AppItem mSelectedApp;
     private CategoryItemAdapter mCategoryItemAdapter;
     private Context mContext;
     private ChangeReceiver mChangeReceiver;
@@ -50,6 +54,7 @@ public class Launcher extends Activity {
     private RelativeLayout mThumb_3_layout;
     private ImageView mThumb_3_shadow;
     private TextView mThumb_3_label;
+    private ToolUtils mToolUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class Launcher extends Activity {
         setContentView(R.layout.main);
         mResources = getResources();
         mContext = getApplicationContext();
+        mToolUtils = ToolUtils.getInstance();
         parseCategoryItem();
         initView();
         // Intent intentService = new Intent();
@@ -78,9 +84,9 @@ public class Launcher extends Activity {
         mThumb_3_label = (TextView) findViewById(R.id.thumb_3_label);
         mAppManager = AppManager.getInstance();
         mGridView = (GridView) findViewById(R.id.category_layout);
-        final AppItem mFirstApp = mAppList.get(0);
-        final AppItem mSecondApp = mAppList.get(1);
-        final AppItem mThirdApp = mAppList.get(2);
+        final AppItem mFirstApp = mAllAppList.get(0);
+        final AppItem mSecondApp = mAllAppList.get(1);
+        final AppItem mThirdApp = mAllAppList.get(2);
         mThumb_1_layout.setBackground(mFirstApp.getBackgroundIcon());
         mThumb_1_shadow.setImageDrawable(mFirstApp.getShadowIcon());
         mThumb_1_label.setText(mFirstApp.getLabel());
@@ -114,7 +120,7 @@ public class Launcher extends Activity {
 
             }
         });
-        Iterator<AppItem> iter = mAppList.iterator();
+        Iterator<AppItem> iter = mAllAppList.iterator();
         while (iter.hasNext()) {
             AppItem app = iter.next();
             if (app.mLabel.equals(mFirstApp.mLabel) || app.mLabel.equals(mSecondApp.mLabel)
@@ -122,28 +128,42 @@ public class Launcher extends Activity {
                 iter.remove();
             }
         }
-        mCategoryItemAdapter = new CategoryItemAdapter(mAppList, mContext);
+        mCatgoryAppList = new ArrayList<AppItem>(mAllAppList);
+        mCategoryItemAdapter = new CategoryItemAdapter(mCatgoryAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AppItem app = mAppList.get(position);
-                String componentName = app.getComponentName();
+                AppItem app = mCatgoryAppList.get(position);
+                ComponentName componentName = app.getComponentName();
                 safeStartApk(componentName);
+            }
+        });
+        mGridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedApp = mCatgoryAppList.get(position);
+                mSelectedApp.setIndex(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
     }
 
-    void safeStartApk(String componentName) {
+    void safeStartApk(ComponentName componentName) {
         try {
-            String[] info = componentName.split("/");
             Intent intent = new Intent();
-            intent.setComponent(new ComponentName(info[0], componentName));
+            intent.setComponent(componentName);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(mContext, "App no found for "+componentName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "App no found for " + componentName, Toast.LENGTH_SHORT)
+                    .show();
 
             Log.d(TAG, e.toString());
         }
@@ -157,7 +177,7 @@ public class Launcher extends Activity {
     }
 
     private void parseCategoryItem() {
-        mAppList = ToolUtils.getInfoFromConfig(mContext, R.xml.default_config);
+        mAllAppList = ToolUtils.getInfoFromConfig(mContext, R.xml.default_config);
         // CategoryItem item1 = new CategoryItem();
         // item1.mAppIcon =
         // mResources.getDrawable(R.drawable.categore_app_1_logo);
@@ -258,7 +278,14 @@ public class Launcher extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (resultCode) {
             case RESULT_OK:
-                Bundle bundle = data.getExtras();
+                ApplicationInfo app = data.getParcelableExtra("app");
+                mToolUtils.setConfigured(mContext, app, true);
+                mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mIndex, app);
+                mSelectedApp.mAppIcon = app.getIcon();
+                mSelectedApp.mLabel = app.getTitle();
+                mSelectedApp.mComponentName = app.mComponent;
+                notifyAppList(mSelectedApp);
+                mCategoryItemAdapter.notifyDataSetChanged();
                 break;
             case RESULT_CANCELED:
                 break;
@@ -266,5 +293,21 @@ public class Launcher extends Activity {
                 break;
         }
 
+    }
+
+    private void notifyAppList(AppItem newApp) {
+        for (int i = 0; i < mCatgoryAppList.size(); i++) {
+            if (i == newApp.getIndex()) {
+                mCatgoryAppList.set(i, newApp);
+            }
+        }
+    }
+
+    private void notifyAllAppList() {
+        for (int i = 0; i < mAllAppList.size(); i++) {
+            if(!TextUtils.isEmpty(mToolUtils.getConfiguredPkg(mContext, "category_"+i))){
+                ApplicationInfo app = mAppManager.
+            }
+        }
     }
 }

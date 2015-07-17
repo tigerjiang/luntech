@@ -1,7 +1,9 @@
 
 package com.luntech.launcher;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -9,7 +11,7 @@ import android.util.Log;
 public class AppItem {
     private String mType;
     private String mName;
-    private String mComponentName;
+    public String mActivityName;
     private String mBackground;
     private String mAvailable;
     private String mConfigured;
@@ -17,7 +19,8 @@ public class AppItem {
     private String mLogo;
     private String mShadow;
     public CharSequence mLabel;
-
+    public ComponentName mComponentName;
+    public int mIndex;
     public Drawable mAppIcon;
     public Drawable mBackgroundIcon;
     public Drawable mShadowIcon;
@@ -33,6 +36,14 @@ public class AppItem {
 
     }
 
+    public int getIndex() {
+        return mIndex;
+    }
+
+    public void setIndex(int index) {
+        this.mIndex = index;
+    }
+    
     public String getType() {
         return mType;
     }
@@ -49,12 +60,14 @@ public class AppItem {
         this.mName = name;
     }
 
-    public String getComponentName() {
-        return mComponentName;
+    public String getActivityName() {
+        return mActivityName;
     }
 
-    public void setComponentName(String componentName) {
-        this.mComponentName = componentName;
+    public void setActivityName(String activityName) {
+        this.mActivityName = activityName;
+        String[] info = mActivityName.split("/");
+        setComponentName(new ComponentName(info[0], mActivityName));
     }
 
     public String getBackground() {
@@ -151,13 +164,20 @@ public class AppItem {
         return icon;
     }
 
+    public ComponentName getComponentName() {
+        return mComponentName;
+    }
+
+    public void setComponentName(ComponentName componentName) {
+        this.mComponentName = componentName;
+    }
+
     @Override
     public String toString() {
         return "AppItem [mType=" + mType + ", mName=" + mName + ", mComponentName="
-                + mComponentName + ", mBackground=" + mBackground + ", mAvailable=" + mAvailable
+                + mActivityName + ", mBackground=" + mBackground + ", mAvailable=" + mAvailable
                 + ", mConfigured=" + mConfigured + ", mConfiguredComponent=" + mConfiguredComponent
                 + ", mLogo=" + mLogo + ", mShadow=" + mShadow + ", mLabel=" + mLabel + "]";
     }
-    
-    
+
 }

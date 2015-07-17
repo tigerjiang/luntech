@@ -194,6 +194,7 @@ public final class AppManager {
 					PackageInfo pi = mPackageManager.getPackageInfo(
 							info.activityInfo.packageName, 0);
 					appinfo.mInstallTime = pi.firstInstallTime;
+					appinfo.mpackageName = info.activityInfo.packageName;;
 				} catch (PackageManager.NameNotFoundException e) {
 					// ignore
 				}

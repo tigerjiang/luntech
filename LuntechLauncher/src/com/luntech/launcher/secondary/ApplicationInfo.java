@@ -28,25 +28,25 @@ public class ApplicationInfo implements Parcelable, Comparable<ApplicationInfo> 
     /**
      * The application name.
      */
-    /*package*/ CharSequence mTitle;
+    public CharSequence mTitle;
 
     /**
      * The main component used to start the application.
      */
-    /*package*/ ComponentName mComponent;
+    public ComponentName mComponent;
 
     /**
      * The application icon.
      */
-    /*package*/ Drawable mIcon;
+    public Drawable mIcon;
 
     /**
      * The installation time.
      */
-    /*package*/ long mInstallTime;
+    public long mInstallTime;
+    
+    public String mpackageName;
 
-    public static final String[] m4K2KApps = {"com.myzaker.ZAKER_HD.hisense4k2k",
-                                              "com.douguo.recipetv.hisense4k2k" };
     ApplicationInfo() {}
 
     @SuppressWarnings("deprecation")
@@ -56,6 +56,7 @@ public class ApplicationInfo implements Parcelable, Comparable<ApplicationInfo> 
         mComponent = in.readParcelable(classLoader);
         mTitle = in.readString();
         mInstallTime = in.readLong();
+        mpackageName = in.readString();
     }
 
     /**
@@ -87,12 +88,7 @@ public class ApplicationInfo implements Parcelable, Comparable<ApplicationInfo> 
     public Intent getIntent() {
         final Intent i = Intent.makeMainActivity(mComponent);
         String packageName = mComponent.getPackageName();
-        List<String> packList = Arrays.asList(m4K2KApps);
         Log.d("AppCenter", "packageName is " + packageName);
-        if ( packList.contains(packageName) ){
-            // i.addFlags(Intent.FLAG_ACTIVITY_UHD);
-            Log.d("AppCenter", "Add flag FLAG_ACTIVITY_UHD");
-        }
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return i;
     }
@@ -111,6 +107,13 @@ public class ApplicationInfo implements Parcelable, Comparable<ApplicationInfo> 
         return mTitle;
     }
 
+    /**
+     * @return The application pkg.
+     */
+    public String getPackageName() {
+        return mpackageName;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -145,6 +148,7 @@ public class ApplicationInfo implements Parcelable, Comparable<ApplicationInfo> 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(mInstallTime);
         dest.writeString(mTitle.toString());
+        dest.writeString(mpackageName.toString());
         dest.writeParcelable(mComponent, flags);
         dest.writeParcelable((Bitmap)((BitmapDrawable) mIcon).getBitmap(), flags);
     }

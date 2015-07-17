@@ -3,51 +3,51 @@
     <apps>
         <app name="LiveTv">
             <type>LIVE_TV</type>
-            <component>com.xike.xkliveplay/.activity.launch.ActivityLaunch</component>
+            <activity>com.xike.xkliveplay/.activity.launch.ActivityLaunch</activity>
             <label>直播电视</label>
             <background>global_thumb_1_logo</background>
             <shadow>global_thumb_1_shadow</shadow>
             <logo>global_thumb_1_logo</logo>
             <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
         <app name="HSYZX">
             <type>HSYZX</type>
-            <component>com.xike.xkliveplay/.activity.launch.ActivityLaunch</component>
+            <activity>com.xike.xkliveplay/.activity.launch.ActivityLaunch</activity>
              <label>红石崖在线</label>
             <background>global_thumb_2_logo</background>
             <shadow>global_thumb_2_shadow</shadow>
             <logo>global_thumb_2_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
         <app name="WuYue">
             <type>WuYue</type>
-            <component>com.xike.xkliveplay/.activity.launch.ActivityLaunch</component>
+            <activity>com.xike.xkliveplay/.activity.launch.ActivityLaunch</activity>
              <label>物业服务</label>
             <background>global_thumb_3_logo</background>
             <shadow>global_thumb_3_shadow</shadow>
             <logo>global_thumb_3_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
         <app name="category_1">
             <type>category</type>
-            <component>cn.com.wasu.main/.WasuTVMainActivity</component>
+            <activity>cn.com.wasu.main/.WasuTVMainActivity</activity>
             <label>影视点播</label>
             <background>categore_app_1_bg</background>
             <shadow>categore_app_1_shadow</shadow>
             <logo>categore_app_1_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
               <app name="category_2">
             <type>category</type>
-             <component>com.eastsoft.android.ihome/.login.Launcher</component>
+             <activity>com.eastsoft.android.ihome/.login.Launcher</activity>
            
             <label>智慧社区</label>
             <background>categore_app_2_bg</background>
@@ -55,62 +55,62 @@
             <logo>categore_app_2_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
        <app name="category_3">
             <type>category</type>
-            <component>com.softwine.secondary/.LongTaiAppsGridActivity</component>
+            <activity>com.softwine.secondary/.LongTaiAppsGridActivity</activity>
             <label>智能家居</label>
             <background>categore_app_3_bg</background>
             <shadow>categore_app_3_shadow</shadow>
             <logo>categore_app_3_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
            <app name="category_4">
             <type>category</type>
-            <component>com.luntech.zhihemarket/.LoginActivity</component>
+            <activity>com.luntech.zhihemarket/.LoginActivity</activity>
             <label>应用市场</label>
             <background>categore_app_4_bg</background>
             <shadow>categore_app_4_shadow</shadow>
             <logo>categore_app_4_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
         <app name="category_5">
             <type>category</type>
-            <component>com.softwine.secondary/.ApplicationsGridActivity</component>
+            <activity>com.softwine.secondary/.ApplicationsGridActivity</activity>
             <label>更多应用</label>
             <background>categore_app_5_bg</background>
             <shadow>categore_app_5_shadow</shadow>
             <logo>categore_app_5_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
         <app name="category_6">
             <type>category</type>
-            <component>com.softwinner.TvdFileManager/.MainUI</component>
+            <activity>com.softwinner.TvdFileManager/.MainUI</activity>
             <label>本地播放</label>
             <background>categore_app_6_bg</background>
             <shadow>categore_app_6_shadow</shadow>
             <logo>categore_app_6_logo</logo>
              <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>
         <app name="category_7">
             <type>category</type>
-            <component>com.android.settings/.Settings</component>
+            <activity>com.android.settings/.Settings</activity>
             <label>系统设置</label>
             <background>categore_app_7_bg</background>
             <shadow>categore_app_7_shadow</shadow>
             <logo>categore_app_7_logo</logo>
-             <configured>false</configured>
+            <configured>false</configured>
             <available>false</available>
-            <configured_component>null</configured_component>
+            <configured_activity>null</configured_activity>
         </app>        
     </apps>
 
