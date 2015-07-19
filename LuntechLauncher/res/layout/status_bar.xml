@@ -78,7 +78,7 @@
         android:layout_marginTop="@dimen/global_vertical_devider_height_2"
         android:layout_toLeftOf="@+id/weather_status" 
         android:src="@drawable/ic_device_usb"
-        android:visibility="visible">
+        android:visibility="gone">
     </ImageView>
 
 </merge>

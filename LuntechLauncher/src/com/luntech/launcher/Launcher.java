@@ -2,6 +2,7 @@
 package com.luntech.launcher;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
+import com.luntech.launcher.view.AppDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,14 +46,17 @@ public class Launcher extends Activity {
     private Configuration mConfig = new Configuration();
     private AppManager mAppManager;
     private RelativeLayout mThumb_1_layout;
+    private ImageView mThumb_1_view;
     private ImageView mThumb_1_shadow;
     private TextView mThumb_1_label;
 
     private RelativeLayout mThumb_2_layout;
+    private ImageView mThumb_2_view;
     private ImageView mThumb_2_shadow;
     private TextView mThumb_2_label;
 
     private RelativeLayout mThumb_3_layout;
+    private ImageView mThumb_3_view;
     private ImageView mThumb_3_shadow;
     private TextView mThumb_3_label;
     private ToolUtils mToolUtils;
@@ -63,6 +68,7 @@ public class Launcher extends Activity {
         mResources = getResources();
         mContext = getApplicationContext();
         mToolUtils = ToolUtils.getInstance();
+        AppManager.create(this);
         parseCategoryItem();
         initView();
         // Intent intentService = new Intent();
@@ -73,21 +79,25 @@ public class Launcher extends Activity {
 
     private void initView() {
 
-        mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_view);
+        mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_layout);
+        mThumb_1_view = (ImageView) findViewById(R.id.thumb_1_view);
         mThumb_1_shadow = (ImageView) findViewById(R.id.thumb_1_cover_view);
         mThumb_1_label = (TextView) findViewById(R.id.thumb_1_label);
-        mThumb_2_layout = (RelativeLayout) findViewById(R.id.thumb_2_view);
+        mThumb_2_layout = (RelativeLayout) findViewById(R.id.thumb_2_layout);
+        mThumb_2_view = (ImageView) findViewById(R.id.thumb_2_view);
         mThumb_2_shadow = (ImageView) findViewById(R.id.thumb_2_cover_view);
         mThumb_2_label = (TextView) findViewById(R.id.thumb_2_label);
-        mThumb_3_layout = (RelativeLayout) findViewById(R.id.thumb_3_view);
+        mThumb_3_layout = (RelativeLayout) findViewById(R.id.thumb_3_layout);
+        mThumb_3_view = (ImageView) findViewById(R.id.thumb_3_view);
         mThumb_3_shadow = (ImageView) findViewById(R.id.thumb_3_cover_view);
         mThumb_3_label = (TextView) findViewById(R.id.thumb_3_label);
         mAppManager = AppManager.getInstance();
+        mAppManager.getAllApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
         final AppItem mFirstApp = mAllAppList.get(0);
         final AppItem mSecondApp = mAllAppList.get(1);
         final AppItem mThirdApp = mAllAppList.get(2);
-        mThumb_1_layout.setBackground(mFirstApp.getBackgroundIcon());
+        mThumb_1_view.setBackground(mFirstApp.getBackgroundIcon());
         mThumb_1_shadow.setImageDrawable(mFirstApp.getShadowIcon());
         mThumb_1_label.setText(mFirstApp.getLabel());
         mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +108,7 @@ public class Launcher extends Activity {
 
             }
         });
-        mThumb_2_layout.setBackground(mSecondApp.getBackgroundIcon());
+        mThumb_2_view.setBackground(mSecondApp.getBackgroundIcon());
         mThumb_2_shadow.setImageDrawable(mSecondApp.getShadowIcon());
         mThumb_2_label.setText(mSecondApp.getLabel());
         mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +119,7 @@ public class Launcher extends Activity {
 
             }
         });
-        mThumb_3_layout.setBackground(mThirdApp.getBackgroundIcon());
+        mThumb_3_view.setBackground(mThirdApp.getBackgroundIcon());
         mThumb_3_shadow.setImageDrawable(mThirdApp.getShadowIcon());
         mThumb_3_label.setText(mThirdApp.getLabel());
         mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +139,7 @@ public class Launcher extends Activity {
             }
         }
         mCatgoryAppList = new ArrayList<AppItem>(mAllAppList);
+        notifyAllAppList();
         mCategoryItemAdapter = new CategoryItemAdapter(mCatgoryAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -262,37 +273,82 @@ public class Launcher extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         int action = event.getAction();
-        Log.d(TAG, "action " + action + "    keycode" + keyCode);
         if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
+            Log.d(TAG, "action " + action + "    keycode" + keyCode);
+            Log.d(TAG, "focus "  + "    keycode" + keyCode);
+            
             if (keyCode == KeyEvent.KEYCODE_MENU) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, AppSelectedActivity.class);
-                startActivityForResult(intent, 0);
+                final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
+                newFragment.show(getFragmentManager(), "dialog");
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                if (mThumb_1_layout.isFocused()) {
+                    mThumb_2_layout.requestFocus();
+                }
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+                if (mThumb_1_layout.isFocused()) {
+                    Log.d(TAG, "mThumb_1_layout ");
+                    mGridView.requestFocus();
+                } else if (mThumb_2_layout.isFocused()) {
+                    Log.d(TAG, "mThumb_2_layout ");
+                    mThumb_3_layout.requestFocus();
+                } 
+                else if (mThumb_3_layout.isFocused()) {
+                    Log.d(TAG, "mThumb_3_layout ");
+                    mGridView.requestFocus();
+                }
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
+                if (mGridView.isFocused()) {
+                    mThumb_1_layout.requestFocus();
+                } else if (mThumb_3_layout.isFocused()) {
+                    mThumb_2_layout.requestFocus();
+                }
+                return true;
+            } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+                if (mThumb_2_layout.isFocused()) {
+                    mThumb_1_layout.requestFocus();
+                } else if (mThumb_3_layout.isFocused()) {
+                    mThumb_1_layout.requestFocus();
+                }
+                return true;
             }
         }
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode) {
-            case RESULT_OK:
-                ApplicationInfo app = data.getParcelableExtra("app");
-                mToolUtils.setConfigured(mContext, app, true);
-                mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mIndex, app);
-                mSelectedApp.mAppIcon = app.getIcon();
-                mSelectedApp.mLabel = app.getTitle();
-                mSelectedApp.mComponentName = app.mComponent;
-                notifyAppList(mSelectedApp);
-                mCategoryItemAdapter.notifyDataSetChanged();
-                break;
-            case RESULT_CANCELED:
-                break;
-            default:
-                break;
-        }
+    /*
+     * @Override protected void onActivityResult(int requestCode, int
+     * resultCode, Intent data) { super.onActivityResult(requestCode,
+     * resultCode, data); Log.d(TAG, "requestCode "+ requestCode +
+     * "resultCode  "+resultCode); switch (resultCode) { case RESULT_OK:
+     * Log.d(TAG, "RESULT_OK"); ApplicationInfo app =
+     * data.getParcelableExtra("app"); Log.d(TAG, "app "+app.toString());
+     * mToolUtils.setConfigured(mContext, app, true);
+     * mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mIndex, app);
+     * mSelectedApp.mAppIcon = app.getIcon(); mSelectedApp.mLabel =
+     * app.getTitle(); mSelectedApp.mComponentName = app.mComponent;
+     * notifyAppList(mSelectedApp); mCategoryItemAdapter.notifyDataSetChanged();
+     * break; case RESULT_CANCELED: Log.d(TAG, "RESULT_CANCELED"); break;
+     * default: break; } }
+     */
 
+    public void setResult(ApplicationInfo app, boolean isSelected) {
+        if (isSelected && app != null) {
+            Log.d("jzh", "setResult " + app.toString());
+            mToolUtils.setConfigured(mContext, app, true);
+            mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mIndex, app.getPackageName());
+            mSelectedApp.mAppIcon = app.getIcon();
+            mSelectedApp.mLabel = app.getTitle();
+            mSelectedApp.mComponentName = app.mComponent;
+            notifyAppList(mSelectedApp);
+            mCategoryItemAdapter.notifyDataSetChanged();
+            Log.d("jzh", "setResult  RESULT_OK " + app.toString());
+        } else {
+            setResult(RESULT_CANCELED, null);
+            Log.d("jzh", "setResult RESULT_CANCELED ");
+        }
     }
 
     private void notifyAppList(AppItem newApp) {
@@ -305,8 +361,22 @@ public class Launcher extends Activity {
 
     private void notifyAllAppList() {
         for (int i = 0; i < mAllAppList.size(); i++) {
-            if(!TextUtils.isEmpty(mToolUtils.getConfiguredPkg(mContext, "category_"+i))){
-                ApplicationInfo app = mAppManager.
+            String pkg = mToolUtils.getConfiguredPkg(mContext, "category_" + i);
+            Log.d(TAG, "category " + pkg);
+            if (!TextUtils.isEmpty(pkg)) {
+                ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
+                if (app != null) {
+                    AppItem newApp = new AppItem(mContext);
+                    newApp.mAppIcon = app.getIcon();
+                    newApp.mLabel = app.getTitle();
+                    newApp.mComponentName = app.mComponent;
+                    newApp.mBackgroundIcon = mCatgoryAppList.get(i).getBackgroundIcon();
+                    newApp.mShadowIcon = mCatgoryAppList.get(i).getShadowIcon();
+                    newApp.setIndex(i);
+                    notifyAppList(newApp);
+                } else {
+                    mToolUtils.clearConfiguredPkg(mContext, "category_" + i);
+                }
             }
         }
     }

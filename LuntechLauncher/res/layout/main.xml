@@ -22,11 +22,20 @@
         android:layout_marginTop="@dimen/global_vertical_devider_height_2" >
 
         <RelativeLayout
-            android:id="@+id/thumb_1_view"
+            android:id="@+id/thumb_1_layout"
             android:layout_width="@dimen/global_thumb_1_width"
             android:layout_height="@dimen/global_thumb_1_height"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/global_thumb_1_logo" >
+            android:background="@drawable/focus_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" >
+
+            <ImageView
+                android:id="@+id/thumb_1_view"
+                android:layout_width="@dimen/global_thumb_1_width"
+                android:layout_height="@dimen/global_thumb_1_height"
+                android:src="@drawable/global_thumb_1_logo" />
 
             <ImageView
                 android:id="@+id/thumb_1_cover_view"
@@ -49,14 +58,23 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/thumb_2_view"
+            android:id="@+id/thumb_2_layout"
             android:layout_width="@dimen/global_thumb_2_width"
             android:layout_height="@dimen/global_thumb_2_height"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/global_horizontal_devider_height"
-            android:layout_toRightOf="@+id/thumb_1_view"
-            android:background="@drawable/global_thumb_2_logo" >
+            android:layout_toRightOf="@+id/thumb_1_layout"
+            android:background="@drawable/focus_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" >
+
+            <ImageView
+                android:id="@+id/thumb_2_view"
+                android:layout_width="@dimen/global_thumb_1_width"
+                android:layout_height="@dimen/global_thumb_1_height"
+                android:src="@drawable/global_thumb_2_logo" />
 
             <ImageView
                 android:id="@+id/thumb_2_cover_view"
@@ -77,15 +95,24 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/thumb_3_view"
+            android:id="@+id/thumb_3_layout"
             android:layout_width="@dimen/global_thumb_3_width"
             android:layout_height="@dimen/global_thumb_3_height"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/thumb_2_view"
+            android:layout_below="@+id/thumb_2_layout"
             android:layout_marginLeft="@dimen/global_horizontal_devider_height"
             android:layout_marginTop="@dimen/global_vertical_devider_height"
-            android:layout_toRightOf="@+id/thumb_1_view"
-            android:background="@drawable/global_thumb_3_logo" >
+            android:layout_toRightOf="@+id/thumb_1_layout"
+            android:background="@drawable/focus_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" >
+
+            <ImageView
+                android:id="@+id/thumb_3_view"
+                android:layout_width="@dimen/global_thumb_1_width"
+                android:layout_height="@dimen/global_thumb_1_height"
+                android:src="@drawable/global_thumb_3_logo" />
 
             <ImageView
                 android:id="@+id/thumb_3_cover_view"

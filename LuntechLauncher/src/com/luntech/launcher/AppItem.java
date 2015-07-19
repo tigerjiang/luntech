@@ -43,7 +43,7 @@ public class AppItem {
     public void setIndex(int index) {
         this.mIndex = index;
     }
-    
+
     public String getType() {
         return mType;
     }
@@ -67,7 +67,7 @@ public class AppItem {
     public void setActivityName(String activityName) {
         this.mActivityName = activityName;
         String[] info = mActivityName.split("/");
-        setComponentName(new ComponentName(info[0], mActivityName));
+        setComponentName(new ComponentName(info[0], info[0] + info[1]));
     }
 
     public String getBackground() {
@@ -174,10 +174,10 @@ public class AppItem {
 
     @Override
     public String toString() {
-        return "AppItem [mType=" + mType + ", mName=" + mName + ", mComponentName="
-                + mActivityName + ", mBackground=" + mBackground + ", mAvailable=" + mAvailable
-                + ", mConfigured=" + mConfigured + ", mConfiguredComponent=" + mConfiguredComponent
-                + ", mLogo=" + mLogo + ", mShadow=" + mShadow + ", mLabel=" + mLabel + "]";
+        return "AppItem [mType=" + mType + ", mName=" + mName + ", mComponentName=" + mActivityName
+                + ", mBackground=" + mBackground + ", mAvailable=" + mAvailable + ", mConfigured="
+                + mConfigured + ", mConfiguredComponent=" + mConfiguredComponent + ", mLogo="
+                + mLogo + ", mShadow=" + mShadow + ", mLabel=" + mLabel + "]";
     }
 
 }

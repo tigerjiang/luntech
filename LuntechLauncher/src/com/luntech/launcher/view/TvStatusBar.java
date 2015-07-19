@@ -82,7 +82,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private Resources mResources;
 
-    private long mDelayTime = 5 * 1000;// 3 * 60 * 1000; // 3min
+    private long mDelayTime = 10 * 1000;// 3 * 60 * 1000; // 3min
     // keep in sync with System Settings -> Network Settings
     private static final String PPPOE_ENABLED = "pppoe_enabled";
     private static final String PPPOE_CONNECTED = "pppoe_connected";
@@ -171,27 +171,39 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         }
 
         // initialize weather info
-        mHandler.postDelayed(new Runnable() {
-
+//        mHandler.postDelayed(new Runnable() {
+//
+//            @Override
+//            public void run() {
+//                captureWeatherFromInternet();
+//            }
+//        }, mDelayTime);
+//        
+        new Thread(new Runnable() {
+            
             @Override
             public void run() {
                 captureWeatherFromInternet();
             }
-        }, mDelayTime);
+        }).start();
         // update the network info
         if (mConnectivityManager != null) {
             final NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
             onNetworkInfoChanged(netInfo);
         }
         // register for broadcasts we want
-        final IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
-        filter.addAction(WifiManager.RSSI_CHANGED_ACTION);
-        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
-        filter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
-        context.registerReceiver(mBroadcastReceiver, filter);
+        final IntentFilter filter1 = new IntentFilter();
+        filter1.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter1.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        filter1.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        filter1.addAction(WifiManager.RSSI_CHANGED_ACTION);
+
+        final IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        filter2.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        filter2.addDataScheme("file");
+        context.registerReceiver(mNetworkReceiver, filter1);
+        context.registerReceiver(mUsbReceiver, filter2);
     }
 
     private void registerListener() {
@@ -203,12 +215,12 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     @Override
     public void mount() {
-
+        mUsbStatusView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void unMount() {
-
+        mUsbStatusView.setVisibility(View.GONE);
     }
 
     @Override
@@ -218,7 +230,10 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     @Override
     public void networkChenge(int status) {
-
+        if (mConnectivityManager != null) {
+            final NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
+            onNetworkInfoChanged(networkInfo);
+        }
     }
 
     private class NonUIHandler extends Handler {
@@ -311,13 +326,13 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                                 "", ""
                         };
                     }
-                    Log.d(TAG, "weather info " + weatherInfo[0]+" "+ weatherInfo[1]);
+                    Log.d(TAG, "weather info " + weatherInfo[0] + " " + weatherInfo[1]);
                     synchronized (mState) {
                         Drawable weatherIcon = changeWeatherToIcon(weatherInfo[0]);
                         mState.setWeatherIcon(weatherIcon);
                         mState.setTemperature(weatherInfo[1]);
-//                        mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
-//                        mTemperatureView.setText(mState.getTemperature());
+                        // mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
+                        // mTemperatureView.setText(mState.getTemperature());
                         if (mState.hasChanges(TvStatus.WEATHER_INFO)) {
                             Log.d(TAG, "WEATHER_INFO" + mState.toString());
                             notifyStateChange();
@@ -338,10 +353,13 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private Handler mHandler;
 
-    private final BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mNetworkReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
+            Uri uri = intent.getData();
+            String path = uri == null ? "" : uri.getPath();
+            Log.d(TAG, "action: " + action + " path: " + path);
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)
                     || action.equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)
                     || action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)
@@ -350,9 +368,20 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     final NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
                     onNetworkInfoChanged(networkInfo);
                 }
-            } else if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
-                Uri uri = intent.getData();
-                String path = uri == null ? "" : uri.getPath();
+            }
+        }
+    };
+
+    private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            Uri uri = intent.getData();
+            String path = uri == null ? "" : uri.getPath();
+            Log.d(TAG, "action: " + action + " path: " + path);
+            if (action.equals(Intent.ACTION_MEDIA_MOUNTED)) {
+                // Uri uri = intent.getData();
+                // String path = uri == null ? "" : uri.getPath();
                 mUsbStatusView.setVisibility(View.VISIBLE);
                 if (DEBUG)
                     Log.d(TAG, "action: " + action + " path: " + path);
@@ -455,44 +484,32 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
     public Drawable changeWeatherToIcon(String engString) {
         if (engString.equals(mResources.getString(R.string.qing))) {
             return mResources.getDrawable(R.drawable.ic_weather_qing);
-        }
-        else if (engString.equals(mResources.getString(R.string.duoyun))) {
+        } else if (engString.equals(mResources.getString(R.string.duoyun))) {
             return mResources.getDrawable(R.drawable.ic_weather_duoyun);
-        }
-        else if (engString.equals(mResources.getString(R.string.ying))) {
+        } else if (engString.equals(mResources.getString(R.string.ying))) {
             return mResources.getDrawable(R.drawable.ic_weather_ying);
         }
         if (engString.equals(mResources.getString(R.string.zhenyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.leizhenyu))) {
+        } else if (engString.equals(mResources.getString(R.string.leizhenyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_leizhenyu);
-        }
-        else if (engString.equals(mResources.getString(R.string.yujiaxue))) {
+        } else if (engString.equals(mResources.getString(R.string.yujiaxue))) {
             return mResources.getDrawable(R.drawable.ic_weather_yujiaxue);
-        }
-        else if (engString.equals(mResources.getString(R.string.xiaoyu))) {
+        } else if (engString.equals(mResources.getString(R.string.xiaoyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_xiaoyu);
-        }
-        else if (engString.equals(mResources.getString(R.string.zhongyu))) {
+        } else if (engString.equals(mResources.getString(R.string.zhongyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.dayu))) {
+        } else if (engString.equals(mResources.getString(R.string.dayu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.dongyu))) {
+        } else if (engString.equals(mResources.getString(R.string.dongyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.baoyu))) {
+        } else if (engString.equals(mResources.getString(R.string.baoyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.dabaoyu))) {
+        } else if (engString.equals(mResources.getString(R.string.dabaoyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.te_dabaoyu))) {
+        } else if (engString.equals(mResources.getString(R.string.te_dabaoyu))) {
             return mResources.getDrawable(R.drawable.ic_weather_dayu);
-        }
-        else if (engString.equals(mResources.getString(R.string.xiaoxue))
+        } else if (engString.equals(mResources.getString(R.string.xiaoxue))
                 || engString.equals(mResources.getString(R.string.zhongxue))
                 || engString.equals(mResources.getString(R.string.daxue))
                 || engString.equals(mResources.getString(R.string.baoxue))
@@ -501,8 +518,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 || engString.equals(mResources.getString(R.string.xue))) {
             return mResources.getDrawable(R.drawable.ic_weather_xue);
 
-        }
-        else if (engString.equals(mResources.getString(R.string.qiang_shachengbao))
+        } else if (engString.equals(mResources.getString(R.string.qiang_shachengbao))
                 || engString.equals(mResources.getString(R.string.wu))
                 || engString.equals(mResources.getString(R.string.fuchen))
                 || engString.equals(mResources.getString(R.string.yangsha))) {
@@ -564,9 +580,12 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 mIsGetWeather = true;
                 mWeatherDetail = weather.getWeather();
                 mTemperature = weather.getTemp();
-                Log.d(TAG,  "mWeatherDetail = "+mWeatherDetail + "mTemperature = "+mTemperature);
-                String[] info = new String[]{mWeatherDetail,mTemperature};;
-                Log.d(TAG,  "info = "+info);
+                Log.d(TAG, "mWeatherDetail = " + mWeatherDetail + "mTemperature = " + mTemperature);
+                String[] info = new String[] {
+                        mWeatherDetail, mTemperature
+                };
+                ;
+                Log.d(TAG, "info = " + info);
                 Log.d(TAG, "weather " + weather.toString());
                 if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
                     mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
@@ -626,8 +645,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         httpUrl = httpUrl + "?" + httpArg;
         try {
             URL url = new URL(httpUrl);
-            HttpURLConnection connection = (HttpURLConnection) url
-                    .openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             // 填入apikey到HTTP header
             connection.setRequestProperty("apikey", "ad30c50fa431bbcacdd06c03ad3e9542");

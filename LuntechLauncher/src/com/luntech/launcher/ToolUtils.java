@@ -104,11 +104,11 @@ public class ToolUtils {
         spe.commit();
     }
 
-    public void setConfiguredPkg(Context context, int index, ApplicationInfo app) {
+    public void setConfiguredPkg(Context context, int index, String pkg) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO,
                 Context.MODE_PRIVATE);
         Editor spe = sp.edit();
-        spe.putString("category"+"_"+index , app.getPackageName());
+        spe.putString("category"+"_"+index , pkg);
         spe.commit();
     }
 
@@ -118,6 +118,14 @@ public class ToolUtils {
         return sp.getString(name , null);
     }
 
+    public void clearConfiguredPkg(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO,
+                Context.MODE_PRIVATE);
+        Editor spe = sp.edit();
+        spe.remove(key);
+        spe.commit();
+    }
+    
     public boolean getConfigured(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO,
                 Context.MODE_PRIVATE);

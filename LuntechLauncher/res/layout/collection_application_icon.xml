@@ -24,8 +24,7 @@
         android:paddingRight="@dimen/collection_app_icon_text_padding_right"
         android:ellipsize="end"
         android:gravity="center_horizontal"
-        android:lines="2"
-        android:singleLine="false"
+        android:singleLine="true"
         android:textColor="@android:color/white"
         android:layout_below="@id/app_icon_image"
         android:textAppearance="?android:attr/textAppearanceMedium" />

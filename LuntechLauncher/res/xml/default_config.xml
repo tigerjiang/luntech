@@ -103,7 +103,7 @@
         </app>
         <app name="category_7">
             <type>category</type>
-            <activity>com.android.settings/.Settings</activity>
+            <activity>com.luntech.launcher/.SettingActivity</activity>
             <label>系统设置</label>
             <background>categore_app_7_bg</background>
             <shadow>categore_app_7_shadow</shadow>

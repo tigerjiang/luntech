@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,8 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.luntech.launcher.AppSelectedActivity;
+import com.luntech.launcher.Launcher;
 import com.luntech.launcher.R;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
@@ -62,22 +62,24 @@ public class AppDialogFragment extends DialogFragment {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dismiss();
                 Activity activity = getActivity();
-                if (activity instanceof AppSelectedActivity) {
-                    ((AppSelectedActivity) activity).setResult(mSelectedApp, true);
+                if (activity instanceof Launcher) {
+                    ((Launcher) activity).setResult(mSelectedApp, true);
                 }
+                dismiss();
+                Log.d("jzh", "ok for " + mSelectedApp.toString());
             }
         });
         builder.setNegativeButton(R.string.cancel, new OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                dismiss();
                 Activity activity = getActivity();
-                if (activity instanceof AppSelectedActivity) {
-                    ((AppSelectedActivity) activity).setResult(mSelectedApp, false);
+                if (activity instanceof Launcher) {
+                    ((Launcher) activity).setResult(mSelectedApp, false);
                 }
+                Log.d("jzh", "cancel");
+                dismiss();
             }
         });
 
@@ -101,13 +103,24 @@ public class AppDialogFragment extends DialogFragment {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mSelectedApp = mAppList.get(position);
+//                mSelectedApp = mAppList.get(position);
+//                Log.d("jzh", "onItemSelected "+ mSelectedApp.toString());
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mSelectedApp = mAppList.get(0);
+//                mSelectedApp = mAppList.get(0);
+            }
+        });
+        mGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mSelectedApp = mAppList.get(position);
+                view.setPressed(true);
+                view.setBackgroundResource(R.drawable.focus);
+                Log.d("jzh", "onItemClick "+ mSelectedApp.toString());
             }
         });
     }

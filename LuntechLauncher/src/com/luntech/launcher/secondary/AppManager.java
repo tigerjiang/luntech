@@ -50,6 +50,7 @@ public final class AppManager {
 	private Context mContext;
 
 	private static Map<String, ApplicationInfo> mMainActivities = new HashMap<String, ApplicationInfo>();
+	private static Map<String, ApplicationInfo> mAllActivities = new HashMap<String, ApplicationInfo>();
 
 	private final PackageManager mPackageManager;
 
@@ -165,6 +166,9 @@ public final class AppManager {
         return mMainActivities.get(packageName);
     }
 	
+    public ApplicationInfo getInfoFromAllActivitys(String packageName) {
+        return mAllActivities.get(packageName);
+    }
 	
 	/**
 	 * All Applications for Content View.
@@ -173,6 +177,7 @@ public final class AppManager {
 	 */
 	public List<ApplicationInfo> getAllApplications() {
 		mMainActivities.clear();
+		mAllActivities.clear();
 		Log.d("packagename", "show app");
 		final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
 		mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -207,6 +212,7 @@ public final class AppManager {
 					mMainActivities.put(packageName, appinfo);
 					appList.add(appinfo);
 				}
+				mAllActivities.put(packageName, appinfo);
 				Log.d("packagename", packageName);
 			}
 		}
