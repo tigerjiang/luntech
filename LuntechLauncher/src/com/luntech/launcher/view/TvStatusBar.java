@@ -14,11 +14,13 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -171,21 +173,17 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         }
 
         // initialize weather info
-//        mHandler.postDelayed(new Runnable() {
-//
-//            @Override
-//            public void run() {
-//                captureWeatherFromInternet();
-//            }
-//        }, mDelayTime);
-//        
-        new Thread(new Runnable() {
-            
+        mHandler.postDelayed(new Runnable() {
+
             @Override
             public void run() {
-                captureWeatherFromInternet();
+                String city = getUserCity();
+                Log.d(TAG, "user city " + city);
+//                new WeatherTask().execute(city);
+                 captureWeatherFromInternet();
             }
-        }).start();
+        }, mDelayTime);
+
         // update the network info
         if (mConnectivityManager != null) {
             final NetworkInfo netInfo = mConnectivityManager.getActiveNetworkInfo();
@@ -434,6 +432,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
                     mTemperatureView.setText(mState.getTemperature());
                     mState.clearChanges(TvStatus.DATE_TIME_INFO);
+                    mState.clearChanges(TvStatus.WEATHER_INFO);
                 }
             }
         }
@@ -614,10 +613,10 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
     private String getUserCity() {
         String cityString = "青岛";
-        try {
-            cityString = Settings.System.getString(mContext.getContentResolver(), "city");
-        } catch (Exception e) {
-            Log.e(TAG, "Can't get the use set city");
+        cityString = Settings.System.getString(mContext.getContentResolver(), "city");
+        if (TextUtils.isEmpty(cityString)) {
+            cityString = "青岛";
+            Settings.System.putString(mContext.getContentResolver(), "city", cityString);
         }
         return cityString;
     }
@@ -665,7 +664,71 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         return result;
     }
 
-    private Drawable getWeatherIcon(String key) {
-        return null;
+    class WeatherTask extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            String weatherCity = null;
+            int r = 0;
+            String cityString = params[0];
+            Log.d(TAG, "mCity" + mCity + "   " + cityString);
+            if (TextUtils.isEmpty(cityString)) {
+                mWeatherDetail = "";
+                mTemperature = "";
+                return null;
+            }
+            weatherCity = filterSuffix(cityString);
+            mCity = weatherCity;
+
+            Log.d(TAG, "mCity" + mCity + "   " + cityString);
+            String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
+            String httpArg = "cityname=" + mCity;
+            String jasonResult = requestWeather(url, httpArg);
+            return jasonResult;
+        }
+
+        @Override
+        protected void onPostExecute(String jasonResult) {
+            if (jasonResult == null) {
+                return;
+            }
+
+            try {
+                JSONObject jb = new JSONObject(jasonResult);
+                Log.d(TAG, "weather " + jasonResult);
+                String errNum = jb.getString("errNum");
+                String errMessage = jb.getString("errMsg");
+                JSONObject jb1 = jb.getJSONObject("retData");
+                WeatherForm weather = new WeatherForm();
+                weather.setTemp(jb1.getString("l_tmp") + "-" + jb1.getString("h_tmp"));
+                weather.setWeather(jb1.getString("weather"));
+                weather.setDdate(jb1.getString("date"));
+                weather.setName(jb1.getString("city"));
+                weather.setId(jb1.getString("citycode"));
+                mIsGetWeather = true;
+                mWeatherDetail = weather.getWeather();
+                mTemperature = weather.getTemp();
+                Log.d(TAG, "mWeatherDetail = " + mWeatherDetail + "mTemperature = " + mTemperature);
+                String[] info = new String[] {
+                        mWeatherDetail, mTemperature
+                };
+                ;
+                Log.d(TAG, "info = " + info);
+                Log.d(TAG, "weather " + weather.toString());
+                if (!mHandler.hasMessages(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED)) {
+                    mHandler.obtainMessage(NonUIHandler.MSG_ON_WEATHER_INFO_CHANGED, new String[] {
+                            mWeatherDetail, mTemperature
+                    }).sendToTarget();
+                }
+            } catch (JSONException e) {
+
+                mIsGetWeather = false;
+                e.printStackTrace();
+            } catch (Exception e) {
+                mIsGetWeather = false;
+            }
+            super.onPostExecute(jasonResult);
+        }
+
     }
 }
