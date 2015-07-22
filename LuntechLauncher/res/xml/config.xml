@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="utf-8"?>
+<response>
+
+    <group
+        code="IPTV_1"
+        group_flag="1"
+        moveable="0" >
+        <name>
+<![CDATA[ 电视直播 ]]></name>
+
+        <showtext>
+<![CDATA[ 电视直播 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab03b7e1b89.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab03bbc4873.png ]]></icon>
+
+        <module
+            code="IPTV_1"
+            replace="0" >
+            <showtext>
+<![CDATA[ 电视直播 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab03b7e1b89.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab03bbc4873.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_1"
+                    type="5" >
+                    <url>
+<![CDATA[ com.xike.xkliveplay ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_2"
+        group_flag="1"
+        moveable="0" >
+        <name>
+<![CDATA[ 红石崖在线 ]]></name>
+
+        <showtext>
+<![CDATA[ 红石崖在线 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab0404976f7.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab040ebe1a7.png ]]></icon>
+
+        <module
+            code="IPTV_2"
+            replace="0" >
+            <showtext>
+<![CDATA[ 红石崖在线 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab0404976f7.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab040ebe1a7.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_2"
+                    type="5" >
+                    <url>
+<![CDATA[ com.xike.xkliveplay ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_3"
+        group_flag="1"
+        moveable="0" >
+        <name>
+<![CDATA[ 物业服务 ]]></name>
+
+        <showtext>
+<![CDATA[ 物业服务 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab043d88ed5.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab04413ad15.png ]]></icon>
+
+        <module
+            code="IPTV_3"
+            replace="0" >
+            <showtext>
+<![CDATA[ 物业服务 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab043d88ed5.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab04413ad15.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_3"
+                    type="5" >
+                    <url>
+<![CDATA[ com.xike.xkliveplay ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_4"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 影视点播 ]]></name>
+
+        <showtext>
+<![CDATA[ 影视点播 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab0470bad38.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab0479c912c.png ]]></icon>
+
+        <module
+            code="IPTV_4"
+            replace="1" >
+            <showtext>
+<![CDATA[ 影视点播 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab0470bad38.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab0479c912c.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_4"
+                    type="5" >
+                    <url>
+<![CDATA[ cn.com.wasu.main ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_5"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 智慧社区 ]]></name>
+
+        <showtext>
+<![CDATA[ 智慧社区 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab04b10c3da.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab04b64306f.png ]]></icon>
+
+        <module
+            code="IPTV_5"
+            replace="1" >
+            <showtext>
+<![CDATA[ 智慧社区 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab04b10c3da.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab04b64306f.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_5"
+                    type="5" >
+                    <url>
+<![CDATA[ com.eastsoft.android.ihome ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_6"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 智能家居 ]]></name>
+
+        <showtext>
+<![CDATA[ 智能家居 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab04f28595c.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab04f9e9022.png ]]></icon>
+
+        <module
+            code="IPTV_6"
+            replace="1" >
+            <showtext>
+<![CDATA[ 智能家居 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab04f28595c.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab04f9e9022.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_6"
+                    type="5" >
+                    <url>
+<![CDATA[ com.softwine.secondary ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_7"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 应用市场 ]]></name>
+
+        <showtext>
+<![CDATA[ 应用市场 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab052ee5b68.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab053a44258.png ]]></icon>
+
+        <module
+            code="IPTV_7"
+            replace="1" >
+            <showtext>
+<![CDATA[ 应用市场 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab052ee5b68.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab053a44258.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_7"
+                    type="5" >
+                    <url>
+<![CDATA[ com.luntech.zhihemarket ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_8"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 更多应用 ]]></name>
+
+        <showtext>
+<![CDATA[ 更多应用 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab0565e6d96.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab056cc2673.png ]]></icon>
+
+        <module
+            code="IPTV_8"
+            replace="1" >
+            <showtext>
+<![CDATA[ 更多应用 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab0565e6d96.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab056cc2673.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_8"
+                    type="5" >
+                    <url>
+<![CDATA[ com.softwine.secondary ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_9"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 本地播放 ]]></name>
+
+        <showtext>
+<![CDATA[ 本地播放 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab059596716.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab059d9e54b.png ]]></icon>
+
+        <module
+            code="IPTV_9"
+            replace="1" >
+            <showtext>
+<![CDATA[ 本地播放 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab059596716.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab059d9e54b.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_9"
+                    type="5" >
+                    <url>
+<![CDATA[ com.softwinner.TvdFileManager ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_10"
+        group_flag="1"
+        moveable="1" >
+        <name>
+<![CDATA[ 系统设置 ]]></name>
+
+        <showtext>
+<![CDATA[ 系统设置 ]]></showtext>
+
+        <bg>
+<![CDATA[ [55ab05bb5bbdb.png ]]></bg>
+
+        <icon>
+<![CDATA[ [55ab05c0af9e6.png ]]></icon>
+
+        <module
+            code="IPTV_10"
+            replace="1" >
+            <showtext>
+<![CDATA[ 系统设置 ]]></showtext>
+
+            <bg>
+<![CDATA[ [55ab05bb5bbdb.png ]]></bg>
+
+            <icon>
+<![CDATA[ [55ab05c0af9e6.png ]]></icon>
+
+            <apps>
+                <app
+                    code="IPTV_10"
+                    type="5" >
+                    <url>
+<![CDATA[ com.android.settings ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+
+</response>

@@ -8,9 +8,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Message;
+import android.os.Process;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -28,7 +35,6 @@ import com.luntech.launcher.view.AppDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class Launcher extends Activity {
 
@@ -61,20 +67,71 @@ public class Launcher extends Activity {
     private TextView mThumb_3_label;
     private ToolUtils mToolUtils;
 
+    private static PackageInfo sPackageInfo;
+    private static String sPackageName;
+    private static int sVersionCode;
+    private static final long REQUEST_DELAY_TIME = 10 * 1000;
+    private Handler mHandler;
+    private HandlerThread mThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mResources = getResources();
         mContext = getApplicationContext();
+        sPackageName = this.getPackageName();
+        try {
+            sPackageInfo = this.getPackageManager().getPackageInfo(sPackageName, 0);
+            sVersionCode = sPackageInfo.versionCode;
+        } catch (NameNotFoundException e) {
+
+            e.printStackTrace();
+        }
         mToolUtils = ToolUtils.getInstance();
         AppManager.create(this);
+        initHandler();
+        initPrecondition();
         parseCategoryItem();
         initView();
+
         // Intent intentService = new Intent();
         // intentService.setClass(this, ChangeService.class);
         // startService(intentService);
         // registerReceiver();
+    }
+
+    private void initHandler() {
+        mThread = new HandlerThread("launcher", Process.THREAD_PRIORITY_DISPLAY);
+        mThread.start();
+        mHandler = new LauncherHandler(mThread.getLooper());
+    }
+
+    private void initPrecondition() {
+        if (!HttpUtils.checkConnectivity(mContext)) {
+            return;
+        }
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                String httpArg = "&package_name=" + sPackageName + "&version=" + sVersionCode;
+                String url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
+
+                String result = HttpUtils.requestResourcesFromServer(url);
+                if (TextUtils.isEmpty(result)) {
+                    Logger.e("Doesn't found any info from server");
+                    return;
+                } else {
+                    Logger.d("result = " + result);
+                    Message msg = mHandler.obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+
+            }
+        }, REQUEST_DELAY_TIME);
+
     }
 
     private void initView() {
@@ -275,8 +332,8 @@ public class Launcher extends Activity {
         int action = event.getAction();
         if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
             Log.d(TAG, "action " + action + "    keycode" + keyCode);
-            Log.d(TAG, "focus "  + "    keycode" + keyCode);
-            
+            Log.d(TAG, "focus " + "    keycode" + keyCode);
+
             if (keyCode == KeyEvent.KEYCODE_MENU) {
                 final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
                 newFragment.show(getFragmentManager(), "dialog");
@@ -293,7 +350,7 @@ public class Launcher extends Activity {
                 } else if (mThumb_2_layout.isFocused()) {
                     Log.d(TAG, "mThumb_2_layout ");
                     mThumb_3_layout.requestFocus();
-                } 
+                }
                 else if (mThumb_3_layout.isFocused()) {
                     Log.d(TAG, "mThumb_3_layout ");
                     mGridView.requestFocus();
@@ -380,4 +437,37 @@ public class Launcher extends Activity {
             }
         }
     }
+
+    class LauncherHandler extends Handler {
+
+        public static final int RETURN_CATEGORY_CONFIG_CODE = 1;
+        public static final int RETURN_HIDDEN_CONFIG_CODE = 2;
+        public static final int RETURN_UPDATE_CONFIG_CODE = 3;
+        public static final int RETURN_SYSTEM_CONFIG_CODE = 4;
+
+        public LauncherHandler(Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            String result = (String) msg.obj;
+            if (TextUtils.isEmpty(result)) {
+                Logger.e("result is empty");
+            }
+            switch (msg.what) {
+                case RETURN_CATEGORY_CONFIG_CODE:
+                    
+                    break;
+                case RETURN_HIDDEN_CONFIG_CODE:
+                    break;
+                case RETURN_UPDATE_CONFIG_CODE:
+                    break;
+                case RETURN_SYSTEM_CONFIG_CODE:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
 }
