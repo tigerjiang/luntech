@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <response>
 
+    
     <group
         code="IPTV_1"
         group_flag="1"
@@ -377,6 +378,35 @@
                     type="5" >
                     <url>
 <![CDATA[ com.android.settings ]]></url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_1"
+        group_flag="1"
+        moveable="0" >
+        <group_name>电视直播</group_name>
+        <group_showtext>电视直播</group_showtext>
+        <group_bg>[55ab03b7e1b89.png</group_bg>
+        <group_icon>[55ab03bbc4873.png</group_icon>
+        <module
+            code="IPTV_1"
+            replace="0"
+            type="5" >
+            <module_showtext>电视直播</module_showtext>
+            <module_bg>55ab03b7e1b89.png</module_bg>
+            <module_icon>55ab03bbc4873.png</module_icon>
+            <module_shadow>55ab03bbc4873.png</module_shadow>
+            <apps>
+                <app>
+                    <app_name></app_name>
+                    <app_package_name>com.xike.xkliveplay</app_package_name>
+                    <app_activity>com.xike.xkliveplay/.activity.launch.ActivityLaunch</app_activity>
+                    <app_version></app_version>
+                    <app_size></app_size>
+                    <app_icon></app_icon>
+                    <app_url>com.xike.xkliveplay</app_url>
                 </app>
             </apps>
         </module>
