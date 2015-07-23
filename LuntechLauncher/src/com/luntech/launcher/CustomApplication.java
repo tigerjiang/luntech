@@ -1,6 +1,7 @@
 
 package com.luntech.launcher;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -10,19 +11,14 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.launcher.R;
-
-import java.io.File;
 import java.util.ArrayList;
 
 public class CustomApplication {
     public Group mGroup;
-    public ArrayList<Module> mModules;
 
-    
-    private Context mContext;
-    private Resources mResources;
-    private String mPackageName;
+    static Context mContext;
+    static Resources mResources;
+    static String mPackageName;
 
     public CustomApplication(Context context) {
         mContext = context;
@@ -39,7 +35,7 @@ public class CustomApplication {
         public static final String GROUP_TEXT_TAG = "g_text";
         public static final String GROUP_BG_TAG = "g_bg";
         public static final String GROUP_ICON_TAG = "g_icon";
-
+        public ArrayList<Module> mModules;
         public Group() {
 
         }
@@ -50,12 +46,68 @@ public class CustomApplication {
         public String groupText;
         public String groupBg;
         public String groupIcon;
-        
 
+        public String getGroupCode() {
+            return groupCode;
+        }
+
+        public void setGroupCode(String groupCode) {
+            this.groupCode = groupCode;
+        }
+
+        public int getGroupMoveable() {
+            return groupMoveable;
+        }
+
+        public void setGroupMoveable(int groupMoveable) {
+            this.groupMoveable = groupMoveable;
+        }
+
+        public int getGroupFlag() {
+            return groupFlag;
+        }
+
+        public void setGroupFlag(int groupFlag) {
+            this.groupFlag = groupFlag;
+        }
+
+        public String getGroupText() {
+            return groupText;
+        }
+
+        public void setGroupText(String groupText) {
+            this.groupText = groupText;
+        }
+
+        public String getGroupBg() {
+            return groupBg;
+        }
+
+        public void setGroupBg(String groupBg) {
+            this.groupBg = groupBg;
+        }
+
+        public String getGroupIcon() {
+            return groupIcon;
+        }
+
+        public void setGroupIcon(String groupIcon) {
+            this.groupIcon = groupIcon;
+        }
+
+        public void addModule(Module module) {
+            if (mModules == null) {
+                mModules = new ArrayList<CustomApplication.Module>();
+                mModules.add(module);
+            } else {
+                mModules.add(module);
+            }
+        }
         @Override
         public String toString() {
             return "Group [groupCode=" + groupCode + ", groupMoveable=" + groupMoveable
-                    + ", groupFlag=" + groupFlag + ", groupName=" + groupText + ", groupBg=" + groupBg + ", groupIcon=" + groupIcon + "]";
+                    + ", groupFlag=" + groupFlag + ", groupName=" + groupText + ", groupBg="
+                    + groupBg + ", groupIcon=" + groupIcon +", module=" + mModules + "]";
         }
 
     }
@@ -78,7 +130,7 @@ public class CustomApplication {
         public String moduleCode;
         public int moduleReplace;
         public int moduleType;
-        public String moduleText;
+        public CharSequence moduleText;
         public String moduleBg;
         public String moduleIcon;
         public String moduleShadow;
@@ -87,28 +139,75 @@ public class CustomApplication {
         public Drawable moduleIconDrawable;
         public Drawable moduleShadowDrawable;
 
+        public String getModuleCode() {
+            return moduleCode;
+        }
+
+        public void setModuleCode(String moduleCode) {
+            this.moduleCode = moduleCode;
+        }
+
+        public int getModuleReplace() {
+            return moduleReplace;
+        }
+
+        public void setModuleReplace(int moduleReplace) {
+            this.moduleReplace = moduleReplace;
+        }
+
+        public int getModuleType() {
+            return moduleType;
+        }
+
+        public void setModuleType(int moduleType) {
+            this.moduleType = moduleType;
+        }
+
+        public CharSequence getModuleText() {
+            return moduleText;
+        }
+
+        public void setModuleText(String moduleText) {
+            this.moduleText = moduleText;
+        }
+
         public String getModuleBg() {
             return moduleBg;
         }
 
-        public void setModuleBg(String moduleBg) {
+        public void setModuleBg(boolean defaultValue, String moduleBg) {
             this.moduleBg = moduleBg;
+            if (defaultValue) {
+                setModuleBgDrawable(changeIdtoDrawable(this.moduleBg));
+            } else {
+                setModuleBgDrawable(changeFiletoDrawable(this.moduleBg));
+            }
         }
 
         public String getModuleIcon() {
             return moduleIcon;
         }
 
-        public void setModuleIcon(String moduleIcon) {
+        public void setModuleIcon(boolean defaultValue, String moduleIcon) {
             this.moduleIcon = moduleIcon;
+            if (defaultValue) {
+                setModuleBgDrawable(changeIdtoDrawable(this.moduleIcon));
+            } else {
+                setModuleBgDrawable(changeFiletoDrawable(this.moduleIcon));
+            }
         }
 
         public String getModuleShadow() {
             return moduleShadow;
         }
 
-        public void setModuleShadow(String moduleShadow) {
+        public void setModuleShadow(boolean defaultValue, String moduleShadow) {
             this.moduleShadow = moduleShadow;
+            if (defaultValue) {
+                setModuleBgDrawable(changeIdtoDrawable(this.moduleShadow));
+            } else {
+                setModuleBgDrawable(changeFiletoDrawable(this.moduleShadow));
+            }
         }
 
         public Drawable getModuleBgDrawable() {
@@ -138,11 +237,30 @@ public class CustomApplication {
         public void addApp(App app) {
             if (mApps == null) {
                 mApps = new ArrayList<CustomApplication.App>();
+                mApps.add(app);
             } else {
                 mApps.add(app);
             }
         }
 
+        private  Drawable changeIdtoDrawable(String name) {
+            Drawable icon = null;
+            int resId = mResources.getIdentifier(name, "drawable", mPackageName);
+            if (resId == 0) {
+                Log.e("error", mPackageName+ " resource not found for " + name);
+            } else {
+                icon = mResources.getDrawable(resId);
+            }
+            return icon;
+        }
+
+        private  Drawable changeFiletoDrawable(String path) {
+            Drawable icon = null;
+            if (!TextUtils.isEmpty(path)) {
+                icon = Drawable.createFromPath(path);
+            }
+            return icon;
+        }
         @Override
         public String toString() {
             return "Module [mApps=" + mApps + ", moduleCode=" + moduleCode + ", moduleReplace="
@@ -171,40 +289,68 @@ public class CustomApplication {
         public String appActivity;
         public String appIcon;
         public String appUrl;
+        public ComponentName componentName;
+        public String getAppName() {
+            return appName;
+        }
+
+        public void setAppName(String appName) {
+            this.appName = appName;
+        }
+
+        public String getAppPackage() {
+            return appPackage;
+        }
+
+        public void setAppPackage(String appPackage) {
+            this.appPackage = appPackage;
+        }
+
+        public String getAppActivity() {
+            return appActivity;
+        }
+
+        public void setAppActivity(String appActivity) {
+            this.appActivity = appActivity;
+            if(!TextUtils.isEmpty(appActivity)){
+                String[] info = this.appActivity.split("/");
+                setComponentName(new ComponentName(info[0], info[0] + info[1]));
+                
+            }else{
+                Logger.e("activity is null");
+            }
+        }
+
+        public String getAppIcon() {
+            return appIcon;
+        }
+
+        public void setAppIcon(String appIcon) {
+            this.appIcon = appIcon;
+        }
+
+        public String getAppUrl() {
+            return appUrl;
+        }
+
+        public void setAppUrl(String appUrl) {
+            this.appUrl = appUrl;
+        }
+
+        public ComponentName getComponentName() {
+            return componentName;
+        }
+
+        public void setComponentName(ComponentName componentName) {
+            this.componentName = componentName;
+        }
 
         @Override
         public String toString() {
-            return "App [appName=" + appName + ", appPackagename=" + appPackage
-                    + ", appActivity=" + appActivity  + ", appIcon=" + appIcon + ", appUrl=" + appUrl + "]";
+            return "App [appName=" + appName + ", appPackagename=" + appPackage + ", appActivity="
+                    + appActivity + ", appIcon=" + appIcon + ", appUrl=" + appUrl + "]";
         }
 
-    }
-
-    public void addModule(Module module) {
-        if (mModules == null) {
-            mModules = new ArrayList<CustomApplication.Module>();
-        } else {
-            mModules.add(module);
-        }
-    }
-
-    private Drawable changeIdtoDrawable(String name) {
-        Drawable icon = null;
-        int resId = mResources.getIdentifier(name, "drawable", mPackageName);
-        if (resId == 0) {
-            Log.e("error", "resource not found for " + name);
-        } else {
-            icon = mResources.getDrawable(resId);
-        }
-        return icon;
-    }
-
-    private Drawable changeFiletoDrawable(String path) {
-        Drawable icon = null;
-        if (!TextUtils.isEmpty(path)) {
-            icon = Drawable.createFromPath(path);
-        }
-        return icon;
     }
 
 }

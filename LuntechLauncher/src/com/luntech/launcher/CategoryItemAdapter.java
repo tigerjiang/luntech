@@ -1,6 +1,8 @@
 
 package com.luntech.launcher;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -13,25 +15,27 @@ import android.widget.TextView;
 
 public class CategoryItemAdapter extends BaseAdapter {
 
-    private List<AppItem> mAppList;
+    private List<CustomApplication> mAppList;
+    private List<CustomApplication> mCatgoryAppList;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
-    public CategoryItemAdapter(List<AppItem> appList, Context context) {
+    public CategoryItemAdapter(List<CustomApplication> appList, Context context) {
         super();
         this.mAppList = appList;
+        initList();
         this.mContext = context;
         mLayoutInflater = LayoutInflater.from(mContext);
     }
 
     @Override
     public int getCount() {
-        return mAppList.size();
+        return mCatgoryAppList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mAppList.get(position);
+        return mCatgoryAppList.get(position);
     }
 
     @Override
@@ -41,7 +45,8 @@ public class CategoryItemAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final AppItem categoryItem = mAppList.get(position);
+        final CustomApplication application = mCatgoryAppList.get(position);
+        final CustomApplication.Module module = application.mGroup.mModules.get(0);
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -56,10 +61,10 @@ public class CategoryItemAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.appBgView.setImageDrawable(categoryItem.getBackgroundIcon());
-        holder.appLogoView.setImageDrawable(categoryItem.getAppIcon());
-        holder.appShadowView.setImageDrawable(categoryItem.getShadowIcon());
-        holder.mAppLabel.setText(categoryItem.getLabel());
+        holder.appBgView.setImageDrawable(module.getModuleBgDrawable());
+        holder.appLogoView.setImageDrawable(module.getModuleIconDrawable());
+        holder.appShadowView.setImageDrawable(module.getModuleShadowDrawable());
+        holder.mAppLabel.setText(module.getModuleText());
         return convertView;
     }
 
@@ -68,5 +73,21 @@ public class CategoryItemAdapter extends BaseAdapter {
         ImageView appBgView;
         ImageView appShadowView;
         TextView mAppLabel;
+    }
+
+    private void initList() {
+        Iterator<CustomApplication> iter = mAppList.iterator();
+        while (iter.hasNext()) {
+            CustomApplication app = iter.next();
+            if (app.mGroup.mModules.get(0).moduleText
+                    .equals(mAppList.get(0).mGroup.mModules.get(0).moduleText)
+                    || app.mGroup.mModules.get(0).moduleText.equals(mAppList.get(1).mGroup.mModules
+                            .get(0).moduleText)
+                    || app.mGroup.mModules.get(0).moduleText.equals(mAppList.get(2).mGroup.mModules
+                            .get(0).moduleText)) {
+                iter.remove();
+            }
+        }
+        mCatgoryAppList = new ArrayList<CustomApplication>(mAppList);
     }
 }

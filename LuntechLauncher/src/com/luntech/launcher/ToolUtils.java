@@ -114,50 +114,51 @@ public class ToolUtils {
                     Log.d(TAG, name);
                     // group info
                     if (name.equals(CustomApplication.Group.GROUP_TAG)) {
-                        application = new CustomApplication();
+                        application = new CustomApplication(context);
                         application.mGroup = new CustomApplication.Group();
-                        application.mGroup.groupCode = parser.getAttributeValue(0);
-                        application.mGroup.groupMoveable = Integer.parseInt(parser
-                                .getAttributeValue(1));
-                        application.mGroup.groupFlag = Integer
-                                .parseInt(parser.getAttributeValue(2));
+                        application.mGroup.setGroupCode(parser.getAttributeValue(0));
+                        application.mGroup.setGroupMoveable(Integer.parseInt(parser
+                                .getAttributeValue(1)));
+
+                        application.mGroup.setGroupFlag(Integer.parseInt(parser
+                                .getAttributeValue(2)));
                     } else if (name.equals(CustomApplication.Group.GROUP_TEXT_TAG)) {
-                        application.mGroup.groupText = parser.nextText();
+                        application.mGroup.setGroupText(parser.nextText());
                     } else if (name.equals(CustomApplication.Group.GROUP_BG_TAG)) {
-                        application.mGroup.groupBg = parser.nextText();
+                        application.mGroup.setGroupBg(parser.nextText());
                     } else if (name.equals(CustomApplication.Group.GROUP_ICON_TAG)) {
-                        application.mGroup.groupIcon = parser.nextText();
+                        application.mGroup.setGroupIcon(parser.nextText());
                     }
                     // Module info
 
                     else if (name.equals(CustomApplication.Module.MODULE_TAG)) {
                         module = new CustomApplication.Module();
-                        module.moduleCode = parser.getAttributeValue(0);
-                        module.moduleReplace = Integer.parseInt(parser.getAttributeValue(1));
-                        module.moduleType = Integer.parseInt(parser.getAttributeValue(2));
+                        module.setModuleCode(parser.getAttributeValue(0));
+                        module.setModuleReplace(Integer.parseInt(parser.getAttributeValue(1)));
+                        module.setModuleType(Integer.parseInt(parser.getAttributeValue(2)));
                     } else if (name.equals(CustomApplication.Module.MODULE_TEXT_TAG)) {
-                        module.moduleText = parser.nextText();
+                        module.setModuleText(parser.nextText());
                     } else if (name.equals(CustomApplication.Module.MODULE_BG_TAG)) {
-                        module.moduleBg = parser.nextText();
+                        module.setModuleBg(true, parser.nextText());
                     } else if (name.equals(CustomApplication.Module.MODULE_ICON_TAG)) {
-                        module.moduleIcon = parser.nextText();
+                        module.setModuleIcon(true, parser.nextText());
                     } else if (name.equals(CustomApplication.Module.MODULE_SHADOW_TAG)) {
-                        module.moduleShadow = parser.nextText();
+                        module.setModuleShadow(true, parser.nextText());
                         // apps
                     } else if (name.equals(CustomApplication.App.APPS_TAG)) {
                         apps = new ArrayList<CustomApplication.App>();
                     } else if (name.equals(CustomApplication.App.APP_TAG)) {
                         app = new CustomApplication.App();
                     } else if (name.equals(CustomApplication.App.APP_NAME_TAG)) {
-                        app.appName = parser.nextText();
+                        app.setAppName(parser.nextText());
                     } else if (name.equals(CustomApplication.App.APP_PACKAGE_TAG)) {
-                        app.appPackage = parser.nextText();
+                        app.setAppPackage(parser.nextText());
                     } else if (name.equals(CustomApplication.App.APP_ACTIVITY_TAG)) {
-                        app.appActivity = parser.nextText();
+                        app.setAppActivity(parser.nextText());
                     } else if (name.equals(CustomApplication.App.APP_ICON_TAG)) {
-                        app.appIcon = parser.nextText();
+                        app.setAppIcon(parser.nextText());
                     } else if (name.equals(CustomApplication.App.APP_URL_TAG)) {
-                        app.appUrl = parser.nextText();
+                        app.setAppUrl(parser.nextText());
                     }
 
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
@@ -170,7 +171,7 @@ public class ToolUtils {
                         module.mApps = apps;
                         Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(CustomApplication.Module.MODULE_TAG)) {
-                        application.addModule(module);
+                        application.mGroup.addModule(module);
                         Logger.d("end module" + module.toString());
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         applications.add(application);
@@ -205,7 +206,7 @@ public class ToolUtils {
                     Log.d(TAG, name);
                     // group info
                     if (name.equals(CustomApplication.Group.GROUP_TAG)) {
-                        application = new CustomApplication();
+                        application = new CustomApplication(context);
                         application.mGroup = new CustomApplication.Group();
                         application.mGroup.groupCode = parser.getAttributeValue(0);
                         application.mGroup.groupMoveable = Integer.parseInt(parser
@@ -261,7 +262,7 @@ public class ToolUtils {
                         module.mApps = apps;
                         Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(CustomApplication.Module.MODULE_TAG)) {
-                        application.addModule(module);
+                        application.mGroup.addModule(module);
                         Logger.d("end module" + module.toString());
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         applications.add(application);
@@ -286,10 +287,10 @@ public class ToolUtils {
         spe.commit();
     }
 
-    public void setConfiguredPkg(Context context, int index, String pkg) {
+    public void setConfiguredPkg(Context context, String keyCode, String pkg) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
         Editor spe = sp.edit();
-        spe.putString("category" + "_" + index, pkg);
+        spe.putString(keyCode, pkg);
         spe.commit();
     }
 
