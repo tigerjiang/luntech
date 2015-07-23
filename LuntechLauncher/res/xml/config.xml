@@ -1,41 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
 <response>
 
-    
     <group
         code="IPTV_1"
         group_flag="1"
         moveable="0" >
-        <name>
-<![CDATA[ 电视直播 ]]></name>
+        <g_text>
+电视直播
+        </g_text>
 
-        <showtext>
-<![CDATA[ 电视直播 ]]></showtext>
+        <g_bg>
+global_thumb_1_logo
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab03b7e1b89.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab03bbc4873.png ]]></icon>
+        <g_icon>
+global_thumb_1_logo
+        </g_icon>
 
         <module
             code="IPTV_1"
-            replace="0" >
-            <showtext>
-<![CDATA[ 电视直播 ]]></showtext>
+            replace="0"
+            type="5" >
+            <m_text>
+电视直播
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab03b7e1b89.png ]]></bg>
+            <m_bg>
+global_thumb_1_logo
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab03bbc4873.png ]]></icon>
+            <m_icon>
+global_thumb_1_logo
+            </m_icon>
+
+            <m_shadow>
+                global_thumb_1_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_1"
-                    type="5" >
-                    <url>
-<![CDATA[ com.xike.xkliveplay ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+com.xike.xkliveplay
+                    </a_package>
+
+                    <a_activity>
+com.xike.xkliveplay/.activity.launch.ActivityLaunch
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -44,36 +62,54 @@
         code="IPTV_2"
         group_flag="1"
         moveable="0" >
-        <name>
-<![CDATA[ 红石崖在线 ]]></name>
+        <g_text>
+红石崖在线
+        </g_text>
 
-        <showtext>
-<![CDATA[ 红石崖在线 ]]></showtext>
+        <g_bg>
+global_thumb_2_logo
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab0404976f7.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab040ebe1a7.png ]]></icon>
+        <g_icon>
+global_thumb_2_logo
+        </g_icon>
 
         <module
             code="IPTV_2"
-            replace="0" >
-            <showtext>
-<![CDATA[ 红石崖在线 ]]></showtext>
+            replace="0"
+            type="5" >
+            <m_text>
+红石崖在线
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab0404976f7.png ]]></bg>
+            <m_bg>
+global_thumb_2_logo
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab040ebe1a7.png ]]></icon>
+            <m_icon>
+global_thumb_2_logo
+            </m_icon>
+
+            <m_shadow>
+global_thumb_2_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_2"
-                    type="5" >
-                    <url>
-<![CDATA[ com.xike.xkliveplay ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -82,36 +118,54 @@
         code="IPTV_3"
         group_flag="1"
         moveable="0" >
-        <name>
-<![CDATA[ 物业服务 ]]></name>
+        <g_text>
+物业服务
+        </g_text>
 
-        <showtext>
-<![CDATA[ 物业服务 ]]></showtext>
+        <g_bg>
+global_thumb_3_logo
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab043d88ed5.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab04413ad15.png ]]></icon>
+        <g_icon>
+global_thumb_3_logo
+        </g_icon>
 
         <module
             code="IPTV_3"
-            replace="0" >
-            <showtext>
-<![CDATA[ 物业服务 ]]></showtext>
+            replace="0"
+            type="5" >
+            <m_text>
+物业服务
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab043d88ed5.png ]]></bg>
+            <m_bg>
+global_thumb_3_logo
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab04413ad15.png ]]></icon>
+            <m_icon>
+global_thumb_3_logo
+            </m_icon>
+
+            <m_shadow>
+global_thumb_3_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_3"
-                    type="5" >
-                    <url>
-<![CDATA[ com.xike.xkliveplay ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -120,36 +174,56 @@
         code="IPTV_4"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 影视点播 ]]></name>
+        <g_text>
+影视点播
+        </g_text>
 
-        <showtext>
-<![CDATA[ 影视点播 ]]></showtext>
+        <g_bg>
+categore_app_1_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab0470bad38.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab0479c912c.png ]]></icon>
+        <g_icon>
+categore_app_1_logo
+        </g_icon>
 
         <module
             code="IPTV_4"
-            replace="1" >
-            <showtext>
-<![CDATA[ 影视点播 ]]></showtext>
+            replace="1"
+            type="5" >
+            <m_text>
+影视点播
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab0470bad38.png ]]></bg>
+            <m_bg>
+categore_app_1_bg
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab0479c912c.png ]]></icon>
+            <m_icon>
+categore_app_1_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_1_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_4"
-                    type="5" >
-                    <url>
-<![CDATA[ cn.com.wasu.main ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+cn.com.wasu.main
+                    </a_package>
+
+                    <a_activity>
+cn.com.wasu.main/.WasuTVMainActivity
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -158,36 +232,258 @@
         code="IPTV_5"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 智慧社区 ]]></name>
+        <g_text>
+智慧社区
+        </g_text>
 
-        <showtext>
-<![CDATA[ 智慧社区 ]]></showtext>
+        <g_bg>
+categore_app_2_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab04b10c3da.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab04b64306f.png ]]></icon>
+        <g_icon>
+categore_app_2_logo
+        </g_icon>
 
         <module
             code="IPTV_5"
-            replace="1" >
-            <showtext>
-<![CDATA[ 智慧社区 ]]></showtext>
+            replace="1"
+            type="2" >
+            <m_text>
+智慧社区
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab04b10c3da.png ]]></bg>
+            <m_bg>
+categore_app_2_bg
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab04b64306f.png ]]></icon>
+            <m_icon>
+categore_app_2_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_2_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_5"
-                    type="5" >
-                    <url>
-<![CDATA[ com.eastsoft.android.ihome ]]></url>
+                <app>
+                    <a_name>
+音乐+
+                    </a_name>
+
+                    <a_package>
+com.lutongnet.kalaok
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20130923/1379903967.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20130923/1379903971.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+QQ音乐
+                    </a_name>
+
+                    <a_package>
+com.tencent.qqmusicpad
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20131213/1386915594.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20131213/1386915590.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+多米音乐
+                    </a_name>
+
+                    <a_package>
+com.hycstv.android
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20130923/1379903604.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20130923/1379903608.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+博雅斗地主
+                    </a_name>
+
+                    <a_package>
+com.boyaa.lordland.sina
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20131111/1384153100.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20131111/1384153171.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+百度音乐
+                    </a_name>
+
+                    <a_package>
+com.happy000.rushCy
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20131115/1384504486.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20131115/1384504533.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+屋顶狂奔
+                    </a_name>
+
+                    <a_package>
+fishnoodle.canabalt
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20140102/1388643384.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20140102/1388643362.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+音悦TV
+                    </a_name>
+
+                    <a_package>
+com.airplayme.android.tvbox
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20131014/1381738766.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20131014/1381738787.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+涂鸦泡泡
+                    </a_name>
+
+                    <a_package>
+com.yingzheng.dooblebubbleEn
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20131015/1381800651.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20131015/1381800690.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+海洋音乐
+                    </a_name>
+
+                    <a_package>
+com.omusic.tv
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20131115/1384504361.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20131115/1384504365.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+E生活管家
+                    </a_name>
+
+                    <a_package>
+com.luntech.maplivingarea
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20150303/1425363846.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20150303/1425363873.apk
+                    </a_url>
+                </app>
+                <app>
+                    <a_name>
+华数影视
+                    </a_name>
+
+                    <a_package>
+cn.com.wasu.main
+                    </a_package>
+
+                    <a_activity>
+                    </a_activity>
+
+                    <a_icon>
+http://market.4006169169.com/Public/Upload/soft_icon/20141210/1418178250.png
+                    </a_icon>
+
+                    <a_url>
+http://market.4006169169.com/Public/Upload/soft/20141210/1418178260.apk
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -196,36 +492,56 @@
         code="IPTV_6"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 智能家居 ]]></name>
+        <g_text>
+智能家居
+        </g_text>
 
-        <showtext>
-<![CDATA[ 智能家居 ]]></showtext>
+        <g_bg>
+categore_app_3_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab04f28595c.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab04f9e9022.png ]]></icon>
+        <g_icon>
+categore_app_3_logo
+        </g_icon>
 
         <module
             code="IPTV_6"
-            replace="1" >
-            <showtext>
-<![CDATA[ 智能家居 ]]></showtext>
+            replace="1"
+            type="3" >
+            <m_text>
+智能家居
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab04f28595c.png ]]></bg>
+            <m_bg>
+categore_app_3_bg
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab04f9e9022.png ]]></icon>
+            <m_icon>
+categore_app_3_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_3_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_6"
-                    type="5" >
-                    <url>
-<![CDATA[ com.softwine.secondary ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+com.eastsoft.android.ihome
+                    </a_package>
+
+                    <a_activity>
+com.eastsoft.android.ihome/.login.Launcher
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -234,36 +550,56 @@
         code="IPTV_7"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 应用市场 ]]></name>
+        <g_text>
+应用市场
+        </g_text>
 
-        <showtext>
-<![CDATA[ 应用市场 ]]></showtext>
+        <g_bg>
+categore_app_4_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab052ee5b68.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab053a44258.png ]]></icon>
+        <g_icon>
+categore_app_4_logo
+        </g_icon>
 
         <module
             code="IPTV_7"
-            replace="1" >
-            <showtext>
-<![CDATA[ 应用市场 ]]></showtext>
+            replace="1"
+            type="4" >
+            <m_text>
+应用市场
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab052ee5b68.png ]]></bg>
+            <m_bg>
+categore_app_4_bg
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab053a44258.png ]]></icon>
+            <m_icon>
+categore_app_4_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_4_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_7"
-                    type="5" >
-                    <url>
-<![CDATA[ com.luntech.zhihemarket ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+com.luntech.zhihemarket
+                    </a_package>
+
+                    <a_activity>
+com.luntech.zhihemarket/.LoginActivity
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -272,36 +608,56 @@
         code="IPTV_8"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 更多应用 ]]></name>
+        <g_text>
+更多应用
+        </g_text>
 
-        <showtext>
-<![CDATA[ 更多应用 ]]></showtext>
+        <g_bg>
+categore_app_5_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab0565e6d96.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab056cc2673.png ]]></icon>
+        <g_icon>
+categore_app_5_logo
+        </g_icon>
 
         <module
             code="IPTV_8"
-            replace="1" >
-            <showtext>
-<![CDATA[ 更多应用 ]]></showtext>
+            replace="1"
+            type="5" >
+            <m_text>
+更多应用
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab0565e6d96.png ]]></bg>
+            <m_bg>
+categore_app_5_bg
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab056cc2673.png ]]></icon>
+            <m_icon>
+categore_app_5_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_5_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_8"
-                    type="5" >
-                    <url>
-<![CDATA[ com.softwine.secondary ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+com.softwine.secondary
+                    </a_package>
+
+                    <a_activity>
+com.softwine.secondary/.ApplicationsGridActivity
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -310,36 +666,54 @@
         code="IPTV_9"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 本地播放 ]]></name>
+        <g_text>
+本地播放
+        </g_text>
 
-        <showtext>
-<![CDATA[ 本地播放 ]]></showtext>
+        <g_bg>
+categore_app_6_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab059596716.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab059d9e54b.png ]]></icon>
+        <g_icon>
+categore_app_6_logo
+        </g_icon>
 
         <module
             code="IPTV_9"
-            replace="1" >
-            <showtext>
-<![CDATA[ 本地播放 ]]></showtext>
+            replace="1"
+            type="1" >
+            <m_text>
+本地播放
+            </m_text>
 
-            <bg>
-<![CDATA[ [55ab059596716.png ]]></bg>
+            <m_bg>
+categore_app_6_bg
+            </m_bg>
 
-            <icon>
-<![CDATA[ [55ab059d9e54b.png ]]></icon>
+            <m_icon>
+categore_app_6_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_6_shadow
+            </m_shadow>
 
             <apps>
-                <app
-                    code="IPTV_9"
-                    type="5" >
-                    <url>
-<![CDATA[ com.softwinner.TvdFileManager ]]></url>
+                <app>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+com.softwinner.TvdFileManager
+                    </a_package>
+
+                    <a_activity />
+com.softwinner.TvdFileManager/.MainUI
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>
@@ -348,65 +722,56 @@
         code="IPTV_10"
         group_flag="1"
         moveable="1" >
-        <name>
-<![CDATA[ 系统设置 ]]></name>
+        <g_text>
+系统设置
+        </g_text>
 
-        <showtext>
-<![CDATA[ 系统设置 ]]></showtext>
+        <g_bg>
+categore_app_7_bg
+        </g_bg>
 
-        <bg>
-<![CDATA[ [55ab05bb5bbdb.png ]]></bg>
-
-        <icon>
-<![CDATA[ [55ab05c0af9e6.png ]]></icon>
+        <g_icon>
+categore_app_7_logo
+        </g_icon>
 
         <module
             code="IPTV_10"
-            replace="1" >
-            <showtext>
-<![CDATA[ 系统设置 ]]></showtext>
-
-            <bg>
-<![CDATA[ [55ab05bb5bbdb.png ]]></bg>
-
-            <icon>
-<![CDATA[ [55ab05c0af9e6.png ]]></icon>
-
-            <apps>
-                <app
-                    code="IPTV_10"
-                    type="5" >
-                    <url>
-<![CDATA[ com.android.settings ]]></url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_1"
-        group_flag="1"
-        moveable="0" >
-        <group_name>电视直播</group_name>
-        <group_showtext>电视直播</group_showtext>
-        <group_bg>[55ab03b7e1b89.png</group_bg>
-        <group_icon>[55ab03bbc4873.png</group_icon>
-        <module
-            code="IPTV_1"
-            replace="0"
+            replace="1"
             type="5" >
-            <module_showtext>电视直播</module_showtext>
-            <module_bg>55ab03b7e1b89.png</module_bg>
-            <module_icon>55ab03bbc4873.png</module_icon>
-            <module_shadow>55ab03bbc4873.png</module_shadow>
+            <m_text>
+系统设置
+            </m_text>
+
+            <m_bg>
+categore_app_7_bg
+            </m_bg>
+
+            <m_icon>
+categore_app_7_logo
+            </m_icon>
+
+            <m_shadow>
+categore_app_7_shadow
+            </m_shadow>
+
             <apps>
                 <app>
-                    <app_name></app_name>
-                    <app_package_name>com.xike.xkliveplay</app_package_name>
-                    <app_activity>com.xike.xkliveplay/.activity.launch.ActivityLaunch</app_activity>
-                    <app_version></app_version>
-                    <app_size></app_size>
-                    <app_icon></app_icon>
-                    <app_url>com.xike.xkliveplay</app_url>
+                    <a_name>
+                    </a_name>
+
+                    <a_package>
+com.android.settings
+                    </a_package>
+
+                    <a_activity>
+com.luntech.launcher/.SettingActivity
+                    </a_activity>
+
+                    <a_icon>
+                    </a_icon>
+
+                    <a_url>
+                    </a_url>
                 </app>
             </apps>
         </module>

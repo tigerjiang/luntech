@@ -43,8 +43,8 @@ public class Launcher extends Activity {
     private GridView mGridView;
     private Resources mResources;
     // private List<CategoryItem> mAppList = new ArrayList<CategoryItem>();
-    private ArrayList<AppItem> mAllAppList = new ArrayList<AppItem>();
-    private ArrayList<AppItem> mCatgoryAppList = new ArrayList<AppItem>();
+    private ArrayList<CustomApplication> mAllAppList = new ArrayList<CustomApplication>();
+    private ArrayList<CustomApplication> mCatgoryAppList = new ArrayList<CustomApplication>();
     private AppItem mSelectedApp;
     private CategoryItemAdapter mCategoryItemAdapter;
     private Context mContext;
@@ -151,9 +151,9 @@ public class Launcher extends Activity {
         mAppManager = AppManager.getInstance();
         mAppManager.getAllApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
-        final AppItem mFirstApp = mAllAppList.get(0);
-        final AppItem mSecondApp = mAllAppList.get(1);
-        final AppItem mThirdApp = mAllAppList.get(2);
+        final CustomApplication mFirstApp = mAllAppList.get(0);
+        final CustomApplication mSecondApp = mAllAppList.get(1);
+        final CustomApplication mThirdApp = mAllAppList.get(2);
         mThumb_1_view.setBackground(mFirstApp.getBackgroundIcon());
         mThumb_1_shadow.setImageDrawable(mFirstApp.getShadowIcon());
         mThumb_1_label.setText(mFirstApp.getLabel());
