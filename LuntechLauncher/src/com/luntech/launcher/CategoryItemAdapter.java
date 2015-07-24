@@ -21,7 +21,7 @@ public class CategoryItemAdapter extends BaseAdapter {
     private LayoutInflater mLayoutInflater;
 
     public CategoryItemAdapter(List<CustomApplication> appList, Context context) {
-        super();
+        Logger.d("appList " + appList.toString());
         this.mAppList = appList;
         initList();
         this.mContext = context;
@@ -46,7 +46,8 @@ public class CategoryItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final CustomApplication application = mCatgoryAppList.get(position);
-        final CustomApplication.Module module = application.mGroup.mModules.get(0);
+        final Module module = application.mGroup.mModules.get(0);
+        Logger.d(" module " + module.toString());
         ViewHolder holder = null;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -76,18 +77,27 @@ public class CategoryItemAdapter extends BaseAdapter {
     }
 
     private void initList() {
+        CustomApplication app1 = mAppList.get(0);
+        CustomApplication app2 = mAppList.get(1);
+        CustomApplication app3 = mAppList.get(2);
+        mCatgoryAppList = new ArrayList<CustomApplication>();
         Iterator<CustomApplication> iter = mAppList.iterator();
         while (iter.hasNext()) {
             CustomApplication app = iter.next();
+            Logger.d("module " + app.mGroup.mModules.get(0).toString());
             if (app.mGroup.mModules.get(0).moduleText
-                    .equals(mAppList.get(0).mGroup.mModules.get(0).moduleText)
-                    || app.mGroup.mModules.get(0).moduleText.equals(mAppList.get(1).mGroup.mModules
-                            .get(0).moduleText)
-                    || app.mGroup.mModules.get(0).moduleText.equals(mAppList.get(2).mGroup.mModules
-                            .get(0).moduleText)) {
-                iter.remove();
+                    .equals(app1.mGroup.mModules.get(0).moduleText)
+                    || app.mGroup.mModules.get(0).moduleText
+                            .equals(app2.mGroup.mModules.get(0).moduleText)
+                    || app.mGroup.mModules.get(0).moduleText
+                            .equals(app3.mGroup.mModules.get(0).moduleText)) {
+                Logger.d("filter app " + app.toString());
+            } else {
+                mCatgoryAppList.add(app);
             }
         }
-        mCatgoryAppList = new ArrayList<CustomApplication>(mAppList);
+        Logger.d("Adapter list size " + mCatgoryAppList.size());
+        Logger.d("Adapter list content " + mCatgoryAppList.toString());
+        Logger.d("all list content " + mAppList.toString());
     }
 }

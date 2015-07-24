@@ -357,6 +357,7 @@ public final class R {
         public static final int default_city=0x7f070049;
         public static final int dongyu=0x7f070031;
         public static final int duoyun=0x7f070027;
+        public static final int duplicate_alert=0x7f070056;
         public static final int fuchen=0x7f07003d;
         public static final int game_title=0x7f070050;
         public static final int global_thumb_1_label=0x7f070002;

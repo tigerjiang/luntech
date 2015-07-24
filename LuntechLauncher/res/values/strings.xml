@@ -104,4 +104,6 @@
         <item>智能灯光</item>
         <item>智能影音</item>
     </string-array>
+    
+        <string name="duplicate_alert">该应用已经在桌面,请选择其他应用!</string>
 </resources>

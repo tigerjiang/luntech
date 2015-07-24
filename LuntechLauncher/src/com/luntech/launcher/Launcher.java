@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -72,6 +73,10 @@ public class Launcher extends Activity {
     private static final long REQUEST_DELAY_TIME = 10 * 1000;
     private Handler mHandler;
     private HandlerThread mThread;
+
+    CustomApplication mFirstApp;
+    CustomApplication mSecondApp;
+    CustomApplication mThirdApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,55 +156,18 @@ public class Launcher extends Activity {
         mAppManager = AppManager.getInstance();
         mAppManager.getAllApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
-        final CustomApplication mFirstApp = mAllAppList.get(0);
-        final CustomApplication mSecondApp = mAllAppList.get(1);
-        final CustomApplication mThirdApp = mAllAppList.get(2);
-        final CustomApplication.Module module1 = mFirstApp.mGroup.mModules.get(0);
-        mThumb_1_view.setBackground(module1.getModuleBgDrawable());
-        mThumb_1_shadow.setImageDrawable(module1.getModuleShadowDrawable());
-        mThumb_1_label.setText(module1.getModuleText());
-        mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                safeStartApk(module1.mApps.get(0).getComponentName());
-
-            }
-        });
-        final CustomApplication.Module module2 = mSecondApp.mGroup.mModules.get(0);
-        mThumb_2_view.setBackground(module2.getModuleBgDrawable());
-        mThumb_2_shadow.setImageDrawable(module2.getModuleShadowDrawable());
-        mThumb_2_label.setText(module2.getModuleText());
-        mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                safeStartApk(module2.mApps.get(0).getComponentName());
-
-            }
-        });
-        final CustomApplication.Module module3 = mThirdApp.mGroup.mModules.get(0);
-        mThumb_3_view.setBackground(module3.getModuleBgDrawable());
-        mThumb_3_shadow.setImageDrawable(module3.getModuleShadowDrawable());
-        mThumb_3_label.setText(module3.getModuleText());
-        mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                safeStartApk(module3.mApps.get(0).getComponentName());
-
-            }
-        });
 
         notifyAllAppList();
+        refreshThumbnail();
         mCategoryItemAdapter = new CategoryItemAdapter(mAllAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CustomApplication.App app = ((CustomApplication) parent.getItemAtPosition(position)).mGroup.mModules
+                App app = ((CustomApplication) parent.getItemAtPosition(position)).mGroup.mModules
                         .get(0).mApps.get(0);
+                Logger.d(" clicke app for " + app.toString());
                 ComponentName componentName = app.getComponentName();
                 safeStartApk(componentName);
             }
@@ -208,6 +176,7 @@ public class Launcher extends Activity {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Logger.d("select position " + position);
                 mSelectedApp = (CustomApplication) parent.getItemAtPosition(position);
             }
 
@@ -232,6 +201,51 @@ public class Launcher extends Activity {
         }
     }
 
+    private void refreshThumbnail() {
+        mFirstApp = mAllAppList.get(0);
+        mSecondApp = mAllAppList.get(1);
+        mThirdApp = mAllAppList.get(2);
+        final Module module1 = mFirstApp.mGroup.mModules.get(0);
+        Logger.d("first module " + module1.toString());
+        mThumb_1_view.setBackground(module1.getModuleBgDrawable());
+        mThumb_1_shadow.setImageDrawable(module1.getModuleShadowDrawable());
+        mThumb_1_label.setText(module1.getModuleText());
+        mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                safeStartApk(module1.mApps.get(0).getComponentName());
+
+            }
+        });
+        final Module module2 = mSecondApp.mGroup.mModules.get(0);
+        Logger.d("second module " + module2.toString());
+        mThumb_2_view.setBackground(module2.getModuleBgDrawable());
+        mThumb_2_shadow.setImageDrawable(module2.getModuleShadowDrawable());
+        mThumb_2_label.setText(module2.getModuleText());
+        mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                safeStartApk(module2.mApps.get(0).getComponentName());
+
+            }
+        });
+        final Module module3 = mThirdApp.mGroup.mModules.get(0);
+        Logger.d("third module " + module3.toString());
+        mThumb_3_view.setBackground(module3.getModuleBgDrawable());
+        mThumb_3_shadow.setImageDrawable(module3.getModuleShadowDrawable());
+        mThumb_3_label.setText(module3.getModuleText());
+        mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                safeStartApk(module3.mApps.get(0).getComponentName());
+
+            }
+        });
+    }
+
     private void registerReceiver() {
         mChangeReceiver = new ChangeReceiver();
         IntentFilter filter = new IntentFilter();
@@ -241,7 +255,9 @@ public class Launcher extends Activity {
 
     private void parseCategoryItem() {
         mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
-        Logger.d("all app " + mAllAppList.toString());
+        for (CustomApplication application : mAllAppList) {
+            Logger.d("application " + application.mGroup.toString());
+        }
         // CategoryItem item1 = new CategoryItem();
         // item1.mAppIcon =
         // mResources.getDrawable(R.drawable.categore_app_1_logo);
@@ -338,7 +354,6 @@ public class Launcher extends Activity {
                 } else if (mThumb_3_layout.isFocused()) {
                     mSelectedApp = mAllAppList.get(2);
                 }
-
                 final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
                 newFragment.show(getFragmentManager(), "dialog");
                 return true;
@@ -350,13 +365,17 @@ public class Launcher extends Activity {
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
                 if (mThumb_1_layout.isFocused()) {
                     Log.d(TAG, "mThumb_1_layout ");
+                    mGridView.setSelection(0);
                     mGridView.requestFocus();
+                    mSelectedApp = mAllAppList.get(3);
                 } else if (mThumb_2_layout.isFocused()) {
                     Log.d(TAG, "mThumb_2_layout ");
                     mThumb_3_layout.requestFocus();
                 } else if (mThumb_3_layout.isFocused()) {
                     Log.d(TAG, "mThumb_3_layout ");
+                    mGridView.setSelection(0);
                     mGridView.requestFocus();
+                    mSelectedApp = mAllAppList.get(3);
                 }
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
@@ -395,8 +414,14 @@ public class Launcher extends Activity {
      */
 
     public void setResult(ApplicationInfo app, boolean isSelected) {
-        if (isSelected && app != null) {
+        if (isSelected && app != null && mSelectedApp != null) {
             Log.d("jzh", "setResult " + app.toString());
+            if ((mToolUtils.getConfigured(mContext,
+                    app.toString()))) {
+                Log.d("jzh", "setResult cancel for duplicate ");
+                Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
+                return;
+            }
             mToolUtils.setConfigured(mContext, app, true);
             mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mGroup.mModules.get(0)
                     .getModuleCode(), app.getPackageName());
@@ -404,6 +429,7 @@ public class Launcher extends Activity {
             mSelectedApp.mGroup.mModules.get(0).moduleText = app.getTitle();
             mSelectedApp.mGroup.mModules.get(0).mApps.get(0).componentName = app.mComponent;
             notifyAppList(mSelectedApp);
+            refreshThumbnail();
             mCategoryItemAdapter.notifyDataSetChanged();
             Log.d("jzh", "setResult  RESULT_OK " + app.toString());
         } else {
@@ -422,24 +448,25 @@ public class Launcher extends Activity {
     }
 
     private void notifyAllAppList() {
-        ArrayList<CustomApplication> temp = new ArrayList<CustomApplication>(mAllAppList);
-        for (int i = 0; i < temp.size(); i++) {
-            CustomApplication application = temp.get(i);
+        for (int i = 0; i < mAllAppList.size(); i++) {
+            CustomApplication application = mAllAppList.get(i);
+            final Module module = application.mGroup.mModules.get(0);
             String key = application.mGroup.mModules.get(0).moduleCode;
             String pkg = mToolUtils.getConfiguredPkg(mContext, key);
-            Log.d(TAG, "key  " + pkg);
+            Log.d(TAG, "key  for " + key + pkg);
             if (!TextUtils.isEmpty(pkg)) {
                 ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
                 if (app != null) {
-                    application.mGroup.mModules.get(0).moduleIconDrawable = app.getIcon();
-                    application.mGroup.mModules.get(0).moduleText = app.getTitle();
-                    application.mGroup.mModules.get(0).mApps.get(0).componentName = app.mComponent;
-                    notifyAppList(application);
+                    module.moduleIconDrawable = app.getIcon();
+                    module.moduleText = app.getTitle();
+                    module.mApps.get(0).componentName = app.mComponent;
+                    // notifyAppList(application);
                 } else {
                     mToolUtils.clearConfiguredPkg(mContext, key);
                 }
             }
         }
+        Log.d(TAG, mAllAppList.toString());
     }
 
     class LauncherHandler extends Handler {
@@ -474,4 +501,5 @@ public class Launcher extends Activity {
         }
     }
 
+    
 }
