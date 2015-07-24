@@ -154,7 +154,8 @@ public class Launcher extends Activity {
         final CustomApplication mFirstApp = mAllAppList.get(0);
         final CustomApplication mSecondApp = mAllAppList.get(1);
         final CustomApplication mThirdApp = mAllAppList.get(2);
-        final CustomApplication.Module module1 = mFirstApp.mGroup.mModules.get(0);
+        final Module module1 = mFirstApp.mGroup.mModules.get(0);
+        Logger.d("first module " + module1.toString());
         mThumb_1_view.setBackground(module1.getModuleBgDrawable());
         mThumb_1_shadow.setImageDrawable(module1.getModuleShadowDrawable());
         mThumb_1_label.setText(module1.getModuleText());
@@ -166,7 +167,8 @@ public class Launcher extends Activity {
 
             }
         });
-        final CustomApplication.Module module2 = mSecondApp.mGroup.mModules.get(0);
+        final Module module2 = mSecondApp.mGroup.mModules.get(0);
+        Logger.d("second module " + module2.toString());
         mThumb_2_view.setBackground(module2.getModuleBgDrawable());
         mThumb_2_shadow.setImageDrawable(module2.getModuleShadowDrawable());
         mThumb_2_label.setText(module2.getModuleText());
@@ -178,7 +180,8 @@ public class Launcher extends Activity {
 
             }
         });
-        final CustomApplication.Module module3 = mThirdApp.mGroup.mModules.get(0);
+        final Module module3 = mThirdApp.mGroup.mModules.get(0);
+        Logger.d("third module " + module3.toString());
         mThumb_3_view.setBackground(module3.getModuleBgDrawable());
         mThumb_3_shadow.setImageDrawable(module3.getModuleShadowDrawable());
         mThumb_3_label.setText(module3.getModuleText());
@@ -198,8 +201,9 @@ public class Launcher extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                CustomApplication.App app = ((CustomApplication) parent.getItemAtPosition(position)).mGroup.mModules
+                App app = ((CustomApplication) parent.getItemAtPosition(position)).mGroup.mModules
                         .get(0).mApps.get(0);
+                Logger.d(" clicke app for " + app.toString());
                 ComponentName componentName = app.getComponentName();
                 safeStartApk(componentName);
             }
@@ -241,7 +245,9 @@ public class Launcher extends Activity {
 
     private void parseCategoryItem() {
         mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
-        Logger.d("all app " + mAllAppList.toString());
+        for (CustomApplication application : mAllAppList) {
+            Logger.d("application " + application.mGroup.toString());
+        }
         // CategoryItem item1 = new CategoryItem();
         // item1.mAppIcon =
         // mResources.getDrawable(R.drawable.categore_app_1_logo);
@@ -427,7 +433,7 @@ public class Launcher extends Activity {
             CustomApplication application = temp.get(i);
             String key = application.mGroup.mModules.get(0).moduleCode;
             String pkg = mToolUtils.getConfiguredPkg(mContext, key);
-            Log.d(TAG, "key  " + pkg);
+            Log.d(TAG, "key  for " + key + pkg);
             if (!TextUtils.isEmpty(pkg)) {
                 ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
                 if (app != null) {
@@ -462,13 +468,13 @@ public class Launcher extends Activity {
             switch (msg.what) {
                 case RETURN_CATEGORY_CONFIG_CODE:
 
-                break;
+                    break;
                 case RETURN_HIDDEN_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_SYSTEM_CONFIG_CODE:
-                break;
+                    break;
             }
             super.handleMessage(msg);
         }

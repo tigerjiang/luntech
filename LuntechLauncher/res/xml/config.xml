@@ -646,11 +646,11 @@ categore_app_5_shadow
                     </a_name>
 
                     <a_package>
-com.softwine.secondary
+com.luntech.launcher.secondary
                     </a_package>
 
                     <a_activity>
-com.softwine.secondary/.ApplicationsGridActivity
+com.luntech.launcher.secondary/.ApplicationsGridActivity
                     </a_activity>
 
                     <a_icon>
@@ -760,7 +760,7 @@ categore_app_7_shadow
                     </a_name>
 
                     <a_package>
-com.android.settings
+com.luntech.launcher
                     </a_package>
 
                     <a_activity>
