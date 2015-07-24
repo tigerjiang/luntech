@@ -156,8 +156,6 @@ public class Launcher extends Activity {
         mAppManager = AppManager.getInstance();
         mAppManager.getAllApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
-
-        notifyAllAppList();
         refreshThumbnail();
         mCategoryItemAdapter = new CategoryItemAdapter(mAllAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
@@ -489,13 +487,13 @@ public class Launcher extends Activity {
             switch (msg.what) {
                 case RETURN_CATEGORY_CONFIG_CODE:
 
-                break;
+                    break;
                 case RETURN_HIDDEN_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_SYSTEM_CONFIG_CODE:
-                break;
+                    break;
             }
             super.handleMessage(msg);
         }

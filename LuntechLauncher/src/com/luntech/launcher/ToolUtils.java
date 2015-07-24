@@ -212,8 +212,8 @@ public class ToolUtils {
                         application.mGroup.setGroupCode(parser.getAttributeValue(0).trim());
                         application.mGroup.setGroupMoveable(Integer.parseInt(parser
                                 .getAttributeValue(1).trim()));
-                        application.mGroup.setGroupFlag(Integer.parseInt(parser
-                                .getAttributeValue(2).trim()));
+                        application.mGroup.setGroupFlag(Integer
+                                .parseInt(parser.getAttributeValue(2).trim()));
                     } else if (name.equals(CustomApplication.Group.GROUP_TEXT_TAG)) {
                         application.mGroup.setGroupText(parser.nextText().trim());
                     } else if (name.equals(CustomApplication.Group.GROUP_BG_TAG)) {
