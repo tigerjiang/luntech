@@ -106,4 +106,5 @@
     </string-array>
     
         <string name="duplicate_alert">该应用已经在桌面,请选择其他应用!</string>
+           <string name="feature_menu">按OK键进入，按菜单键替换当前应用.</string>
 </resources>

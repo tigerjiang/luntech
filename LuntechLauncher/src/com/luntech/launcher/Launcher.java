@@ -52,6 +52,8 @@ public class Launcher extends Activity {
     private Configuration mConfig = new Configuration();
     private AppManager mAppManager;
     private RelativeLayout mThumb_1_layout;
+    
+    private TextView mFeatureView;
     private ImageView mThumb_1_view;
     private ImageView mThumb_1_shadow;
     private TextView mThumb_1_label;
@@ -71,6 +73,7 @@ public class Launcher extends Activity {
     private static String sPackageName;
     private static int sVersionCode;
     private static final long REQUEST_DELAY_TIME = 10 * 1000;
+    private static final long SHOW_DELAY_TIME = 10 * 1000;
     private Handler mHandler;
     private HandlerThread mThread;
 
@@ -142,6 +145,7 @@ public class Launcher extends Activity {
     private void initView() {
 
         mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_layout);
+        mFeatureView = (TextView) findViewById(R.id.feature_menu);
         mThumb_1_view = (ImageView) findViewById(R.id.thumb_1_view);
         mThumb_1_shadow = (ImageView) findViewById(R.id.thumb_1_cover_view);
         mThumb_1_label = (TextView) findViewById(R.id.thumb_1_label);
@@ -473,7 +477,8 @@ public class Launcher extends Activity {
         public static final int RETURN_HIDDEN_CONFIG_CODE = 2;
         public static final int RETURN_UPDATE_CONFIG_CODE = 3;
         public static final int RETURN_SYSTEM_CONFIG_CODE = 4;
-
+        public static final int SHOW_FEATURE_VIEW = 5;
+        public static final int DISMISS_FEATURE_VIEW = 6;
         public LauncherHandler(Looper looper) {
             super(looper);
         }
@@ -494,10 +499,24 @@ public class Launcher extends Activity {
                     break;
                 case RETURN_SYSTEM_CONFIG_CODE:
                     break;
+                case SHOW_FEATURE_VIEW:
+                    mFeatureView.setVisibility(View.VISIBLE);
+                    mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
+                    mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW, SHOW_DELAY_TIME);
+                    break;
+                case DISMISS_FEATURE_VIEW:
+                    mFeatureView.setVisibility(View.GONE);
+                    break;
             }
             super.handleMessage(msg);
         }
     }
 
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
+        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
+    }
     
 }
