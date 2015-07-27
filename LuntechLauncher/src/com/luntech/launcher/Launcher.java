@@ -34,6 +34,7 @@ import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -541,6 +542,17 @@ public class Launcher extends Activity {
         super.onUserInteraction();
         mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
         mHandler.sendEmptyMessage(LauncherHandler.DISMISS_FEATURE_VIEW);
+    }
+
+    private void rename(File destFile, File sourceFile) {
+        while (destFile.exists()) {
+            destFile.delete();
+        }
+        try {
+            sourceFile.renameTo(destFile);
+        } catch (Exception e) {
+            Logger.w("", e);
+        }
     }
 
 }

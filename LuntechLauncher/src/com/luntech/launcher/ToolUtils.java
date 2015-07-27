@@ -113,8 +113,14 @@ public class ToolUtils {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
-                    // group info
-                    if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                     if (name.equals(CustomApplication.TIME_TAG)) {
+                         
+                     }
+                     else if (name.equals(CustomApplication.URL_TAG)) {
+                         
+                     }
+                     // group info
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         application = new CustomApplication();
                         application.mGroup = new CustomApplication.Group();
                         application.mGroup.setGroupCode(parser.getAttributeValue(0).trim());
@@ -205,8 +211,17 @@ public class ToolUtils {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+                        String 
+                        if()
+                        storeIntoSP(context, CustomApplication.TIME_TAG, parser.nextText().trim());
+                        
+                    }
+                    else if (name.equals(CustomApplication.URL_TAG)) {
+                        storeIntoSP(context, CustomApplication.URL_TAG, parser.nextText().trim());
+                    }
                     // group info
-                    if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         application = new CustomApplication();
                         application.mGroup = new CustomApplication.Group();
                         application.mGroup.setGroupCode(parser.getAttributeValue(0).trim());
@@ -313,4 +328,15 @@ public class ToolUtils {
         return sp.getBoolean(name, false);
     }
 
+    public static void storeIntoSP(Context context, String key, String pkg) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        Editor spe = sp.edit();
+        spe.putString(key, pkg);
+        spe.commit();
+    }
+    
+    public static String getFromSP(Context context, String key, String pkg) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        return sp.getString(key, null);
+    }
 }
