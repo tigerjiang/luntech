@@ -16,7 +16,7 @@
     <dimen name="global_category_item_width">230px</dimen>
     <dimen name="global_category_item_height">190px</dimen>
     <dimen name="global_horizontal_devider_height">20px</dimen>
-    <dimen name="global_vertical_devider_height">20px</dimen>
+    <dimen name="global_vertical_devider_height">10px</dimen>
     <dimen name="global_category_app_logo_margin_top">10px</dimen>
     <dimen name="global_category_layout_wiith">1710px</dimen>
     <dimen name="global_category_layout_height">190px</dimen>

@@ -6,8 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -53,38 +53,41 @@ public class AppDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater li = LayoutInflater.from(mContext);
         View view = li.inflate(R.layout.app_dialog, null);
+
         mGrid = (GridView) view.findViewById(R.id.select_apps);
-        mGrid.setSelector(R.drawable.focus_selector);
         onAppManagerReady();
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setView(view);
-        builder.setPositiveButton(R.string.ok, new OnClickListener() {
+        Button okBtn = (Button) view.findViewById(R.id.ok);
+        Button cancelBtn = (Button) view.findViewById(R.id.cancel);
+        okBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View arg0) {
                 Activity activity = getActivity();
                 if (activity instanceof Launcher) {
                     ((Launcher) activity).setResult(mSelectedApp, true);
                 }
                 dismiss();
                 Log.d("jzh", "ok for " + mSelectedApp.toString());
+
             }
         });
-        builder.setNegativeButton(R.string.cancel, new OnClickListener() {
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View arg0) {
                 Activity activity = getActivity();
                 if (activity instanceof Launcher) {
                     ((Launcher) activity).setResult(mSelectedApp, false);
                 }
                 Log.d("jzh", "cancel");
                 dismiss();
+
             }
         });
-
-        builder.setTitle(R.string.select_app);
-        Dialog dialog = builder.create();
+        okBtn.requestFocus();
+        AlertDialog dialog = builder.create();
+        dialog.setView(view, 0, 0, 0, 0);
         return dialog;
     }
 
@@ -96,31 +99,29 @@ public class AppDialogFragment extends DialogFragment {
         mAppList = mAppManager.getAllAppsApplications();
         sortByInstallTime(mAppList);
         mAdapter = new ApplicationsAdapter(mContext, mAppList);
-
+        mAdapter.setIndex(0);
         mGrid.setAdapter(mAdapter);
         mGrid.setSelection(0);
         mGrid.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                mSelectedApp = mAppList.get(position);
-//                Log.d("jzh", "onItemSelected "+ mSelectedApp.toString());
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                mSelectedApp = mAppList.get(0);
+                // mSelectedApp = mAppList.get(0);
             }
         });
         mGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mAdapter.setIndex(position);
+                mAdapter.notifyDataSetChanged();
                 mSelectedApp = mAppList.get(position);
-                view.setPressed(true);
-                view.setBackgroundResource(R.drawable.focus);
-                Log.d("jzh", "onItemClick "+ mSelectedApp.toString());
+                Log.d("jzh", "onItemClick " + mSelectedApp.toString());
             }
         });
     }
@@ -138,6 +139,7 @@ public class AppDialogFragment extends DialogFragment {
      */
     private class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
         private LayoutInflater mLayoutInflater;
+        private int mIndex = 0;
 
         public ApplicationsAdapter(Context context, List<ApplicationInfo> apps) {
             super(context, 0, apps);
@@ -154,15 +156,22 @@ public class AppDialogFragment extends DialogFragment {
             return mAppList.size();
         }
 
+        public void setIndex(int selected) {
+            Log.d("jzh", "setIndex " + selected);
+            mIndex = selected;
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder;
 
             if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = mLayoutInflater.inflate(R.layout.collection_application_icon, null);
-                viewHolder.mAppIcon = (ImageView) convertView.findViewById(R.id.app_icon_image);
-                viewHolder.mAppLabel = (TextView) convertView.findViewById(R.id.app_icon_label);
+                convertView = mLayoutInflater.inflate(R.layout.selected_application_icon, null);
+                viewHolder.mAppIcon = (ImageView) convertView
+                        .findViewById(R.id.selected_app_icon_image);
+                viewHolder.mAppLabel = (TextView) convertView
+                        .findViewById(R.id.selected_app_icon_label);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
@@ -172,10 +181,17 @@ public class AppDialogFragment extends DialogFragment {
 
             viewHolder.mAppIcon.setImageDrawable(info.getIcon());
             viewHolder.mAppLabel.setText(info.getTitle());
-
+            if (mIndex == position) {
+                Log.d("jzh", "mIndex " + mIndex + " position " + position);
+                convertView.setBackgroundColor(Color.GRAY);
+                viewHolder.mAppLabel.setTextColor(Color.WHITE);
+            }
+            else {
+                viewHolder.mAppLabel.setTextColor(Color.LTGRAY);
+                convertView.setBackgroundColor(Color.TRANSPARENT);
+            }
             return convertView;
         }
-
     }
 
     static class ViewHolder {

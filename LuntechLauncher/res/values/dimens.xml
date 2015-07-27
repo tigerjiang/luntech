@@ -16,7 +16,7 @@
     <dimen name="global_category_item_width">154px</dimen>
     <dimen name="global_category_item_height">128px</dimen>
     <dimen name="global_horizontal_devider_height">12px</dimen>
-    <dimen name="global_vertical_devider_height">12px</dimen>
+    <dimen name="global_vertical_devider_height">10px</dimen>
     <dimen name="global_category_app_logo_margin_top">7px</dimen>
     <dimen name="global_category_layout_wiith">1150px</dimen>
     <dimen name="global_category_layout_height">130px</dimen>
@@ -35,7 +35,7 @@
     <dimen name="global_iptv_logo_layout_height">54px</dimen>
     <dimen name="global_iptv_logo_layout_width">158px</dimen>
     <dimen name="global_vertical_devider_height_1">30px</dimen>
-    <dimen name="global_vertical_devider_height_2">13px</dimen>
+    <dimen name="global_vertical_devider_height_2">10px</dimen>
     <dimen name="global_text_size_large">26px</dimen>
     <dimen name="global_text_size_small">16px</dimen>
     <dimen name="global_text_size_middle">20px</dimen>

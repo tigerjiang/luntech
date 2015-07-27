@@ -170,6 +170,7 @@ public class Launcher extends Activity {
         mAppManager = AppManager.getInstance();
         mAppManager.getAllApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
+        notifyAllAppList();
         refreshThumbnail();
         mCategoryItemAdapter = new CategoryItemAdapter(mAllAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
@@ -366,13 +367,13 @@ public class Launcher extends Activity {
                 } else if (mThumb_3_layout.isFocused()) {
                     mSelectedApp = mAllAppList.get(2);
                 }
-                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
-                    // can't replace
-                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+//                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+//                    // can't replace
+//                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
                     final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
                     newFragment.show(getFragmentManager(), "dialog");
                     return true;
-                }
+//                }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
                     mThumb_2_layout.requestFocus();
