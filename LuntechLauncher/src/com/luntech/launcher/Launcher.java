@@ -52,7 +52,7 @@ public class Launcher extends Activity {
     private Configuration mConfig = new Configuration();
     private AppManager mAppManager;
     private RelativeLayout mThumb_1_layout;
-    
+
     private TextView mFeatureView;
     private ImageView mThumb_1_view;
     private ImageView mThumb_1_shadow;
@@ -74,6 +74,12 @@ public class Launcher extends Activity {
     private static int sVersionCode;
     private static final long REQUEST_DELAY_TIME = 10 * 1000;
     private static final long SHOW_DELAY_TIME = 10 * 1000;
+    
+    private static final String CAPTURE_TIME = "capture_time";
+    private static final String CAPTURE_FILE = "network_config.xml";
+    private static final String LOCAL_CONFIG_FILE_ = "local_config.xml";
+    private static final String FILE_PREFIX = "launcher";
+    
     private Handler mHandler;
     private HandlerThread mThread;
 
@@ -109,9 +115,12 @@ public class Launcher extends Activity {
     }
 
     private void initHandler() {
-        mThread = new HandlerThread("launcher", Process.THREAD_PRIORITY_DISPLAY);
-        mThread.start();
-        mHandler = new LauncherHandler(mThread.getLooper());
+        // mThread = new HandlerThread("launcher",
+        // Process.THREAD_PRIORITY_DISPLAY);
+        // mThread.start();
+        mHandler = new LauncherHandler();
+        mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
+        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
     }
 
     private void initPrecondition() {
@@ -124,8 +133,8 @@ public class Launcher extends Activity {
             public void run() {
                 String httpArg = "&package_name=" + sPackageName + "&version=" + sVersionCode;
                 String url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
-
-                String result = HttpUtils.requestResourcesFromServer(url);
+                String result = HttpUtils.requestResourcesFromServer(url,
+                        FILE_PREFIX + System.currentTimeMillis() + LOCAL_CONFIG_FILE_);
                 if (TextUtils.isEmpty(result)) {
                     Logger.e("Doesn't found any info from server");
                     return;
@@ -356,9 +365,13 @@ public class Launcher extends Activity {
                 } else if (mThumb_3_layout.isFocused()) {
                     mSelectedApp = mAllAppList.get(2);
                 }
-                final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
-                newFragment.show(getFragmentManager(), "dialog");
-                return true;
+                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+                    // can't replace
+                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
+                    newFragment.show(getFragmentManager(), "dialog");
+                    return true;
+                }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
                     mThumb_2_layout.requestFocus();
@@ -479,8 +492,9 @@ public class Launcher extends Activity {
         public static final int RETURN_SYSTEM_CONFIG_CODE = 4;
         public static final int SHOW_FEATURE_VIEW = 5;
         public static final int DISMISS_FEATURE_VIEW = 6;
-        public LauncherHandler(Looper looper) {
-            super(looper);
+
+        public LauncherHandler() {
+            super(Looper.getMainLooper());
         }
 
         @Override
@@ -491,7 +505,7 @@ public class Launcher extends Activity {
             }
             switch (msg.what) {
                 case RETURN_CATEGORY_CONFIG_CODE:
-
+                     
                     break;
                 case RETURN_HIDDEN_CONFIG_CODE:
                     break;
@@ -501,11 +515,21 @@ public class Launcher extends Activity {
                     break;
                 case SHOW_FEATURE_VIEW:
                     mFeatureView.setVisibility(View.VISIBLE);
-                    mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
-                    mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW, SHOW_DELAY_TIME);
+                    try {
+                        if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+                            mFeatureView.setText(R.string.feature_menu_1);
+                        } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+                            mFeatureView.setText(R.string.feature_menu_0);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case DISMISS_FEATURE_VIEW:
                     mFeatureView.setVisibility(View.GONE);
+                    mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
+                    mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
+                            SHOW_DELAY_TIME);
                     break;
             }
             super.handleMessage(msg);
@@ -515,8 +539,8 @@ public class Launcher extends Activity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
-        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
+        mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
+        mHandler.sendEmptyMessage(LauncherHandler.DISMISS_FEATURE_VIEW);
     }
-    
+
 }

@@ -359,7 +359,8 @@ public final class R {
         public static final int dongyu=0x7f070031;
         public static final int duoyun=0x7f070027;
         public static final int duplicate_alert=0x7f070056;
-        public static final int feature_menu=0x7f070057;
+        public static final int feature_menu_0=0x7f070057;
+        public static final int feature_menu_1=0x7f070058;
         public static final int fuchen=0x7f07003d;
         public static final int game_title=0x7f070050;
         public static final int global_thumb_1_label=0x7f070002;
@@ -371,7 +372,7 @@ public final class R {
         public static final int mai=0x7f07003f;
         public static final int media_first_name=0x7f070053;
         public static final int media_title=0x7f07004f;
-        /**   city 
+        /**  city 
   city 
          */
         public static final int ok=0x7f070041;

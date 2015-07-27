@@ -211,16 +211,15 @@
 
     <TextView
         android:id="@+id/feature_menu"
-        android:layout_width="@dimen/global_ad_text_width"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_below="@+id/ad_layout"
         android:layout_marginTop="@dimen/global_vertical_devider_height"
-        android:background="@android:color/black"
         android:ellipsize="end"
         android:gravity="center|left"
         android:singleLine="true"
-        android:text="@string/feature_menu"
+        android:text="@string/feature_menu_1"
         android:textColor="@color/white"
         android:textSize="@dimen/global_text_size_small"
         android:visibility="gone" />
