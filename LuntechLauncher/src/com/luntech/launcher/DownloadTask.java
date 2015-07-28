@@ -21,13 +21,10 @@ public final class DownloadTask implements Runnable {
     private String mDownloadUrl;
 
     private IDownloadListener mListener;
-    
-    private String mLocalFile;
 
-    public DownloadTask(String doanloadTo, String url, IDownloadListener listener,String localFile) {
+    public DownloadTask(String doanloadTo, String url, IDownloadListener listener) {
         mDownloadTo = doanloadTo;
         mDownloadUrl = url;
-        mLocalFile = localFile;
         mListener = listener;
     }
 
@@ -44,6 +41,7 @@ public final class DownloadTask implements Runnable {
             while ((count = in.read(buffer)) != -1) {
                 out.write(buffer, 0, count);
             }
+            mListener.onCompleted(tmpFile);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -123,7 +121,7 @@ public final class DownloadTask implements Runnable {
         Logger.i("downdload file from " + mDownloadUrl);
         try {
             File tempFile = null;
-            tempFile = getTempFile(mLocalFile);
+            tempFile = getTempFile();
             if (tempFile.exists()) {
                 if (tempFile.length() == getContentLength()) {
                     mListener.onCompleted(tempFile);
@@ -147,12 +145,16 @@ public final class DownloadTask implements Runnable {
         }
     }
 
-    private File getTempFile(String localFile) {
-        File tempFile = new File(getTempFileName(localFile));
+    private File getTempFile() {
+        File tempFile = new File(getTempFileName());
         return tempFile;
     }
 
-    private String getTempFileName(String localFile) {
-        return mDownloadTo + FILE_PREFIX + "-" + localFile;
+    private String getTempFileName() {
+        return mDownloadTo + FILE_PREFIX + "-" + getUrlFileName(mDownloadUrl);
+    }
+
+    private String getUrlFileName(String url) {
+        return url.substring(url.lastIndexOf("/") + 1);
     }
 }

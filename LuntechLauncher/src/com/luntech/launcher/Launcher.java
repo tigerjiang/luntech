@@ -6,23 +6,23 @@ import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.os.Process;
+import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -34,9 +34,16 @@ import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.zip.ZipException;
 
 public class Launcher extends Activity {
 
@@ -75,14 +82,16 @@ public class Launcher extends Activity {
     private static int sVersionCode;
     private static final long REQUEST_DELAY_TIME = 10 * 1000;
     private static final long SHOW_DELAY_TIME = 10 * 1000;
-    
-    private static final String CAPTURE_TIME = "capture_time";
-    private static final String CAPTURE_FILE = "network_config.xml";
-    private static final String LOCAL_CONFIG_FILE_ = "local_config.xml";
-    private static final String FILE_PREFIX = "launcher";
-    
+
+    public static final String CAPTURE_TIME = "capture_time";
+    public static final String CAPTURE_FILE = "network_config.xml";
+    public static final String LOCAL_CONFIG_FILE_ = "local_config.xml";
+    public static final String FILE_PREFIX = "launcher";
+    public static String DOWNLOAD_TO_PATH;
+
     private Handler mHandler;
     private HandlerThread mThread;
+    private DownloadTask mDownloadTask;
 
     CustomApplication mFirstApp;
     CustomApplication mSecondApp;
@@ -91,10 +100,13 @@ public class Launcher extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
+        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
         setContentView(R.layout.main);
         mResources = getResources();
         mContext = getApplicationContext();
         sPackageName = this.getPackageName();
+        DOWNLOAD_TO_PATH = this.getFilesDir().getAbsolutePath();
         try {
             sPackageInfo = this.getPackageManager().getPackageInfo(sPackageName, 0);
             sVersionCode = sPackageInfo.versionCode;
@@ -134,18 +146,24 @@ public class Launcher extends Activity {
             public void run() {
                 String httpArg = "&package_name=" + sPackageName + "&version=" + sVersionCode;
                 String url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
-                String result = HttpUtils.requestResourcesFromServer(url,
-                        FILE_PREFIX + System.currentTimeMillis() + LOCAL_CONFIG_FILE_);
-                if (TextUtils.isEmpty(result)) {
-                    Logger.e("Doesn't found any info from server");
-                    return;
-                } else {
-                    Logger.d("result = " + result);
-                    Message msg = mHandler
-                            .obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
-                    msg.obj = result;
-                    mHandler.sendMessage(msg);
-                }
+                Logger.e("request url " + url);
+                new FetchTask(url, DOWNLOAD_TO_PATH + "/"
+                        + CAPTURE_FILE).execute();
+                // String result =
+                // HttpUtils.requestAndWriteResourcesFromServer(url,
+                // DOWNLOAD_TO_PATH + "/"
+                // + CAPTURE_FILE
+                // );
+                // if (TextUtils.isEmpty(result)) {
+                // Logger.e("Doesn't found any info from server");
+                // return;
+                // } else {
+                // Logger.d("result = " + result);
+                // Message msg = mHandler
+                // .obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
+                // msg.obj = result;
+                // mHandler.sendMessage(msg);
+                // }
 
             }
         }, REQUEST_DELAY_TIME);
@@ -259,17 +277,23 @@ public class Launcher extends Activity {
         });
     }
 
-    private void registerReceiver() {
-        mChangeReceiver = new ChangeReceiver();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        registerReceiver(mChangeReceiver, filter);
-    }
-
     private void parseCategoryItem() {
-        mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
-        for (CustomApplication application : mAllAppList) {
-            Logger.d("application " + application.mGroup.toString());
+        String networkConfig = DOWNLOAD_TO_PATH + "/" + CAPTURE_FILE;
+        File configFile = new File(networkConfig);
+        if (configFile.exists()) {
+            String resourcesPath = DOWNLOAD_TO_PATH + "/"
+                    + FILE_PREFIX;
+            File resourcesFile = new File(resourcesPath);
+            if (resourcesFile.exists()) {
+                mAllAppList = ToolUtils.getCustomConfigureFromConfig(mContext, configFile);
+                if (mAllAppList == null || mAllAppList.size() < 1) {
+                    Log.d(TAG, "Can't parse the network config ");
+                }
+            } else {
+                mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
+            }
+        } else {
+            mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
         }
         // CategoryItem item1 = new CategoryItem();
         // item1.mAppIcon =
@@ -367,13 +391,14 @@ public class Launcher extends Activity {
                 } else if (mThumb_3_layout.isFocused()) {
                     mSelectedApp = mAllAppList.get(2);
                 }
-//                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
-//                    // can't replace
-//                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
-                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
-                    newFragment.show(getFragmentManager(), "dialog");
-                    return true;
-//                }
+                // if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+                // // can't replace
+                // } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace
+                // == 0) {
+                final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
+                newFragment.show(getFragmentManager(), "dialog");
+                return true;
+                // }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
                     mThumb_2_layout.requestFocus();
@@ -478,11 +503,12 @@ public class Launcher extends Activity {
     class LauncherHandler extends Handler {
 
         public static final int RETURN_CATEGORY_CONFIG_CODE = 1;
-        public static final int RETURN_HIDDEN_CONFIG_CODE = 2;
-        public static final int RETURN_UPDATE_CONFIG_CODE = 3;
-        public static final int RETURN_SYSTEM_CONFIG_CODE = 4;
-        public static final int SHOW_FEATURE_VIEW = 5;
-        public static final int DISMISS_FEATURE_VIEW = 6;
+        public static final int RETURN_UNZIP_CONFIG_CODE = 2;
+        public static final int RETURN_HIDDEN_CONFIG_CODE = 3;
+        public static final int RETURN_UPDATE_CONFIG_CODE = 4;
+        public static final int RETURN_SYSTEM_CONFIG_CODE = 5;
+        public static final int SHOW_FEATURE_VIEW = 6;
+        public static final int DISMISS_FEATURE_VIEW = 7;
 
         public LauncherHandler() {
             super(Looper.getMainLooper());
@@ -496,7 +522,13 @@ public class Launcher extends Activity {
             }
             switch (msg.what) {
                 case RETURN_CATEGORY_CONFIG_CODE:
-                     
+//                    ToolUtils.getCustomConfigureFromConfig(mContext,
+//                            new ByteArrayInputStream(result.getBytes()));
+                    getCustomConfigureFromConfig(mContext,
+                            new ByteArrayInputStream(result.getBytes()));
+                    break;
+                case RETURN_UNZIP_CONFIG_CODE:
+
                     break;
                 case RETURN_HIDDEN_CONFIG_CODE:
                     break;
@@ -534,15 +566,112 @@ public class Launcher extends Activity {
         mHandler.sendEmptyMessage(LauncherHandler.DISMISS_FEATURE_VIEW);
     }
 
-    private void rename(File destFile, File sourceFile) {
-        while (destFile.exists()) {
-            destFile.delete();
-        }
+    private void getCustomConfigureFromConfig(Context context,
+            InputStream is) {
         try {
-            sourceFile.renameTo(destFile);
-        } catch (Exception e) {
-            Logger.w("", e);
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+                        String time = parser.nextText().trim();
+                        String storeTime = ToolUtils.getValueFromSP(context,
+                                CustomApplication.TIME_TAG);
+                        if (!TextUtils.isEmpty(storeTime)) {
+                            if (time.equals(storeTime)) {
+                                Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
+                                        + storeTime);
+                                return;
+                            } else {
+                                ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
+                            }
+                        } else {
+                            ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,time);
+                        }
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+                        String downloadUrl = parser.nextText().trim();
+                        ToolUtils.storeValueIntoSP(context, CustomApplication.URL_TAG, downloadUrl);
+                        // Download the new zip resources
+                        IDownloadListener listener = new IDownloadListener() {
+
+                            @Override
+                            public void onError(String errorCode) {
+
+                            }
+
+                            @Override
+                            public void onCompleted(final File file) {
+
+                                // Complete download the zip file
+                                Log.d(TAG, "download file for " + file.getAbsolutePath());
+                                mHandler.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
+                                                    + FILE_PREFIX);
+                                        } catch (ZipException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                            }
+                        };
+                        mDownloadTask = new DownloadTask(DOWNLOAD_TO_PATH, downloadUrl, listener);
+                        mHandler.post(mDownloadTask);
+                        return;
+                    }
+                }else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                        String name = parser.getName();
+                        Log.d(TAG, name);
+                }
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
         }
     }
 
+    class FetchTask extends AsyncTask<Void, Integer, String> {
+
+        private String mUrl;
+        private String mFileName;
+
+        public FetchTask(String mUrl, String mFileName) {
+            super();
+            this.mUrl = mUrl;
+            this.mFileName = mFileName;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (TextUtils.isEmpty(result)) {
+                Logger.e("Doesn't found any info from server");
+                return;
+            } else {
+                Logger.d("result = " + result);
+                Message msg = mHandler
+                        .obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
+            String result = HttpUtils.requestAndWriteResourcesFromServer(mUrl, mFileName);
+            return result;
+        }
+    }
 }

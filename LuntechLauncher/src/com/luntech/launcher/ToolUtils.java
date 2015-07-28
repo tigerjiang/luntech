@@ -9,14 +9,19 @@ import android.content.res.XmlResourceParser;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.luntech.launcher.secondary.ApplicationInfo;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class ToolUtils {
@@ -172,17 +177,17 @@ public class ToolUtils {
                     String name = parser.getName();
                     Log.d(TAG, name);
                     if (name.equals(App.APP_TAG)) {
-                        Log.d(TAG, "end app " + app.toString());
+//                        Log.d(TAG, "end app " + app.toString());
                         apps.add(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         module.mApps = apps;
-                        Log.d(TAG, "end apps " + module.mApps.toString());
+//                        Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         application.mGroup.addModule(module);
-                        Logger.d("end module" + module.toString());
+//                        Logger.d("end module" + module.toString());
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         applications.add(application);
-                        Logger.d("end group" + application.toString());
+//                        Logger.d("end group" + application.toString());
                     }
                 }
                 parser.next();
@@ -196,14 +201,14 @@ public class ToolUtils {
         return applications;
     }
 
-    public static ArrayList<CustomApplication> getCustomInfoFromConfig(Context context,
-            InputStream is) {
+    public static ArrayList<CustomApplication> getCustomConfigureFromConfig(Context context,File file) {
         ArrayList<CustomApplication> applications = new ArrayList<CustomApplication>();
         CustomApplication application = null;
         Module module = null;
         ArrayList<App> apps = null;
         App app = null;
         try {
+            InputStream is = new FileInputStream(file);
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(is, "utf-8");
@@ -212,21 +217,9 @@ public class ToolUtils {
                     String name = parser.getName();
                     Log.d(TAG, name);
                     if (name.equals(CustomApplication.TIME_TAG)) {
-                        String time = parser.nextText().trim();
-                        String storeTime = getValueFromSP(context, CustomApplication.TIME_TAG);
-                        if (!TextUtils.isEmpty(storeTime)) {
-                            if (time.equals(storeTime)) {
-                                Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
-                                        + storeTime);
-                                return null;
-                            } else {
-                                storeValueIntoSP(context, CustomApplication.TIME_TAG, parser
-                                        .nextText().trim());
-                            }
-                        }
+
                     } else if (name.equals(CustomApplication.URL_TAG)) {
-                        storeValueIntoSP(context, CustomApplication.URL_TAG, parser.nextText()
-                                .trim());
+
                     }
                     // group info
                     else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
@@ -304,6 +297,39 @@ public class ToolUtils {
         }
         return applications;
     }
+    
+    public static void getCustomConfigureFromConfig(Context context,
+            InputStream is) {
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+                        String time = parser.nextText().trim();
+                        Logger.d("time "+ time);
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+                        String url = parser.nextText().trim();
+                        //Download the new zip resources
+                        Logger.d("url "+ url);
+                    }
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                }
+                
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+    }
 
     public void setConfigured(Context context, String key, String pkg) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
@@ -346,5 +372,38 @@ public class ToolUtils {
     public static String getValueFromSP(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
         return sp.getString(key, null);
+    }
+
+    public static void writeFile(InputStream is, String localFile) {
+        BufferedReader reader = null;
+        BufferedWriter writer = null;
+        StringBuffer sbf = new StringBuffer();
+        try {
+            reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            writer = new BufferedWriter(new FileWriter(localFile));
+            String strRead = null;
+            while ((strRead = reader.readLine()) != null) {
+                sbf.append(strRead);
+                writer.write(strRead);
+                sbf.append("\r\n");
+            }
+            writer.flush();
+            reader.close();
+            writer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+    public static  void renameFile(File destFile, File sourceFile) {
+        while (destFile.exists()) {
+            destFile.delete();
+        }
+        try {
+            sourceFile.renameTo(destFile);
+        } catch (Exception e) {
+            Logger.w("", e);
+        }
     }
 }
