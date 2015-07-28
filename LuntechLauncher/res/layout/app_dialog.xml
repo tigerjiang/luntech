@@ -22,35 +22,36 @@
         android:id="@+id/select_apps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/devider2"
         android:layout_below="@+id/title"
         android:layout_marginTop="10dp"
         android:alwaysDrawnWithCache="true"
         android:columnWidth="@dimen/global_category_layout_wiith"
         android:horizontalSpacing="20dp"
         android:listSelector="@drawable/focus_selector"
-        android:numColumns="4"
+        android:numColumns="6"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp"
-         />
+        android:verticalSpacing="10dp" />
 
     <ImageView
         android:id="@+id/devider2"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/select_apps"
+        android:layout_above="@+id/button_layout"
         android:layout_marginTop="10px"
         android:paddingLeft="15px"
         android:paddingRight="15px"
         android:src="@android:color/white" />
 
     <LinearLayout
+        android:id="@+id/button_layout"
+        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="60px"
-        android:layout_below="@+id/devider2"
-        android:weightSum="2"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:weightSum="2" >
 
         <Button
             android:id="@+id/ok"

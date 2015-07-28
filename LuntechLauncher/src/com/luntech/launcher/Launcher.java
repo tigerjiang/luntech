@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -43,6 +44,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.zip.ZipException;
 
 public class Launcher extends Activity {
@@ -100,8 +103,6 @@ public class Launcher extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().penaltyLog().build());
-        StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects().detectLeakedClosableObjects().penaltyLog().penaltyDeath().build());
         setContentView(R.layout.main);
         mResources = getResources();
         mContext = getApplicationContext();
@@ -147,8 +148,7 @@ public class Launcher extends Activity {
                 String httpArg = "&package_name=" + sPackageName + "&version=" + sVersionCode;
                 String url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
                 Logger.e("request url " + url);
-                new FetchTask(url, DOWNLOAD_TO_PATH + "/"
-                        + CAPTURE_FILE).execute();
+                new FetchTask(url, DOWNLOAD_TO_PATH + "/" + CAPTURE_FILE).execute();
                 // String result =
                 // HttpUtils.requestAndWriteResourcesFromServer(url,
                 // DOWNLOAD_TO_PATH + "/"
@@ -186,7 +186,7 @@ public class Launcher extends Activity {
         mThumb_3_shadow = (ImageView) findViewById(R.id.thumb_3_cover_view);
         mThumb_3_label = (TextView) findViewById(R.id.thumb_3_label);
         mAppManager = AppManager.getInstance();
-        mAppManager.getAllApplications();
+        mAppManager.getSelectedApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
         notifyAllAppList();
         refreshThumbnail();
@@ -281,8 +281,7 @@ public class Launcher extends Activity {
         String networkConfig = DOWNLOAD_TO_PATH + "/" + CAPTURE_FILE;
         File configFile = new File(networkConfig);
         if (configFile.exists()) {
-            String resourcesPath = DOWNLOAD_TO_PATH + "/"
-                    + FILE_PREFIX;
+            String resourcesPath = DOWNLOAD_TO_PATH + "/" + FILE_PREFIX;
             File resourcesFile = new File(resourcesPath);
             if (resourcesFile.exists()) {
                 mAllAppList = ToolUtils.getCustomConfigureFromConfig(mContext, configFile);
@@ -295,6 +294,8 @@ public class Launcher extends Activity {
         } else {
             mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
         }
+        Collections.sort(mAllAppList, PARSED_APPS_COMPARATOR);
+        Log.d(TAG, "Sort " + mAllAppList.toString());
         // CategoryItem item1 = new CategoryItem();
         // item1.mAppIcon =
         // mResources.getDrawable(R.drawable.categore_app_1_logo);
@@ -391,14 +392,14 @@ public class Launcher extends Activity {
                 } else if (mThumb_3_layout.isFocused()) {
                     mSelectedApp = mAllAppList.get(2);
                 }
-                // if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
-                // // can't replace
-                // } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace
-                // == 0) {
-                final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
-                newFragment.show(getFragmentManager(), "dialog");
-                return true;
-                // }
+                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+                    // can't replace
+
+                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
+                    newFragment.show(getFragmentManager(), "dialog");
+                    return true;
+                }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
                     mThumb_2_layout.requestFocus();
@@ -516,26 +517,32 @@ public class Launcher extends Activity {
 
         @Override
         public void handleMessage(Message msg) {
-            String result = (String) msg.obj;
+            final String result = (String) msg.obj;
             if (TextUtils.isEmpty(result)) {
                 Logger.e("result is empty");
             }
             switch (msg.what) {
                 case RETURN_CATEGORY_CONFIG_CODE:
-//                    ToolUtils.getCustomConfigureFromConfig(mContext,
-//                            new ByteArrayInputStream(result.getBytes()));
-                    getCustomConfigureFromConfig(mContext,
-                            new ByteArrayInputStream(result.getBytes()));
-                    break;
+                    // ToolUtils.getCustomConfigureFromConfig(mContext,
+                    // new ByteArrayInputStream(result.getBytes()));
+                    new Thread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            getCustomConfigureFromConfig(mContext,
+                                    new ByteArrayInputStream(result.getBytes()));
+                        }
+                    }).start();
+                break;
                 case RETURN_UNZIP_CONFIG_CODE:
 
-                    break;
+                break;
                 case RETURN_HIDDEN_CONFIG_CODE:
-                    break;
+                break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                    break;
+                break;
                 case RETURN_SYSTEM_CONFIG_CODE:
-                    break;
+                break;
                 case SHOW_FEATURE_VIEW:
                     mFeatureView.setVisibility(View.VISIBLE);
                     try {
@@ -547,13 +554,13 @@ public class Launcher extends Activity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    break;
+                break;
                 case DISMISS_FEATURE_VIEW:
                     mFeatureView.setVisibility(View.GONE);
                     mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
-                    break;
+                break;
             }
             super.handleMessage(msg);
         }
@@ -566,8 +573,7 @@ public class Launcher extends Activity {
         mHandler.sendEmptyMessage(LauncherHandler.DISMISS_FEATURE_VIEW);
     }
 
-    private void getCustomConfigureFromConfig(Context context,
-            InputStream is) {
+    private void getCustomConfigureFromConfig(Context context, InputStream is) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
@@ -586,10 +592,11 @@ public class Launcher extends Activity {
                                         + storeTime);
                                 return;
                             } else {
-                                ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
+                                ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
+                                        time);
                             }
                         } else {
-                            ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,time);
+                            ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
                         }
                     } else if (name.equals(CustomApplication.URL_TAG)) {
                         String downloadUrl = parser.nextText().trim();
@@ -625,12 +632,12 @@ public class Launcher extends Activity {
                             }
                         };
                         mDownloadTask = new DownloadTask(DOWNLOAD_TO_PATH, downloadUrl, listener);
-                        mHandler.post(mDownloadTask);
+                        new Thread(mDownloadTask).start();
                         return;
                     }
-                }else if (parser.getEventType() == XmlResourceParser.END_TAG) {
-                        String name = parser.getName();
-                        Log.d(TAG, name);
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
                 }
                 parser.next();
             }
@@ -660,8 +667,7 @@ public class Launcher extends Activity {
                 return;
             } else {
                 Logger.d("result = " + result);
-                Message msg = mHandler
-                        .obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
+                Message msg = mHandler.obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
                 msg.obj = result;
                 mHandler.sendMessage(msg);
             }
@@ -674,4 +680,19 @@ public class Launcher extends Activity {
             return result;
         }
     }
+
+    // ///////////////// Private API Helpers //////////////////////////
+
+    private final Comparator<CustomApplication> PARSED_APPS_COMPARATOR = new Comparator<CustomApplication>() {
+
+        @Override
+        public int compare(CustomApplication lhs, CustomApplication rhs) {
+            String l_flags = lhs.mGroup.getGroupCode();
+            String r_flags = rhs.mGroup.getGroupCode();
+            boolean flag = false;
+            flag = Integer.parseInt(l_flags.replaceAll("\\D+", "")) < Integer.parseInt(r_flags
+                    .replaceAll("\\D+", ""));
+            return flag ? -1 : 0;
+        }
+    };
 }

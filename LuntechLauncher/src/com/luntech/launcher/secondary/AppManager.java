@@ -221,6 +221,52 @@ public final class AppManager {
 		return appList;
 	}
 
+	
+	/**
+     * All Applications for Content View.
+     * 
+     * @return
+     */
+    public List<ApplicationInfo> getSelectedApplications() {
+        mAllActivities.clear();
+        Log.d("packagename", "show app");
+        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        final List<ResolveInfo> acts = mPackageManager.queryIntentActivities(
+                mainIntent, 0);
+        final int count = acts.size();
+
+        final List<ApplicationInfo> appList = new ArrayList<ApplicationInfo>(
+                count);
+        appList.clear();
+        Collections.sort(acts, INSTALLED_APPS_COMPARATOR);
+        Log.d(TAG, "aaaaa"+mHidenApps.toString());
+        for (int i = 0; i < count; i++) {
+            final ResolveInfo info = acts.get(i);
+            if (info != null) {
+                final ApplicationInfo appinfo = getInfoFromActInfo(
+                        info.activityInfo, null);
+                try {
+                    PackageInfo pi = mPackageManager.getPackageInfo(
+                            info.activityInfo.packageName, 0);
+                    appinfo.mInstallTime = pi.firstInstallTime;
+                    appinfo.mpackageName = info.activityInfo.packageName;;
+                } catch (PackageManager.NameNotFoundException e) {
+                    // ignore
+                }
+
+                final String packageName = info.activityInfo.packageName;
+                appList.add(appinfo);
+                mAllActivities.put(packageName, appinfo);
+                Log.d("packagename", packageName);
+            }
+        }
+
+        // then include them ahead
+        return appList;
+    }
+
+	
 	/**
 	 * All Applications for Content View.
 	 * 

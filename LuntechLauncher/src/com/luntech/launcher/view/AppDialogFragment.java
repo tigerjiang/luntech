@@ -9,9 +9,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
@@ -91,12 +93,25 @@ public class AppDialogFragment extends DialogFragment {
         return dialog;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // safety check
+        
+        if (getDialog() == null) {
+            return;
+        }
+        WindowManager.LayoutParams params = getDialog().getWindow().getAttributes();
+        params.width = getResources().getDimensionPixelSize(R.dimen.popup_width);
+        params.height = getResources().getDimensionPixelSize(R.dimen.popup_height);
+        getDialog().getWindow().setAttributes(params);
+    }
     /**
      * Creates a new applications adapter for the grid view and registers it.
      */
 
     public void onAppManagerReady() {
-        mAppList = mAppManager.getAllAppsApplications();
+        mAppList = mAppManager.getSelectedApplications();
         sortByInstallTime(mAppList);
         mAdapter = new ApplicationsAdapter(mContext, mAppList);
         mAdapter.setIndex(0);

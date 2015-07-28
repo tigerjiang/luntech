@@ -80,8 +80,8 @@ public class Module {
 
     public void setModuleBg(String moduleBg) {
         this.moduleBg = moduleBg;
-        if (this.moduleBg.equalsIgnoreCase(".png")
-                || this.moduleBg.equalsIgnoreCase(".jpg")) {
+        if (this.moduleBg.endsWith(".png")
+                || this.moduleBg.endsWith(".jpg")) {
             setModuleBgDrawable(changeFiletoDrawable(this.moduleBg));
         } else {
             setModuleBgDrawable(changeIdtoDrawable(this.moduleBg));
@@ -163,6 +163,7 @@ public class Module {
     private Drawable changeFiletoDrawable(String fileName) {
         Drawable icon = null;
         String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_PREFIX + "/" + fileName;
+        Log.d("jzh", "change path "+path);
         if (!TextUtils.isEmpty(path)) {
             icon = Drawable.createFromPath(path);
         }
