@@ -16,8 +16,6 @@ import com.luntech.launcher.view.AppDialogFragment;
 
 public class SettingActivity extends Activity implements OnClickListener {
     // setting menu
-    private ImageView settingImView;
-    private LinearLayout setting_unfold_layout;
     private ImageView settingBaseView;
     private ImageView settingDispalyView;
     private ImageView settingNetView;
@@ -30,7 +28,6 @@ public class SettingActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_layout);
         // setting
-        setting_unfold_layout = (LinearLayout) findViewById(R.id.setting_unfold_layout);
         settingBaseView = (ImageView) findViewById(R.id.setting_base);
         settingBaseView.setOnClickListener(this);
         settingDispalyView = (ImageView) findViewById(R.id.setting_display);
@@ -48,7 +45,7 @@ public class SettingActivity extends Activity implements OnClickListener {
     @Override
     public void onClick(View view) {
         if (view.getId() == settingBaseView.getId()) {
-            safeStartApk("com.android.settings", "com.sugar.settings.AboutActivity");
+            safeStartApk("com.android.settings", "com.sugar.settings.GeneralSettingActivity");
         } else if (view.getId() == settingDispalyView.getId()) {
             safeStartApk("com.android.settings", "com.sugar.settings.DisplayConfigActivity");
         } else if (view.getId() == settingNetView.getId()) {

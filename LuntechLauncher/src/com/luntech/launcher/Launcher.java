@@ -156,6 +156,7 @@ public class Launcher extends Activity {
         mAppManager = AppManager.getInstance();
         mAppManager.getAllApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
+        notifyAllAppList();
         refreshThumbnail();
         mCategoryItemAdapter = new CategoryItemAdapter(mAllAppList, mContext);
         mGridView.setAdapter(mCategoryItemAdapter);
@@ -395,32 +396,21 @@ public class Launcher extends Activity {
         return super.onKeyDown(keyCode, event);
     }
 
-    /*
-     * @Override protected void onActivityResult(int requestCode, int
-     * resultCode, Intent data) { super.onActivityResult(requestCode,
-     * resultCode, data); Log.d(TAG, "requestCode "+ requestCode +
-     * "resultCode  "+resultCode); switch (resultCode) { case RESULT_OK:
-     * Log.d(TAG, "RESULT_OK"); ApplicationInfo app =
-     * data.getParcelableExtra("app"); Log.d(TAG, "app "+app.toString());
-     * mToolUtils.setConfigured(mContext, app, true);
-     * mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mIndex, app);
-     * mSelectedApp.mAppIcon = app.getIcon(); mSelectedApp.mLabel =
-     * app.getTitle(); mSelectedApp.mComponentName = app.mComponent;
-     * notifyAppList(mSelectedApp); mCategoryItemAdapter.notifyDataSetChanged();
-     * break; case RESULT_CANCELED: Log.d(TAG, "RESULT_CANCELED"); break;
-     * default: break; } }
-     */
-
     public void setResult(ApplicationInfo app, boolean isSelected) {
         if (isSelected && app != null && mSelectedApp != null) {
             Log.d("jzh", "setResult " + app.toString());
-            if ((mToolUtils.getConfigured(mContext,
-                    app.toString()))) {
-                Log.d("jzh", "setResult cancel for duplicate ");
-                Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
-                return;
+            String value = mToolUtils.getConfigured(mContext, app.getPackageName());
+            if (!TextUtils.isEmpty(value)) {
+                if (value.equals(mSelectedApp.mGroup.mModules.get(0).getModuleCode())) {
+                    mToolUtils.clearConfiguredPkg(mContext, app.getPackageName());
+                } else {
+                    Log.d("jzh", "setResult cancel for duplicate ");
+                    Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
-            mToolUtils.setConfigured(mContext, app, true);
+            mToolUtils.setConfigured(mContext, app.getPackageName(), mSelectedApp.mGroup.mModules
+                    .get(0).getModuleCode());
             mToolUtils.setConfiguredPkg(mContext, mSelectedApp.mGroup.mModules.get(0)
                     .getModuleCode(), app.getPackageName());
             mSelectedApp.mGroup.mModules.get(0).moduleIconDrawable = app.getIcon();
@@ -499,5 +489,4 @@ public class Launcher extends Activity {
         }
     }
 
-    
 }

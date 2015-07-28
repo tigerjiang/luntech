@@ -282,10 +282,10 @@ public class ToolUtils {
         return applications;
     }
 
-    public void setConfigured(Context context, ApplicationInfo app, boolean configured) {
+    public void setConfigured(Context context, String key, String pkg) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
         Editor spe = sp.edit();
-        spe.putBoolean(app.mTitle.toString(), configured);
+        spe.putString(key, pkg);
         spe.commit();
     }
 
@@ -308,9 +308,9 @@ public class ToolUtils {
         spe.commit();
     }
 
-    public boolean getConfigured(Context context, String name) {
+    public String getConfigured(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
-        return sp.getBoolean(name, false);
+        return sp.getString(name,null);
     }
 
 }
