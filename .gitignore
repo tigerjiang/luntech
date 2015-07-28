@@ -1,5 +1,5 @@
-/bin
-/gen
-/obj
-.settings
+/LuntechLauncher/bin
+/LuntechLauncher/gen
+/LuntechLauncher/obj
+/LuntechLauncher/.settings
 

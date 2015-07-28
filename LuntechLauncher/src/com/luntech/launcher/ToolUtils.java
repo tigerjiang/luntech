@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.luntech.launcher.secondary.ApplicationInfo;
@@ -113,8 +114,13 @@ public class ToolUtils {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+
+                    }
                     // group info
-                    if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         application = new CustomApplication();
                         application.mGroup = new CustomApplication.Group();
                         application.mGroup.setGroupCode(parser.getAttributeValue(0).trim());
@@ -205,15 +211,32 @@ public class ToolUtils {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+                        String time = parser.nextText().trim();
+                        String storeTime = getValueFromSP(context, CustomApplication.TIME_TAG);
+                        if (!TextUtils.isEmpty(storeTime)) {
+                            if (time.equals(storeTime)) {
+                                Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
+                                        + storeTime);
+                                return null;
+                            } else {
+                                storeValueIntoSP(context, CustomApplication.TIME_TAG, parser
+                                        .nextText().trim());
+                            }
+                        }
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+                        storeValueIntoSP(context, CustomApplication.URL_TAG, parser.nextText()
+                                .trim());
+                    }
                     // group info
-                    if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         application = new CustomApplication();
                         application.mGroup = new CustomApplication.Group();
                         application.mGroup.setGroupCode(parser.getAttributeValue(0).trim());
                         application.mGroup.setGroupMoveable(Integer.parseInt(parser
                                 .getAttributeValue(1).trim()));
-                        application.mGroup.setGroupFlag(Integer
-                                .parseInt(parser.getAttributeValue(2).trim()));
+                        application.mGroup.setGroupFlag(Integer.parseInt(parser
+                                .getAttributeValue(2).trim()));
                     } else if (name.equals(CustomApplication.Group.GROUP_TEXT_TAG)) {
                         application.mGroup.setGroupText(parser.nextText().trim());
                     } else if (name.equals(CustomApplication.Group.GROUP_BG_TAG)) {
@@ -313,4 +336,15 @@ public class ToolUtils {
         return sp.getString(name,null);
     }
 
+    public static void storeValueIntoSP(Context context, String key, String value) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        Editor spe = sp.edit();
+        spe.putString(key, value);
+        spe.commit();
+    }
+
+    public static String getValueFromSP(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        return sp.getString(key, null);
+    }
 }

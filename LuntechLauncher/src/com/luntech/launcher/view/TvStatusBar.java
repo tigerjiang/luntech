@@ -625,6 +625,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         if (mIsInternetConnected && !mIsGetWeather && mTryCount <= 10) {
             mTryCount++;
             String userCityString = getUserCity();
+            Log.d(TAG, "Get weather info on the location "+userCityString);
             searchWeather(userCityString);
         } else {
             Log.d(TAG, "cant get weather due to " + "mIsInternetConnected " + mIsInternetConnected

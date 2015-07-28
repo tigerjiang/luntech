@@ -4,11 +4,14 @@ package com.luntech.launcher;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -24,8 +27,9 @@ public class HttpUtils {
      * @param httpArg :参数
      * @return 返回结果
      */
-    public static String requestResourcesFromServer(String httpUrl) {
+    public static String requestResourcesFromServer(String httpUrl,String localFile) {
         BufferedReader reader = null;
+        BufferedWriter writer =null;  
         String result = null;
         StringBuffer sbf = new StringBuffer();
         try {
@@ -35,12 +39,16 @@ public class HttpUtils {
             connection.connect();
             InputStream is = connection.getInputStream();
             reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            writer = new BufferedWriter(new FileWriter(localFile));
             String strRead = null;
             while ((strRead = reader.readLine()) != null) {
                 sbf.append(strRead);
+                writer.write(strRead);
                 sbf.append("\r\n");
             }
+            writer.flush();
             reader.close();
+            writer.close();
             result = sbf.toString();
         } catch (Exception e) {
             e.printStackTrace();

@@ -136,18 +136,22 @@
     <GridView
         android:id="@+id/category_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/global_category_layout_height"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/middle_layout"
-        android:layout_marginTop="@dimen/global_vertical_devider_height"
-        android:columnWidth="@dimen/global_horizontal_devider_height"
+        android:cacheColorHint="#00000000"
+        android:columnWidth="@dimen/global_category_layout_wiith"
+        android:horizontalSpacing="@dimen/global_horizontal_devider_height"
         android:listSelector="@drawable/focus_selector"
-        android:numColumns="7" />
+        android:numColumns="7"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp" />
 
     <LinearLayout
         android:id="@+id/ad_layout"
         android:layout_width="match_parent"
+         android:layout_alignParentBottom="true"
         android:layout_height="@dimen/global_ad_layout_height"
-        android:layout_below="@+id/category_layout"
         android:layout_marginTop="@dimen/global_vertical_devider_height"
         android:background="@drawable/ad_information_bg"
         android:orientation="horizontal"
@@ -208,5 +212,19 @@
                 android:textSize="@dimen/global_text_size_small" />
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/feature_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/global_vertical_devider_height"
+        android:ellipsize="end"
+        android:gravity="center|left"
+        android:singleLine="true"
+        android:text="@string/feature_menu_1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_text_size_small"
+        android:visibility="visible" />
 
 </RelativeLayout>

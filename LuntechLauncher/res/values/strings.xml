@@ -38,7 +38,7 @@
     <string name="date_time_format_day_of_week">EEEE</string>
     <string name="date_time_format_duration">mm:ss</string>
     <string name="date_time_format_day_of_week_month_day">EEE, MMM d</string>
-    
+
     <!-- weather -->
     <string name="temp_degree">℃</string>
     <string name="qing">晴</string>
@@ -68,9 +68,8 @@
     <string name="yangsha">扬沙</string>
     <string name="mai">霾</string>
     <string name="zhenxue">阵雪</string>
-    
-    
-    <!--  city -->
+
+    <!-- city -->
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="string_sheng">省</string>
@@ -83,11 +82,7 @@
     <string name="current_city">当前城市是:</string>
     <string name="change_city">,请输入新的城市：</string>
     <string name="city_weather_error">无法获取</string>
-    
     <string name="select_app">请选择要替换的应用</string>
-    
-    
-    
     <string name="apps_title">应用中心</string>
     <string name="media_title">影视专区</string>
     <string name="game_title">游戏专区</string>
@@ -104,6 +99,9 @@
         <item>智能灯光</item>
         <item>智能影音</item>
     </string-array>
-    
-        <string name="duplicate_alert">该应用已经在桌面,请选择其他应用!</string>
+
+    <string name="duplicate_alert">该应用已经在桌面,请选择其他应用!</string>
+    <string name="feature_menu_0">按OK键进入，按菜单键替换当前应用.</string>
+    <string name="feature_menu_1">按OK键进入.</string>
+
 </resources>

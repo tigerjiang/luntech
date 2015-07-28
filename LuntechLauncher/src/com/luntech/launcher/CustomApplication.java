@@ -7,6 +7,8 @@ import android.content.res.Resources;
 import java.util.ArrayList;
 
 public class CustomApplication {
+    public static final String TIME_TAG = "time";
+    public static final String URL_TAG = "url";
     public Group mGroup;
 
     static class Group {
