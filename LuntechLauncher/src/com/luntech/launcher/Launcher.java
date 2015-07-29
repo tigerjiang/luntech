@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.ResolveInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -19,7 +18,6 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
-import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -238,8 +236,8 @@ public class Launcher extends Activity {
         mThirdApp = mAllAppList.get(2);
         final Module module1 = mFirstApp.mGroup.mModules.get(0);
         Logger.d("first module " + module1.toString());
-        mThumb_1_view.setBackground(module1.getModuleBgDrawable());
-        mThumb_1_shadow.setImageDrawable(module1.getModuleShadowDrawable());
+        mThumb_1_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,module1.getModuleBg()));
+        mThumb_1_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module1.getModuleShadow()));
         mThumb_1_label.setText(module1.getModuleText());
         mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -251,8 +249,8 @@ public class Launcher extends Activity {
         });
         final Module module2 = mSecondApp.mGroup.mModules.get(0);
         Logger.d("second module " + module2.toString());
-        mThumb_2_view.setBackground(module2.getModuleBgDrawable());
-        mThumb_2_shadow.setImageDrawable(module2.getModuleShadowDrawable());
+        mThumb_2_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,module2.getModuleBg()));
+        mThumb_2_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module2.getModuleShadow()));
         mThumb_2_label.setText(module2.getModuleText());
         mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -264,8 +262,8 @@ public class Launcher extends Activity {
         });
         final Module module3 = mThirdApp.mGroup.mModules.get(0);
         Logger.d("third module " + module3.toString());
-        mThumb_3_view.setBackground(module3.getModuleBgDrawable());
-        mThumb_3_shadow.setImageDrawable(module3.getModuleShadowDrawable());
+        mThumb_3_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,module3.getModuleBg()));
+        mThumb_3_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module3.getModuleShadow()));
         mThumb_3_label.setText(module3.getModuleText());
         mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
 

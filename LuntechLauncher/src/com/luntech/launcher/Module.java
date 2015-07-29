@@ -80,12 +80,12 @@ public class Module {
 
     public void setModuleBg(String moduleBg) {
         this.moduleBg = moduleBg;
-        if (this.moduleBg.endsWith(".png")
-                || this.moduleBg.endsWith(".jpg")) {
-            setModuleBgDrawable(changeFiletoDrawable(this.moduleBg));
-        } else {
-            setModuleBgDrawable(changeIdtoDrawable(this.moduleBg));
-        }
+//        if (this.moduleBg.endsWith(".png")
+//                || this.moduleBg.endsWith(".jpg")) {
+//            setModuleBgDrawable(changeFiletoDrawable(this.moduleBg));
+//        } else {
+//            setModuleBgDrawable(changeIdtoDrawable(this.moduleBg));
+//        }
     }
 
     public String getModuleIcon() {
@@ -94,12 +94,12 @@ public class Module {
 
     public void setModuleIcon(String moduleIcon) {
         this.moduleIcon = moduleIcon;
-        if (this.moduleIcon.equalsIgnoreCase(".png")
-                || this.moduleIcon.equalsIgnoreCase(".jpg")) {
-            setModuleIconDrawable(changeFiletoDrawable(this.moduleIcon));
-        } else {
-            setModuleIconDrawable(changeIdtoDrawable(this.moduleIcon));
-        }
+//        if (this.moduleIcon.equalsIgnoreCase(".png")
+//                || this.moduleIcon.equalsIgnoreCase(".jpg")) {
+//            setModuleIconDrawable(changeFiletoDrawable(this.moduleIcon));
+//        } else {
+//            setModuleIconDrawable(changeIdtoDrawable(this.moduleIcon));
+//        }
     }
 
     public String getModuleShadow() {
@@ -108,12 +108,12 @@ public class Module {
 
     public void setModuleShadow(String moduleShadow) {
         this.moduleShadow = moduleShadow;
-        if (this.moduleShadow.equalsIgnoreCase(".png")
-                || this.moduleShadow.equalsIgnoreCase(".jpg")) {
-            setModuleShadowDrawable(changeFiletoDrawable(this.moduleShadow));
-        } else {
-            setModuleShadowDrawable(changeIdtoDrawable(this.moduleShadow));
-        }
+//        if (this.moduleShadow.equalsIgnoreCase(".png")
+//                || this.moduleShadow.equalsIgnoreCase(".jpg")) {
+//            setModuleShadowDrawable(changeFiletoDrawable(this.moduleShadow));
+//        } else {
+//            setModuleShadowDrawable(changeIdtoDrawable(this.moduleShadow));
+//        }
     }
 
     public Drawable getModuleBgDrawable() {

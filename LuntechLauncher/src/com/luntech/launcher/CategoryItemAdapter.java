@@ -62,9 +62,9 @@ public class CategoryItemAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.appBgView.setImageDrawable(module.getModuleBgDrawable());
-        holder.appLogoView.setImageDrawable(module.getModuleIconDrawable());
-        holder.appShadowView.setImageDrawable(module.getModuleShadowDrawable());
+        holder.appBgView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module.getModuleBg()));
+        holder.appLogoView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module.getModuleIcon()));
+        holder.appShadowView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module.getModuleShadow()));
         holder.mAppLabel.setText(module.getModuleText());
         return convertView;
     }

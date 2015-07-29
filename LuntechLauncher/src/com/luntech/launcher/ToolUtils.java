@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -404,6 +405,36 @@ public class ToolUtils {
             sourceFile.renameTo(destFile);
         } catch (Exception e) {
             Logger.w("", e);
+        }
+    }
+
+    public static Drawable changeIdtoDrawable(Context context, String name) {
+        Drawable icon = null;
+        int resId = context.getResources()
+                .getIdentifier(name, "drawable", context.getPackageName());
+        if (resId == 0) {
+            Log.e("error", context.getPackageName() + " resource not found for " + name);
+        } else {
+            icon = context.getResources().getDrawable(resId);
+        }
+        return icon;
+    }
+
+    public static Drawable changeFiletoDrawable(Context context, String fileName) {
+        Drawable icon = null;
+        String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_PREFIX + "/" + fileName;
+        Log.d("jzh", "change path " + path);
+        if (!TextUtils.isEmpty(path)) {
+            icon = Drawable.createFromPath(path);
+        }
+        return icon;
+    }
+    
+    public static Drawable getDrawableFromAttribute(Context context, String attribute){
+        if(attribute.endsWith(".png")|attribute.endsWith(".PNG")|attribute.endsWith(".JPG")|attribute.endsWith(".jpg")){
+            return changeFiletoDrawable(context,attribute);
+        }else{
+            return changeIdtoDrawable(context,attribute);
         }
     }
 }
