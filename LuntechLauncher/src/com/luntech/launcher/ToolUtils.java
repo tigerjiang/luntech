@@ -10,7 +10,6 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.Log;
 
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -178,17 +177,17 @@ public class ToolUtils {
                     String name = parser.getName();
                     Log.d(TAG, name);
                     if (name.equals(App.APP_TAG)) {
-//                        Log.d(TAG, "end app " + app.toString());
+                        // Log.d(TAG, "end app " + app.toString());
                         apps.add(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         module.mApps = apps;
-//                        Log.d(TAG, "end apps " + module.mApps.toString());
+                        // Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         application.mGroup.addModule(module);
-//                        Logger.d("end module" + module.toString());
+                        // Logger.d("end module" + module.toString());
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         applications.add(application);
-//                        Logger.d("end group" + application.toString());
+                        // Logger.d("end group" + application.toString());
                     }
                 }
                 parser.next();
@@ -202,7 +201,8 @@ public class ToolUtils {
         return applications;
     }
 
-    public static ArrayList<CustomApplication> getCustomConfigureFromConfig(Context context,File file) {
+    public static ArrayList<CustomApplication> getCustomConfigureFromConfig(Context context,
+            File file) {
         ArrayList<CustomApplication> applications = new ArrayList<CustomApplication>();
         CustomApplication application = null;
         Module module = null;
@@ -298,7 +298,43 @@ public class ToolUtils {
         }
         return applications;
     }
-    
+
+    public static String getAdConfigureFromConfig(Context context,
+            InputStream is) {
+        StringBuffer AdContent = new StringBuffer();
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals("marquees")) {
+                        Log.d(TAG, "start ad over");
+                    } else if (name.equals("marquee")) {
+                        String content = parser.nextText().trim();
+                        AdContent.append(content).append("                             ");
+                    }
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    storeValueIntoSP(context, Launcher.ADVERTISEMENT_KEY, AdContent.toString());
+                    if (name.equals("marquees")) {
+                        Log.d(TAG, "end ad over");
+                    }
+                }
+
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+        return AdContent.toString();
+    }
+
     public static void getCustomConfigureFromConfig(Context context,
             InputStream is) {
         try {
@@ -311,17 +347,17 @@ public class ToolUtils {
                     Log.d(TAG, name);
                     if (name.equals(CustomApplication.TIME_TAG)) {
                         String time = parser.nextText().trim();
-                        Logger.d("time "+ time);
+                        Logger.d("time " + time);
                     } else if (name.equals(CustomApplication.URL_TAG)) {
                         String url = parser.nextText().trim();
-                        //Download the new zip resources
-                        Logger.d("url "+ url);
+                        // Download the new zip resources
+                        Logger.d("url " + url);
                     }
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
                 }
-                
+
                 parser.next();
             }
 
@@ -360,7 +396,7 @@ public class ToolUtils {
 
     public String getConfigured(Context context, String name) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
-        return sp.getString(name,null);
+        return sp.getString(name, null);
     }
 
     public static void storeValueIntoSP(Context context, String key, String value) {
@@ -395,9 +431,8 @@ public class ToolUtils {
             e.printStackTrace();
         }
     }
-    
-    
-    public static  void renameFile(File destFile, File sourceFile) {
+
+    public static void renameFile(File destFile, File sourceFile) {
         while (destFile.exists()) {
             destFile.delete();
         }
@@ -429,12 +464,13 @@ public class ToolUtils {
         }
         return icon;
     }
-    
-    public static Drawable getDrawableFromAttribute(Context context, String attribute){
-        if(attribute.endsWith(".png")|attribute.endsWith(".PNG")|attribute.endsWith(".JPG")|attribute.endsWith(".jpg")){
-            return changeFiletoDrawable(context,attribute);
-        }else{
-            return changeIdtoDrawable(context,attribute);
+
+    public static Drawable getDrawableFromAttribute(Context context, String attribute) {
+        if (attribute.endsWith(".png") | attribute.endsWith(".PNG") | attribute.endsWith(".JPG")
+                | attribute.endsWith(".jpg")) {
+            return changeFiletoDrawable(context, attribute);
+        } else {
+            return changeIdtoDrawable(context, attribute);
         }
     }
 }

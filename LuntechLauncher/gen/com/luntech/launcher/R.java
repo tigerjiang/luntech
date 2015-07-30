@@ -241,9 +241,7 @@ public final class R {
         public static final int zhihui=0x7f02008a;
     }
     public static final class id {
-        public static final int ad_content_1=0x7f0a0027;
-        public static final int ad_content_2=0x7f0a0029;
-        public static final int ad_layout=0x7f0a0025;
+        public static final int ad_content_1=0x7f0a0025;
         public static final int all_apps=0x7f0a0007;
         public static final int app_bg=0x7f0a0012;
         public static final int app_icon_image=0x7f0a0008;
@@ -261,31 +259,29 @@ public final class R {
         public static final int custom_app_icon_label=0x7f0a000b;
         public static final int devider2=0x7f0a0002;
         public static final int divider=0x7f0a0006;
-        public static final int feature_menu=0x7f0a002a;
+        public static final int feature_menu=0x7f0a0026;
         public static final int first_app_icon=0x7f0a000e;
         public static final int first_app_label=0x7f0a000f;
         public static final int first_app_layout=0x7f0a000d;
-        public static final int iptv_icon=0x7f0a0037;
-        public static final int logo_1=0x7f0a0026;
-        public static final int logo_2=0x7f0a0028;
-        public static final int luntech_icon=0x7f0a0038;
+        public static final int iptv_icon=0x7f0a0033;
+        public static final int luntech_icon=0x7f0a0034;
         public static final int middle_layout=0x7f0a0017;
         public static final int ok=0x7f0a0004;
-        public static final int order_left_btn=0x7f0a0035;
-        public static final int order_right_btn=0x7f0a0036;
-        public static final int resview=0x7f0a0034;
+        public static final int order_left_btn=0x7f0a0031;
+        public static final int order_right_btn=0x7f0a0032;
+        public static final int resview=0x7f0a0030;
         public static final int select_apps=0x7f0a0001;
-        public static final int selected_app_icon_image=0x7f0a002b;
-        public static final int selected_app_icon_label=0x7f0a002c;
-        public static final int setting_base=0x7f0a002e;
-        public static final int setting_display=0x7f0a002f;
-        public static final int setting_erwei=0x7f0a0033;
-        public static final int setting_more=0x7f0a0032;
-        public static final int setting_net=0x7f0a0030;
-        public static final int setting_unfold_layout=0x7f0a002d;
-        public static final int setting_update=0x7f0a0031;
+        public static final int selected_app_icon_image=0x7f0a0027;
+        public static final int selected_app_icon_label=0x7f0a0028;
+        public static final int setting_base=0x7f0a002a;
+        public static final int setting_display=0x7f0a002b;
+        public static final int setting_erwei=0x7f0a002f;
+        public static final int setting_more=0x7f0a002e;
+        public static final int setting_net=0x7f0a002c;
+        public static final int setting_unfold_layout=0x7f0a0029;
+        public static final int setting_update=0x7f0a002d;
         public static final int status_layout=0x7f0a0016;
-        public static final int temperature_view=0x7f0a003b;
+        public static final int temperature_view=0x7f0a0037;
         public static final int thumb_1_cover_view=0x7f0a001a;
         public static final int thumb_1_label=0x7f0a001b;
         public static final int thumb_1_layout=0x7f0a0018;
@@ -298,11 +294,11 @@ public final class R {
         public static final int thumb_3_label=0x7f0a0023;
         public static final int thumb_3_layout=0x7f0a0020;
         public static final int thumb_3_view=0x7f0a0021;
-        public static final int time_view=0x7f0a0039;
+        public static final int time_view=0x7f0a0035;
         public static final int title=0x7f0a0000;
-        public static final int usb_status=0x7f0a003d;
-        public static final int weather_status=0x7f0a003c;
-        public static final int wifi_status=0x7f0a003a;
+        public static final int usb_status=0x7f0a0039;
+        public static final int weather_status=0x7f0a0038;
+        public static final int wifi_status=0x7f0a0036;
     }
     public static final class layout {
         public static final int app_dialog=0x7f030000;

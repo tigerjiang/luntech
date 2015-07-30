@@ -72,6 +72,8 @@ public class Launcher extends Activity {
     private ImageView mThumb_2_shadow;
     private TextView mThumb_2_label;
 
+    private TextView mAdvertisementView;
+
     private RelativeLayout mThumb_3_layout;
     private ImageView mThumb_3_view;
     private ImageView mThumb_3_shadow;
@@ -85,9 +87,11 @@ public class Launcher extends Activity {
     private static final long SHOW_DELAY_TIME = 10 * 1000;
 
     public static final String CAPTURE_TIME = "capture_time";
-    public static final String CAPTURE_FILE = "network_config.xml";
+    public static final String CATEGORY_FILE = "network_config.xml";
+    public static final String AD_CONFIGURE_FILE = "ad_config.xml";
     public static final String LOCAL_CONFIG_FILE_ = "local_config.xml";
     public static final String FILE_PREFIX = "launcher";
+    public static final String ADVERTISEMENT_KEY = "advertisement_key";
     public static String DOWNLOAD_TO_PATH;
 
     private Handler mHandler;
@@ -144,9 +148,18 @@ public class Launcher extends Activity {
             @Override
             public void run() {
                 String httpArg = "&package_name=" + sPackageName + "&version=" + sVersionCode;
-                String url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
-                Logger.e("request url " + url);
-                new FetchTask(url, DOWNLOAD_TO_PATH + "/" + CAPTURE_FILE).execute();
+                String app_url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
+                Logger.e("request url " + app_url);
+                // capture the category config
+                new FetchTask(app_url, DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE,
+                        LauncherHandler.RETURN_CATEGORY_CONFIG_CODE).execute();
+
+                String config_url = HttpUtils.HTTP_CONFIG_URL + httpArg;
+                Logger.e("request url " + app_url);
+                // capture the category config
+                new FetchTask(config_url, DOWNLOAD_TO_PATH + "/" + AD_CONFIGURE_FILE,
+                        LauncherHandler.RETURN_SYSTEM_CONFIG_CODE).execute();
+
                 // String result =
                 // HttpUtils.requestAndWriteResourcesFromServer(url,
                 // DOWNLOAD_TO_PATH + "/"
@@ -183,9 +196,15 @@ public class Launcher extends Activity {
         mThumb_3_view = (ImageView) findViewById(R.id.thumb_3_view);
         mThumb_3_shadow = (ImageView) findViewById(R.id.thumb_3_cover_view);
         mThumb_3_label = (TextView) findViewById(R.id.thumb_3_label);
+
+        mAdvertisementView = (TextView) findViewById(R.id.ad_content_1);
         mAppManager = AppManager.getInstance();
         mAppManager.getSelectedApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
+        String adContent = ToolUtils.getValueFromSP(mContext, ADVERTISEMENT_KEY);
+        if(!TextUtils.isEmpty(adContent)){
+//            mAdvertisementView.setText(adContent);
+        }
         notifyAllAppList();
         refreshThumbnail();
         mCategoryItemAdapter = new CategoryItemAdapter(mAllAppList, mContext);
@@ -236,8 +255,10 @@ public class Launcher extends Activity {
         mThirdApp = mAllAppList.get(2);
         final Module module1 = mFirstApp.mGroup.mModules.get(0);
         Logger.d("first module " + module1.toString());
-        mThumb_1_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,module1.getModuleBg()));
-        mThumb_1_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module1.getModuleShadow()));
+        mThumb_1_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
+                module1.getModuleBg()));
+        mThumb_1_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                module1.getModuleShadow()));
         mThumb_1_label.setText(module1.getModuleText());
         mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -249,8 +270,10 @@ public class Launcher extends Activity {
         });
         final Module module2 = mSecondApp.mGroup.mModules.get(0);
         Logger.d("second module " + module2.toString());
-        mThumb_2_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,module2.getModuleBg()));
-        mThumb_2_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module2.getModuleShadow()));
+        mThumb_2_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
+                module2.getModuleBg()));
+        mThumb_2_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                module2.getModuleShadow()));
         mThumb_2_label.setText(module2.getModuleText());
         mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -262,8 +285,10 @@ public class Launcher extends Activity {
         });
         final Module module3 = mThirdApp.mGroup.mModules.get(0);
         Logger.d("third module " + module3.toString());
-        mThumb_3_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,module3.getModuleBg()));
-        mThumb_3_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module3.getModuleShadow()));
+        mThumb_3_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
+                module3.getModuleBg()));
+        mThumb_3_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                module3.getModuleShadow()));
         mThumb_3_label.setText(module3.getModuleText());
         mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -276,7 +301,7 @@ public class Launcher extends Activity {
     }
 
     private void parseCategoryItem() {
-        String networkConfig = DOWNLOAD_TO_PATH + "/" + CAPTURE_FILE;
+        String networkConfig = DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE;
         File configFile = new File(networkConfig);
         if (configFile.exists()) {
             String resourcesPath = DOWNLOAD_TO_PATH + "/" + FILE_PREFIX;
@@ -531,16 +556,20 @@ public class Launcher extends Activity {
                                     new ByteArrayInputStream(result.getBytes()));
                         }
                     }).start();
-                break;
+                    break;
                 case RETURN_UNZIP_CONFIG_CODE:
 
-                break;
+                    break;
                 case RETURN_HIDDEN_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_SYSTEM_CONFIG_CODE:
-                break;
+                    String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
+                            new ByteArrayInputStream(result.getBytes()));
+                    Log.d(TAG, "ad "+adContent);
+//                    mAdvertisementView.setText(adContent);
+                    break;
                 case SHOW_FEATURE_VIEW:
                     mFeatureView.setVisibility(View.VISIBLE);
                     try {
@@ -552,13 +581,13 @@ public class Launcher extends Activity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                break;
+                    break;
                 case DISMISS_FEATURE_VIEW:
                     mFeatureView.setVisibility(View.GONE);
                     mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
-                break;
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -651,11 +680,13 @@ public class Launcher extends Activity {
 
         private String mUrl;
         private String mFileName;
+        private int mReturnCode;
 
-        public FetchTask(String mUrl, String mFileName) {
+        public FetchTask(String mUrl, String mFileName, int returnCode) {
             super();
             this.mUrl = mUrl;
             this.mFileName = mFileName;
+            this.mReturnCode = returnCode;
         }
 
         @Override
@@ -665,7 +696,7 @@ public class Launcher extends Activity {
                 return;
             } else {
                 Logger.d("result = " + result);
-                Message msg = mHandler.obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
+                Message msg = mHandler.obtainMessage(mReturnCode);
                 msg.obj = result;
                 mHandler.sendMessage(msg);
             }
