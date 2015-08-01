@@ -23,11 +23,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/global_category_app_shadow_height"
         android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
         android:src="@drawable/categore_app_1_shadow" />
 
     <TextView
         android:id="@+id/app_label"
-        android:background="@drawable/categore_app_1_shadow"
         android:layout_width="match_parent"
         android:layout_height="@dimen/global_category_app_shadow_height"
         android:layout_alignParentBottom="true"

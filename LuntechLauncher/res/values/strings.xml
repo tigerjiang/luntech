@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">CustomLauncher</string>
-    <string name="global_thumb_2_label">红石在线</string>
+    <string name="global_thumb_2_label">智慧政务</string>
     <string name="global_thumb_1_label">直播电视</string>
     <string name="global_thumb_3_label">物业服务</string>
     <string name="categore_app_1_label">影视点播</string>
@@ -15,7 +15,7 @@
     <string name="ad_text_1">智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现...... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现... 智能家居，你来想象我来实现...</string>
     <string name="ad_text_2">智能社区，为你带来智能的自然之家...</string>
     <string name="time">8:20</string>
-    <string name="temperature">20</string>
+    <string name="temperature">青岛</string>
     <string name="date_time_today">今天</string>
     <string name="date_time_yesterday">昨天</string>
     <string name="date_time_hr">小时</string>
@@ -30,7 +30,7 @@
     <string name="date_time_format_time_short_12">h:mm</string>
     <string name="date_time_format_time_am_pm">h:mm a</string>
     <string name="date_time_format_am_pm">a</string>
-    <string name="date_time_format_date_short_full">MM/dd/yy</string>
+    <string name="date_time_format_date_short_full">MM-dd-yy</string>
     <string name="date_time_format_month_day">MMM d</string>
     <string name="date_time_format_month_year">MMM yyyy</string>
     <string name="date_time_format_date_long">MMM dd, yyyy</string>
@@ -101,7 +101,9 @@
     </string-array>
 
     <string name="duplicate_alert">该应用已经在桌面,请选择其他应用!</string>
+    <string name="can_not_replace">该应用不可被替换!</string>
     <string name="feature_menu_0">按OK键进入，按菜单键替换当前应用.</string>
     <string name="feature_menu_1">按OK键进入.</string>
+    <string name="app_no_fund">服务暂未上线，敬请期待</string>
 
 </resources>

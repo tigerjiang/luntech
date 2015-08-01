@@ -9,9 +9,9 @@
     <dimen name="global_thumb_1_width">720px</dimen>
     <dimen name="global_thumb_1_height">406px</dimen>
     <dimen name="global_thumb_2_width">418px</dimen>
-    <dimen name="global_thumb_2_height">197px</dimen>
+    <dimen name="global_thumb_2_height">210px</dimen>
     <dimen name="global_thumb_3_width">418px</dimen>
-    <dimen name="global_thumb_3_height">197px</dimen>
+    <dimen name="global_thumb_3_height">210px</dimen>
     <dimen name="global_thumb_shadow_height">48px</dimen>
     <dimen name="global_category_item_width">154px</dimen>
     <dimen name="global_category_item_height">128px</dimen>

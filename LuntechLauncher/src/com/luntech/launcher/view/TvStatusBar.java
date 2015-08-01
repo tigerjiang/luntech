@@ -111,9 +111,9 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         mContext = context;
         mUiHandler = new UiHandler(this);
         mResources = mContext.getResources();
-        mDrawableNetworkOffline = mResources.getDrawable(R.drawable.ic_statusbar_ununited_network);
-        mDrawableNetworkEthernet = mResources.getDrawable(R.drawable.ic_statusbar_wired_network);
-        mDrawableNetworkWifi = mResources.getDrawable(R.drawable.fullscreen_gp_wifi_signal);
+        mDrawableNetworkOffline = mResources.getDrawable(R.drawable.ethernet_off);
+        mDrawableNetworkEthernet = mResources.getDrawable(R.drawable.ethernet_on);
+        mDrawableNetworkWifi = mResources.getDrawable(R.drawable.wifi_signal);
         mState = new TvStatus();
         LayoutInflater.from(context).inflate(R.layout.status_bar, this);
         mTimeView = (TextView) findViewById(R.id.time_view);
@@ -179,8 +179,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             public void run() {
                 String city = getUserCity();
                 Log.d(TAG, "user city " + city);
-//                new WeatherTask().execute(city);
-                 captureWeatherFromInternet();
+                new WeatherTask().execute(city);
+                // captureWeatherFromInternet();
             }
         }, mDelayTime);
 
@@ -197,6 +197,10 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         filter1.addAction(WifiManager.RSSI_CHANGED_ACTION);
 
         final IntentFilter filter2 = new IntentFilter();
+        filter2.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        filter2.addAction(Intent.ACTION_MEDIA_CHECKING);
+        filter2.addAction(Intent.ACTION_MEDIA_EJECT);
+        filter2.addAction(Intent.ACTION_MEDIA_REMOVED);
         filter2.addAction(Intent.ACTION_MEDIA_MOUNTED);
         filter2.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
         filter2.addDataScheme("file");
@@ -303,7 +307,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
                         synchronized (mState) {
                             mState.setDate(mTimeManager.formatDateTime(time,
-                                    TimeManager.DateTimeFormat.DAY_OF_WEEK_MONTH_DAY));
+                                    TimeManager.DateTimeFormat.DATE_CURRENT_FORMAT));
                             mState.setTime(mTimeManager.formatDateTime(time,
                                     TimeManager.DateTimeFormat.TIME_SHORT));
                             if (mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
@@ -366,6 +370,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     final NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
                     onNetworkInfoChanged(networkInfo);
                 }
+            } else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+                mUsbStatusView.setVisibility(View.GONE);
             }
         }
     };
@@ -383,7 +389,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 mUsbStatusView.setVisibility(View.VISIBLE);
                 if (DEBUG)
                     Log.d(TAG, "action: " + action + " path: " + path);
-            } else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
+            } else {
                 mUsbStatusView.setVisibility(View.GONE);
             }
         }
@@ -423,7 +429,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
                 // Date Time info
                 if (refreshAll || mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
-                    mTimeView.setText(mState.getTime());
+                    mTimeView.setText(mState.getDate() + "   " + mState.getTime());
                     mState.clearChanges(TvStatus.DATE_TIME_INFO);
                 }
                 // Weather info
@@ -625,7 +631,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         if (mIsInternetConnected && !mIsGetWeather && mTryCount <= 10) {
             mTryCount++;
             String userCityString = getUserCity();
-            Log.d(TAG, "Get weather info on the location "+userCityString);
+            Log.d(TAG, "Get weather info on the location " + userCityString);
             searchWeather(userCityString);
         } else {
             Log.d(TAG, "cant get weather due to " + "mIsInternetConnected " + mIsInternetConnected

@@ -10,75 +10,88 @@
         android:id="@+id/iptv_icon"
         android:layout_width="@dimen/global_iptv_logo_layout_width"
         android:layout_height="@dimen/global_iptv_logo_layout_height"
-        android:scaleType="centerInside"
         android:layout_alignParentLeft="true"
+        android:scaleType="centerInside"
         android:src="@drawable/iptv_logo" >
     </ImageView>
 
-    <ImageView
-        android:id="@+id/luntech_icon"
-        android:layout_width="64px"
-        android:layout_height="28px"
-        android:layout_alignParentRight="true"
-        android:scaleType="fitXY"
-        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:src="@drawable/luntech_logo" >
-    </ImageView>
-
-    <TextView
-        android:id="@+id/time_view"
+    <RelativeLayout
+        android:id="@+id/tv_status_layout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/global_vertical_devider_height_1"
-        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/luntech_icon"
-        android:text="@string/time"
-        android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_large" >
-    </TextView>
+        android:layout_height="54px"
+        android:layout_gravity="center_vertical" >
 
-    <ImageView
-        android:id="@+id/wifi_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:layout_marginRight="@dimen/global_status_horizontal_devider_1"
-        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/time_view"
-        android:src="@drawable/wifi_signal" >
-    </ImageView>
+        <ImageView
+            android:id="@+id/luntech_icon"
+            android:layout_width="35px"
+            android:layout_height="54px"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/luntech_logo" >
+        </ImageView>
 
-    <TextView
-        android:id="@+id/temperature_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/global_horizontal_devider_height"
-        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/wifi_status"
-        android:text="@string/temperature"
-        android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_large"
-        android:visibility="visible" >
-    </TextView>
+        <TextView
+            android:id="@+id/time_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/global_vertical_devider_height_1"
+            android:layout_toLeftOf="@+id/luntech_icon"
+            android:gravity="center"
+            android:text="@string/time"
+            android:textColor="@color/white"
+            android:textSize="@dimen/global_text_size_large" >
+        </TextView>
 
-    <ImageView
-        android:id="@+id/weather_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/global_status_horizontal_devider_2"
-        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/temperature_view"
-        android:visibility="visible" >
-    </ImageView>
+        <ImageView
+            android:id="@+id/wifi_status"
+            android:layout_width="30px"
+            android:layout_height="50px"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/global_status_horizontal_devider_1"
+            android:layout_toLeftOf="@+id/time_view"
+            android:scaleType="fitCenter"
+            android:src="@drawable/wifi_signal" >
+        </ImageView>
 
-    <ImageView
-        android:id="@+id/usb_status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/global_vertical_devider_height_2"
-        android:layout_toLeftOf="@+id/weather_status" 
-        android:src="@drawable/ic_device_usb"
-        android:visibility="gone">
-    </ImageView>
+        <TextView
+            android:id="@+id/temperature_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/global_horizontal_devider_height"
+            android:layout_toLeftOf="@+id/wifi_status"
+            android:gravity="center"
+            android:text="@string/temperature"
+            android:textColor="@color/white"
+            android:textSize="@dimen/global_text_size_large"
+            android:visibility="visible" >
+        </TextView>
+
+        <ImageView
+            android:id="@+id/weather_status"
+            android:layout_width="30px"
+            android:layout_height="50px"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/global_status_horizontal_devider_2"
+            android:layout_toLeftOf="@+id/temperature_view"
+            android:scaleType="fitCenter"
+            android:visibility="visible" >
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/usb_status"
+            android:layout_width="30px"
+            android:layout_height="40px"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/weather_status"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_device_usb"
+            android:visibility="gone" >
+        </ImageView>
+    </RelativeLayout>
 
 </merge>

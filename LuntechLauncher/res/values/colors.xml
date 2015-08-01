@@ -4,5 +4,5 @@
     <color name="white">#ffffff</color>
     <color name="gray">#8f8f8f8f</color>
     <color name="hint">#FFFFF0</color>
-    <color name="transparent">#00000000</color>
+    <color name="transparent">#8c000000</color>
 </resources>

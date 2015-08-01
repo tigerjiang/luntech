@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,6 +65,7 @@ public class Launcher extends Activity {
     private RelativeLayout mThumb_1_layout;
 
     private TextView mFeatureView;
+    private LinearLayout mFeatureMenuLayout;
     private ImageView mThumb_1_view;
     private ImageView mThumb_1_shadow;
     private TextView mThumb_1_label;
@@ -85,6 +88,7 @@ public class Launcher extends Activity {
     private static int sVersionCode;
     private static final long REQUEST_DELAY_TIME = 10 * 1000;
     private static final long SHOW_DELAY_TIME = 10 * 1000;
+    private static final long DISMISS_DELAY_TIME = 3 * 1000;
 
     public static final String CAPTURE_TIME = "capture_time";
     public static final String CATEGORY_FILE = "network_config.xml";
@@ -97,6 +101,8 @@ public class Launcher extends Activity {
     private Handler mHandler;
     private HandlerThread mThread;
     private DownloadTask mDownloadTask;
+
+    private boolean mIsShowAlert = false;
 
     CustomApplication mFirstApp;
     CustomApplication mSecondApp;
@@ -136,7 +142,8 @@ public class Launcher extends Activity {
         // mThread.start();
         mHandler = new LauncherHandler();
         mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
-        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
+        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
+                SHOW_DELAY_TIME);
     }
 
     private void initPrecondition() {
@@ -185,6 +192,7 @@ public class Launcher extends Activity {
 
         mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_layout);
         mFeatureView = (TextView) findViewById(R.id.feature_menu);
+        mFeatureMenuLayout = (LinearLayout) findViewById(R.id.feature_layout);
         mThumb_1_view = (ImageView) findViewById(R.id.thumb_1_view);
         mThumb_1_shadow = (ImageView) findViewById(R.id.thumb_1_cover_view);
         mThumb_1_label = (TextView) findViewById(R.id.thumb_1_label);
@@ -202,8 +210,8 @@ public class Launcher extends Activity {
         mAppManager.getSelectedApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
         String adContent = ToolUtils.getValueFromSP(mContext, ADVERTISEMENT_KEY);
-        if(!TextUtils.isEmpty(adContent)){
-//            mAdvertisementView.setText(adContent);
+        if (!TextUtils.isEmpty(adContent)) {
+            mAdvertisementView.setText(adContent);
         }
         notifyAllAppList();
         refreshThumbnail();
@@ -226,6 +234,7 @@ public class Launcher extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Logger.d("select position " + position);
                 mSelectedApp = (CustomApplication) parent.getItemAtPosition(position);
+                refreshFeatureMenuView();
             }
 
             @Override
@@ -242,17 +251,21 @@ public class Launcher extends Activity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(mContext, "App no found for " + componentName, Toast.LENGTH_SHORT)
-                    .show();
 
+            // Toast.makeText(mContext, "App no found for " + componentName,
+            // Toast.LENGTH_SHORT)
+            // .show();
+            Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
             Log.d(TAG, e.toString());
         }
     }
 
     private void refreshThumbnail() {
+        mSelectedApp = mAllAppList.get(0);
         mFirstApp = mAllAppList.get(0);
         mSecondApp = mAllAppList.get(1);
         mThirdApp = mAllAppList.get(2);
+        refreshFeatureMenuView();
         final Module module1 = mFirstApp.mGroup.mModules.get(0);
         Logger.d("first module " + module1.toString());
         mThumb_1_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
@@ -279,6 +292,7 @@ public class Launcher extends Activity {
 
             @Override
             public void onClick(View v) {
+
                 safeStartApk(module2.mApps.get(0).getComponentName());
 
             }
@@ -403,6 +417,8 @@ public class Launcher extends Activity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         int action = event.getAction();
+        mIsShowAlert = false;
+        Log.d("show", "action " + action + "    keycode" + keyCode);
         if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
             Log.d(TAG, "action " + action + "    keycode" + keyCode);
             Log.d(TAG, "focus " + "    keycode" + keyCode);
@@ -415,10 +431,13 @@ public class Launcher extends Activity {
                 } else if (mThumb_3_layout.isFocused()) {
                     mSelectedApp = mAllAppList.get(2);
                 }
-                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+                refreshFeatureMenuView();
+                if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
                     // can't replace
-
-                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+                    Log.d(TAG, "cacn't replace the app");
+                    Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
                     final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
                     newFragment.show(getFragmentManager(), "dialog");
                     return true;
@@ -426,7 +445,9 @@ public class Launcher extends Activity {
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
                     mThumb_2_layout.requestFocus();
+                    mSelectedApp = mAllAppList.get(1);
                 }
+                refreshFeatureMenuView();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
                 if (mThumb_1_layout.isFocused()) {
@@ -437,26 +458,34 @@ public class Launcher extends Activity {
                 } else if (mThumb_2_layout.isFocused()) {
                     Log.d(TAG, "mThumb_2_layout ");
                     mThumb_3_layout.requestFocus();
+                    mSelectedApp = mAllAppList.get(2);
                 } else if (mThumb_3_layout.isFocused()) {
                     Log.d(TAG, "mThumb_3_layout ");
                     mGridView.setSelection(0);
                     mGridView.requestFocus();
                     mSelectedApp = mAllAppList.get(3);
                 }
+                refreshFeatureMenuView();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
                 if (mGridView.isFocused()) {
                     mThumb_1_layout.requestFocus();
+                    mSelectedApp = mAllAppList.get(0);
                 } else if (mThumb_3_layout.isFocused()) {
                     mThumb_2_layout.requestFocus();
+                    mSelectedApp = mAllAppList.get(1);
                 }
+                refreshFeatureMenuView();
                 return true;
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
                 if (mThumb_2_layout.isFocused()) {
                     mThumb_1_layout.requestFocus();
+                    mSelectedApp = mAllAppList.get(0);
                 } else if (mThumb_3_layout.isFocused()) {
                     mThumb_1_layout.requestFocus();
+                    mSelectedApp = mAllAppList.get(0);
                 }
+                refreshFeatureMenuView();
                 return true;
             }
         }
@@ -533,6 +562,7 @@ public class Launcher extends Activity {
         public static final int RETURN_SYSTEM_CONFIG_CODE = 5;
         public static final int SHOW_FEATURE_VIEW = 6;
         public static final int DISMISS_FEATURE_VIEW = 7;
+        public static final int NO_OPERATION = 8;
 
         public LauncherHandler() {
             super(Looper.getMainLooper());
@@ -567,23 +597,24 @@ public class Launcher extends Activity {
                 case RETURN_SYSTEM_CONFIG_CODE:
                     String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
                             new ByteArrayInputStream(result.getBytes()));
-                    Log.d(TAG, "ad "+adContent);
-//                    mAdvertisementView.setText(adContent);
+                    Log.d(TAG, "ad " + adContent);
+                    mAdvertisementView.setText(adContent);
                     break;
                 case SHOW_FEATURE_VIEW:
-                    mFeatureView.setVisibility(View.VISIBLE);
-                    try {
-                        if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
-                            mFeatureView.setText(R.string.feature_menu_1);
-                        } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
-                            mFeatureView.setText(R.string.feature_menu_0);
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    mIsShowAlert = true;
+                    Log.d("show", "SHOW_FEATURE_VIEW");
+                    mFeatureMenuLayout.setVisibility(View.VISIBLE);
+                    mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
+                    mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
+                            DISMISS_DELAY_TIME);
                     break;
                 case DISMISS_FEATURE_VIEW:
-                    mFeatureView.setVisibility(View.GONE);
+                    Log.d("show", "DISMISS_FEATURE_VIEW");
+                    mFeatureMenuLayout.setVisibility(View.GONE);
+                    break;
+                case NO_OPERATION:
+                    Log.d("show", "NO_OPERATION");
+                    mFeatureMenuLayout.setVisibility(View.GONE);
                     mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
@@ -593,11 +624,27 @@ public class Launcher extends Activity {
         }
     }
 
+    private void refreshFeatureMenuView() {
+        try {
+            if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+                mFeatureView.setText(R.string.feature_menu_1);
+            } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+                mFeatureView.setText(R.string.feature_menu_0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-        mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
-        mHandler.sendEmptyMessage(LauncherHandler.DISMISS_FEATURE_VIEW);
+//        if(!mIsShowAlert){
+            mIsShowAlert = true;
+            Log.d("show", "onUserInteraction");
+            mHandler.removeMessages(LauncherHandler.NO_OPERATION);
+            mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
+//        }
     }
 
     private void getCustomConfigureFromConfig(Context context, InputStream is) {
