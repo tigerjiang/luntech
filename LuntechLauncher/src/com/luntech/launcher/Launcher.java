@@ -607,7 +607,7 @@ public class Launcher extends Activity {
                     .getModuleCode(), app.getPackageName());
             mSelectedApp.mGroup.mModules.get(0).moduleIconDrawable = app.getIcon();
             mSelectedApp.mGroup.mModules.get(0).moduleText = app.getTitle();
-            mSelectedApp.mGroup.mModules.get(0).moduleReplace=1;
+            mSelectedApp.mGroup.mModules.get(0).moduleReplace = 1;
             mSelectedApp.mGroup.mModules.get(0).mApps.get(0).componentName = app.mComponent;
             notifyAppList(mSelectedApp);
             refreshThumbnail();

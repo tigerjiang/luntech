@@ -70,7 +70,6 @@ public class AppDialogFragment extends DialogFragment {
                     ((Launcher) activity).setResult(mSelectedApp, true);
                 }
                 dismiss();
-                Log.d("jzh", "ok for " + mSelectedApp.toString());
 
             }
         });
@@ -136,7 +135,6 @@ public class AppDialogFragment extends DialogFragment {
                 mAdapter.setIndex(position);
                 mAdapter.notifyDataSetChanged();
                 mSelectedApp = mAppList.get(position);
-                Log.d("jzh", "onItemClick " + mSelectedApp.toString());
             }
         });
     }
