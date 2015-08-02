@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/status_layout"
     android:layout_width="@dimen/global_status_layout_width"
     android:layout_height="@dimen/global_status_layout_height"
     android:gravity="bottom" >
@@ -85,10 +84,11 @@
         <ImageView
             android:id="@+id/usb_status"
             android:layout_width="30px"
-            android:layout_height="40px"
+            android:layout_height="30px"
             android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/global_status_horizontal_devider_2"
             android:layout_toLeftOf="@+id/weather_status"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@drawable/ic_device_usb"
             android:visibility="gone" >
         </ImageView>

@@ -52,6 +52,7 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -179,8 +180,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             public void run() {
                 String city = getUserCity();
                 Log.d(TAG, "user city " + city);
-                new WeatherTask().execute(city);
-                // captureWeatherFromInternet();
+//                new WeatherTask().execute(city);
+                 captureWeatherFromInternet();
             }
         }, mDelayTime);
 
@@ -263,6 +264,13 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             mState.setNetworkIcon(mDrawableNetworkOffline);
                             mState.setNetworkRSSI(Integer.MIN_VALUE);
                         } else {
+                            mHandler.post(new Runnable() {
+                                
+                                @Override
+                                public void run() {
+                                   captureWeatherFromInternet();
+                                }
+                            });
                             final int networkType = netInfo.getType();
                             Drawable networkIcon = mDrawableNetworkOffline;
                             int rssi = Integer.MIN_VALUE;
@@ -437,7 +445,6 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                     Log.d(TAG, "WEATHER_INFO +++");
                     mWeatherStatusView.setImageDrawable(mState.getWeatherIcon());
                     mTemperatureView.setText(mState.getTemperature());
-                    mState.clearChanges(TvStatus.DATE_TIME_INFO);
                     mState.clearChanges(TvStatus.WEATHER_INFO);
                 }
             }
@@ -555,7 +562,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         }
     }
 
-    private void searchWeather(String cityString) {
+    public void searchWeather(String cityString) {
         String weatherCity = null;
         int r = 0;
         synchronized (mState) {
@@ -568,7 +575,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             }
             Log.d(TAG, "mCity" + mCity + "   " + cityString);
             String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
-            String httpArg = "cityname=" + mCity;
+            String httpArg = "cityname=" + URLEncoder.encode(mCity);
             String jasonResult = requestWeather(url, httpArg);
             try {
                 JSONObject jb = new JSONObject(jasonResult);
@@ -578,13 +585,13 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 JSONObject jb1 = jb.getJSONObject("retData");
                 WeatherForm weather = new WeatherForm();
                 weather.setTemp(jb1.getString("l_tmp") + "-" + jb1.getString("h_tmp"));
-                weather.setWeather(jb1.getString("weather"));
+                weather.setWeather(jb1.getString(URLDecoder.decode("weather")));
                 weather.setDdate(jb1.getString("date"));
-                weather.setName(jb1.getString("city"));
+                weather.setName(jb1.getString(URLDecoder.decode("city")));
                 weather.setId(jb1.getString("citycode"));
                 mIsGetWeather = true;
                 mWeatherDetail = weather.getWeather();
-                mTemperature = weather.getTemp();
+                mTemperature = weather.getTemp() + " "+weather.getName();
                 Log.d(TAG, "mWeatherDetail = " + mWeatherDetail + "mTemperature = " + mTemperature);
                 String[] info = new String[] {
                         mWeatherDetail, mTemperature
@@ -627,7 +634,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
         return cityString;
     }
 
-    private void captureWeatherFromInternet() {
+    public void captureWeatherFromInternet() {
         if (mIsInternetConnected && !mIsGetWeather && mTryCount <= 10) {
             mTryCount++;
             String userCityString = getUserCity();

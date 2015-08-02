@@ -5,8 +5,10 @@
 package com.luntech.launcher;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.URL;
 import java.net.URLConnection;
@@ -24,7 +26,7 @@ public class IOUtils {
         }
     }
 
-    public static void close(RandomAccessFile out) {
+    public static void close(OutputStream out) {
         if (out == null) {
             return;
         }
@@ -46,12 +48,10 @@ public class IOUtils {
         return conn.getInputStream();
     }
 
-    public static RandomAccessFile getRandomAccessFile(File tmpFile) throws IOException {
+    public static FileOutputStream getRandomAccessFile(File tmpFile) throws IOException {
         if (!tmpFile.exists()) {
             tmpFile.createNewFile();
         }
-        RandomAccessFile accessFile = new RandomAccessFile(tmpFile, "rw");
-        accessFile.seek(tmpFile.length());
-        return accessFile;
+        return new FileOutputStream(tmpFile);
     }
 }

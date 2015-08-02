@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
+    android:id="@+id/rootview_layout"
     android:paddingBottom="@dimen/global_margin_bottom"
     android:paddingLeft="@dimen/global_margin_left"
     android:paddingRight="@dimen/global_margin_right"

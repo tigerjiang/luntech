@@ -12,12 +12,15 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.Settings;
+import android.provider.ContactsContract.Directory;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,9 +34,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.luntech.launcher.AsyncImageLoader.ImageCallback;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
+import com.luntech.launcher.view.TvStatusBar;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -94,10 +99,14 @@ public class Launcher extends Activity {
     public static final String CATEGORY_FILE = "network_config.xml";
     public static final String AD_CONFIGURE_FILE = "ad_config.xml";
     public static final String LOCAL_CONFIG_FILE_ = "local_config.xml";
-    public static final String FILE_PREFIX = "launcher";
+    public static String FILE_PREFIX = "launcher";
     public static final String ADVERTISEMENT_KEY = "advertisement_key";
+    public static final String FULL_BG_KEY = "full_bg_key";
+    public static final String RESOURCE_DIR = "resource_dir_key";
     public static String DOWNLOAD_TO_PATH;
+    private TvStatusBar mStatusBar;
 
+    AsyncImageLoader mAsyncImageLoader;
     private Handler mHandler;
     private HandlerThread mThread;
     private DownloadTask mDownloadTask;
@@ -107,6 +116,8 @@ public class Launcher extends Activity {
     CustomApplication mFirstApp;
     CustomApplication mSecondApp;
     CustomApplication mThirdApp;
+
+    private RelativeLayout mRootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,8 +153,7 @@ public class Launcher extends Activity {
         // mThread.start();
         mHandler = new LauncherHandler();
         mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
-        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
-                SHOW_DELAY_TIME);
+        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
     }
 
     private void initPrecondition() {
@@ -189,7 +199,8 @@ public class Launcher extends Activity {
     }
 
     private void initView() {
-
+        mRootView = (RelativeLayout) findViewById(R.id.rootview_layout);
+        mStatusBar = (TvStatusBar) findViewById(R.id.status_layout);
         mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_layout);
         mFeatureView = (TextView) findViewById(R.id.feature_menu);
         mFeatureMenuLayout = (LinearLayout) findViewById(R.id.feature_layout);
@@ -212,6 +223,15 @@ public class Launcher extends Activity {
         String adContent = ToolUtils.getValueFromSP(mContext, ADVERTISEMENT_KEY);
         if (!TextUtils.isEmpty(adContent)) {
             mAdvertisementView.setText(adContent);
+        }
+
+        String bgPath = ToolUtils.getValueFromSP(mContext, FULL_BG_KEY);
+        if (!TextUtils.isEmpty(bgPath)) {
+            try {
+                mRootView.setBackground(Drawable.createFromPath(bgPath));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         notifyAllAppList();
         refreshThumbnail();
@@ -268,8 +288,21 @@ public class Launcher extends Activity {
         refreshFeatureMenuView();
         final Module module1 = mFirstApp.mGroup.mModules.get(0);
         Logger.d("first module " + module1.toString());
-        mThumb_1_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
-                module1.getModuleBg()));
+        mAsyncImageLoader = new AsyncImageLoader(mContext);
+        mAsyncImageLoader.loadDrawable(module1.getModuleIcon(), mThumb_1_view, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module1.getModuleIcon()));
         mThumb_1_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
                 module1.getModuleShadow()));
         mThumb_1_label.setText(module1.getModuleText());
@@ -283,8 +316,20 @@ public class Launcher extends Activity {
         });
         final Module module2 = mSecondApp.mGroup.mModules.get(0);
         Logger.d("second module " + module2.toString());
-        mThumb_2_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
-                module2.getModuleBg()));
+        // mThumb_2_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module2.getModuleIcon()));
+        mAsyncImageLoader.loadDrawable(module2.getModuleIcon(), mThumb_2_view, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
         mThumb_2_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
                 module2.getModuleShadow()));
         mThumb_2_label.setText(module2.getModuleText());
@@ -293,14 +338,32 @@ public class Launcher extends Activity {
             @Override
             public void onClick(View v) {
 
-                safeStartApk(module2.mApps.get(0).getComponentName());
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.skzh.elifetv",
+                        "com.skzh.elifetv.MainActivity"));
+                intent.putExtra("frag_index", "1");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                // safeStartApk(module2.mApps.get(0).getComponentName());
 
             }
         });
         final Module module3 = mThirdApp.mGroup.mModules.get(0);
         Logger.d("third module " + module3.toString());
-        mThumb_3_view.setBackground(ToolUtils.getDrawableFromAttribute(mContext,
-                module3.getModuleBg()));
+        mAsyncImageLoader.loadDrawable(module3.getModuleIcon(), mThumb_3_view, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        // mThumb_3_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module3.getModuleIcon()));
         mThumb_3_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
                 module3.getModuleShadow()));
         mThumb_3_label.setText(module3.getModuleText());
@@ -308,7 +371,13 @@ public class Launcher extends Activity {
 
             @Override
             public void onClick(View v) {
-                safeStartApk(module3.mApps.get(0).getComponentName());
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.skzh.elifetv",
+                        "com.skzh.elifetv.MainActivity"));
+                intent.putExtra("frag_index", "3");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                // safeStartApk(module3.mApps.get(0).getComponentName());
 
             }
         });
@@ -332,7 +401,7 @@ public class Launcher extends Activity {
             mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
         }
         Collections.sort(mAllAppList, PARSED_APPS_COMPARATOR);
-        Log.d(TAG, "Sort " + mAllAppList.toString());
+        // Log.d(TAG, "Sort " + mAllAppList.toString());
         // CategoryItem item1 = new CategoryItem();
         // item1.mAppIcon =
         // mResources.getDrawable(R.drawable.categore_app_1_logo);
@@ -407,11 +476,38 @@ public class Launcher extends Activity {
             Log.d(TAG, "OnConfiguration changed was called: " + newConfig + "diff is:" + changes);
         }
         if ((changes & ActivityInfo.CONFIG_LOCALE) != 0) {
-
+            mStatusBar.searchWeather(getUserCity());
+            Log.d("jzh", "local change----------------" + getUserCity());
         }
         // set our copy of the configuration for comparing with in
         // onConfigurationChanged
         mConfig.setTo(getResources().getConfiguration());
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    mStatusBar.searchWeather(getUserCity());
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onResume();
+    }
+
+    private String getUserCity() {
+        String cityString = "青岛";
+        cityString = Settings.System.getString(mContext.getContentResolver(), "city");
+        if (TextUtils.isEmpty(cityString)) {
+            cityString = "青岛";
+            Settings.System.putString(mContext.getContentResolver(), "city", cityString);
+        }
+        return cityString;
     }
 
     @Override
@@ -420,8 +516,8 @@ public class Launcher extends Activity {
         mIsShowAlert = false;
         Log.d("show", "action " + action + "    keycode" + keyCode);
         if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
-            Log.d(TAG, "action " + action + "    keycode" + keyCode);
-            Log.d(TAG, "focus " + "    keycode" + keyCode);
+            // Log.d(TAG, "action " + action + "    keycode" + keyCode);
+            // Log.d(TAG, "focus " + "    keycode" + keyCode);
 
             if (keyCode == KeyEvent.KEYCODE_MENU) {
                 if (mThumb_1_layout.isFocused()) {
@@ -511,6 +607,7 @@ public class Launcher extends Activity {
                     .getModuleCode(), app.getPackageName());
             mSelectedApp.mGroup.mModules.get(0).moduleIconDrawable = app.getIcon();
             mSelectedApp.mGroup.mModules.get(0).moduleText = app.getTitle();
+            mSelectedApp.mGroup.mModules.get(0).moduleReplace=1;
             mSelectedApp.mGroup.mModules.get(0).mApps.get(0).componentName = app.mComponent;
             notifyAppList(mSelectedApp);
             refreshThumbnail();
@@ -597,12 +694,12 @@ public class Launcher extends Activity {
                 case RETURN_SYSTEM_CONFIG_CODE:
                     String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
                             new ByteArrayInputStream(result.getBytes()));
-                    Log.d(TAG, "ad " + adContent);
+                    // Log.d(TAG, "ad " + adContent);
                     mAdvertisementView.setText(adContent);
                     break;
                 case SHOW_FEATURE_VIEW:
                     mIsShowAlert = true;
-                    Log.d("show", "SHOW_FEATURE_VIEW");
+                    // Log.d("show", "SHOW_FEATURE_VIEW");
                     mFeatureMenuLayout.setVisibility(View.VISIBLE);
                     mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
@@ -639,12 +736,12 @@ public class Launcher extends Activity {
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
-//        if(!mIsShowAlert){
-            mIsShowAlert = true;
-            Log.d("show", "onUserInteraction");
-            mHandler.removeMessages(LauncherHandler.NO_OPERATION);
-            mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
-//        }
+        // if(!mIsShowAlert){
+        mIsShowAlert = true;
+        Log.d("show", "onUserInteraction");
+        mHandler.removeMessages(LauncherHandler.NO_OPERATION);
+        mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
+        // }
     }
 
     private void getCustomConfigureFromConfig(Context context, InputStream is) {
@@ -688,11 +785,19 @@ public class Launcher extends Activity {
 
                                 // Complete download the zip file
                                 Log.d(TAG, "download file for " + file.getAbsolutePath());
+                                final long time = System.currentTimeMillis();
                                 mHandler.post(new Runnable() {
 
                                     @Override
                                     public void run() {
                                         try {
+                                            try {
+                                                Thread.sleep(5000);
+                                            } catch (InterruptedException e) {
+                                                // TODO Auto-generated catch
+                                                // block
+                                                e.printStackTrace();
+                                            }
                                             ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
                                                     + FILE_PREFIX);
                                         } catch (ZipException e) {
@@ -711,7 +816,7 @@ public class Launcher extends Activity {
                     }
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
                     String name = parser.getName();
-                    Log.d(TAG, name);
+                    // Log.d(TAG, name);
                 }
                 parser.next();
             }
@@ -771,4 +876,12 @@ public class Launcher extends Activity {
             return flag ? -1 : 0;
         }
     };
+
+    @Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        Log.d(TAG, "do nothing");
+    }
+
+    
 }

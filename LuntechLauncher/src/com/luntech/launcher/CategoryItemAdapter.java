@@ -6,12 +6,16 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.luntech.launcher.AsyncImageLoader.ImageCallback;
 
 public class CategoryItemAdapter extends BaseAdapter {
 
@@ -62,9 +66,54 @@ public class CategoryItemAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        holder.appBgView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module.getModuleBg()));
-        holder.appLogoView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module.getModuleIcon()));
-        holder.appShadowView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,module.getModuleShadow()));
+        AsyncImageLoader asyncImageLoader = new AsyncImageLoader(mContext);
+
+        String key = module.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            holder.appLogoView.setImageDrawable(module.moduleIconDrawable);
+        } else {
+            Drawable icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
+                    holder.appLogoView, new ImageCallback() {
+
+                        @Override
+                        public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                                String imageUrl) {
+                            if (imageDrawable != null) {
+                                imageView.setImageDrawable(imageDrawable);
+                            } else {
+                                imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(
+                                        mContext, imageUrl));
+                            }
+                        }
+                    });
+        }
+        asyncImageLoader.loadDrawable(module.getModuleBg(), holder.appBgView, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        asyncImageLoader.loadDrawable(module.getModuleShadow(), holder.appShadowView,
+                new ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                            String imageUrl) {
+                        if (imageDrawable != null) {
+                            imageView.setImageDrawable(imageDrawable);
+                        } else {
+                            imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                                    imageUrl));
+                        }
+                    }
+                });
         holder.mAppLabel.setText(module.getModuleText());
         return convertView;
     }

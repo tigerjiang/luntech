@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.zip.ZipException;
 
 public class ToolUtils {
     private static ToolUtils sInstance = new ToolUtils();
@@ -275,17 +276,17 @@ public class ToolUtils {
                     String name = parser.getName();
                     Log.d(TAG, name);
                     if (name.equals(App.APP_TAG)) {
-                        Log.d(TAG, "end app " + app.toString());
+//                        Log.d(TAG, "end app " + app.toString());
                         apps.add(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         module.mApps = apps;
-                        Log.d(TAG, "end apps " + module.mApps.toString());
+//                        Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         application.mGroup.addModule(module);
-                        Logger.d("end module" + module.toString());
+//                        Logger.d("end module" + module.toString());
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         applications.add(application);
-                        Logger.d("end group" + application.toString());
+//                        Logger.d("end group" + application.toString());
                     }
                 }
                 parser.next();
@@ -299,7 +300,7 @@ public class ToolUtils {
         return applications;
     }
 
-    public static String getAdConfigureFromConfig(Context context,
+    public static String getAdConfigureFromConfig(final Context context,
             InputStream is) {
         StringBuffer AdContent = new StringBuffer();
         try {
@@ -310,7 +311,26 @@ public class ToolUtils {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
-                    if (name.equals("marquees")) {
+                    if(name.equals("bg")){
+                        String url = parser.nextText().trim();
+                        String bgFileName =  url.substring(url.lastIndexOf(".") + 1);
+                      
+                        IDownloadListener listener = new IDownloadListener() {
+
+                            @Override
+                            public void onError(String errorCode) {
+
+                            }
+
+                            @Override
+                            public void onCompleted(final File file) {
+                                storeValueIntoSP(context, Launcher.FULL_BG_KEY, file.getAbsolutePath());
+                            }
+                        };
+                        DownloadTask task= new DownloadTask(Launcher.DOWNLOAD_TO_PATH, url, listener);
+                        new Thread(task).start();
+                    }
+                    else if (name.equals("marquees")) {
                         Log.d(TAG, "start ad over");
                     } else if (name.equals("marquee")) {
                         String content = parser.nextText().trim();
@@ -335,8 +355,7 @@ public class ToolUtils {
         return AdContent.toString();
     }
 
-    public static void getCustomConfigureFromConfig(Context context,
-            InputStream is) {
+    public static void getCustomConfigureFromConfig(Context context, InputStream is) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();

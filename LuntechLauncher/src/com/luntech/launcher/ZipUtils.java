@@ -1,5 +1,6 @@
+
 package com.luntech.launcher;
- 
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,18 +9,18 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
- 
+
 /**
  * Java utils 实现的Zip工具
- *
+ * 
  * @author once
  */
 public class ZipUtils {
     private static final int BUFF_SIZE = 1024 * 1024; // 1M Byte
- 
+
     /**
      * 批量压缩文件（夹）
-     *
+     * 
      * @param resFileList 要压缩的文件（夹）列表
      * @param zipFile 生成的压缩文件
      * @throws IOException 当压缩过程出错时抛出
@@ -32,10 +33,10 @@ public class ZipUtils {
         }
         zipout.close();
     }
- 
+
     /**
      * 批量压缩文件（夹）
-     *
+     * 
      * @param resFileList 要压缩的文件（夹）列表
      * @param zipFile 生成的压缩文件
      * @param comment 压缩文件的注释
@@ -51,10 +52,10 @@ public class ZipUtils {
         zipout.setComment(comment);
         zipout.close();
     }
- 
+
     /**
      * 解压缩一个文件
-     *
+     * 
      * @param zipFile 压缩文件
      * @param folderPath 解压缩的目标目录
      * @throws IOException 当解压缩过程出错时抛出
@@ -66,7 +67,7 @@ public class ZipUtils {
         }
         ZipFile zf = new ZipFile(zipFile);
         for (Enumeration<?> entries = zf.entries(); entries.hasMoreElements();) {
-            ZipEntry entry = ((ZipEntry)entries.nextElement());
+            ZipEntry entry = ((ZipEntry) entries.nextElement());
             InputStream in = zf.getInputStream(entry);
             String str = folderPath + File.separator + entry.getName();
             str = new String(str.getBytes("8859_1"), "GB2312");
@@ -84,14 +85,15 @@ public class ZipUtils {
             while ((realLength = in.read(buffer)) > 0) {
                 out.write(buffer, 0, realLength);
             }
+            out.flush();
             in.close();
             out.close();
         }
     }
- 
+
     /**
      * 解压文件名包含传入文字的文件
-     *
+     * 
      * @param zipFile 压缩文件
      * @param folderPath 目标文件夹
      * @param nameContains 传入的文件匹配名
@@ -101,15 +103,15 @@ public class ZipUtils {
     public static ArrayList<File> upZipSelectedFile(File zipFile, String folderPath,
             String nameContains) throws ZipException, IOException {
         ArrayList<File> fileList = new ArrayList<File>();
- 
+
         File desDir = new File(folderPath);
         if (!desDir.exists()) {
             desDir.mkdir();
         }
- 
+
         ZipFile zf = new ZipFile(zipFile);
         for (Enumeration<?> entries = zf.entries(); entries.hasMoreElements();) {
-            ZipEntry entry = ((ZipEntry)entries.nextElement());
+            ZipEntry entry = ((ZipEntry) entries.nextElement());
             if (entry.getName().contains(nameContains)) {
                 InputStream in = zf.getInputStream(entry);
                 String str = folderPath + File.separator + entry.getName();
@@ -137,10 +139,10 @@ public class ZipUtils {
         }
         return fileList;
     }
- 
+
     /**
      * 获得压缩文件内文件列表
-     *
+     * 
      * @param zipFile 压缩文件
      * @return 压缩文件内文件名称
      * @throws ZipException 压缩文件格式有误时抛出
@@ -150,15 +152,15 @@ public class ZipUtils {
         ArrayList<String> entryNames = new ArrayList<String>();
         Enumeration<?> entries = getEntriesEnumeration(zipFile);
         while (entries.hasMoreElements()) {
-            ZipEntry entry = ((ZipEntry)entries.nextElement());
+            ZipEntry entry = ((ZipEntry) entries.nextElement());
             entryNames.add(new String(getEntryName(entry).getBytes("GB2312"), "8859_1"));
         }
         return entryNames;
     }
- 
+
     /**
      * 获得压缩文件内压缩文件对象以取得其属性
-     *
+     * 
      * @param zipFile 压缩文件
      * @return 返回一个压缩文件列表
      * @throws ZipException 压缩文件格式有误时抛出
@@ -168,12 +170,12 @@ public class ZipUtils {
             IOException {
         ZipFile zf = new ZipFile(zipFile);
         return zf.entries();
- 
+
     }
- 
+
     /**
      * 取得压缩文件对象的注释
-     *
+     * 
      * @param entry 压缩文件对象
      * @return 压缩文件对象的注释
      * @throws UnsupportedEncodingException
@@ -181,10 +183,10 @@ public class ZipUtils {
     public static String getEntryComment(ZipEntry entry) throws UnsupportedEncodingException {
         return new String(entry.getComment().getBytes("GB2312"), "8859_1");
     }
- 
+
     /**
      * 取得压缩文件对象的名称
-     *
+     * 
      * @param entry 压缩文件对象
      * @return 压缩文件对象的名称
      * @throws UnsupportedEncodingException
@@ -192,10 +194,10 @@ public class ZipUtils {
     public static String getEntryName(ZipEntry entry) throws UnsupportedEncodingException {
         return new String(entry.getName().getBytes("GB2312"), "8859_1");
     }
- 
+
     /**
      * 压缩文件
-     *
+     * 
      * @param resFile 需要压缩的文件（夹）
      * @param zipout 压缩的目的文件
      * @param rootpath 压缩的文件路径
@@ -224,6 +226,22 @@ public class ZipUtils {
             in.close();
             zipout.flush();
             zipout.closeEntry();
+        }
+    }
+
+    public static void deleteFile(File file) {
+        if (file.exists()) { // 判断文件是否存在
+            if (file.isFile()) { // 判断是否是文件
+                file.delete(); // delete()方法 你应该知道 是删除的意思;
+            } else if (file.isDirectory()) { // 否则如果它是一个目录
+                File files[] = file.listFiles(); // 声明目录下所有的文件 files[];
+                for (int i = 0; i < files.length; i++) {
+                    deleteFile(files[i]); // 把每个文件 用这个方法进行迭代
+                }
+            }
+            file.delete();
+        } else {
+            System.out.println("所删除的文件不存在！" + '\n');
         }
     }
 }

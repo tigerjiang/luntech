@@ -40,7 +40,7 @@
     <dimen name="global_text_size_small">16px</dimen>
     <dimen name="global_text_size_middle">20px</dimen>
     <dimen name="popup_width">750px</dimen>
-    <dimen name="popup_height">500px</dimen>
+    <dimen name="popup_height">470px</dimen>
     <!-- secondary menu -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

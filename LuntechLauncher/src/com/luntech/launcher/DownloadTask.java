@@ -4,6 +4,7 @@ package com.luntech.launcher;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.SocketException;
 import java.net.URL;
@@ -30,7 +31,7 @@ public final class DownloadTask implements Runnable {
 
     private void doDownload(File tmpFile) throws IOException {
         Logger.d("doDownload " + tmpFile.getAbsolutePath());
-        RandomAccessFile out = null;
+        OutputStream out = null;
         InputStream in = null;
         try {
             in = IOUtils.getInputStream(mDownloadUrl, 0);
@@ -41,6 +42,7 @@ public final class DownloadTask implements Runnable {
             while ((count = in.read(buffer)) != -1) {
                 out.write(buffer, 0, count);
             }
+            out.flush();
             mListener.onCompleted(tmpFile);
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,10 +153,10 @@ public final class DownloadTask implements Runnable {
     }
 
     private String getTempFileName() {
-        return mDownloadTo +"/"+ FILE_PREFIX + "-" + getUrlFileName(mDownloadUrl);
+        return mDownloadTo + "/" + FILE_PREFIX + getUrlFileName(mDownloadUrl);
     }
 
     private String getUrlFileName(String url) {
-        return url.substring(url.lastIndexOf("/") + 1);
+        return url.substring(url.lastIndexOf("."));
     }
 }
