@@ -105,5 +105,6 @@
     <string name="feature_menu_0">按OK键进入，按菜单键替换当前应用.</string>
     <string name="feature_menu_1">按OK键进入.</string>
     <string name="app_no_fund">服务暂未上线，敬请期待</string>
+    <string name="tempurter_unit"><![CDATA[℃]]></string>
 
 </resources>

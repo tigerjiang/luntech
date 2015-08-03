@@ -180,8 +180,8 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             public void run() {
                 String city = getUserCity();
                 Log.d(TAG, "user city " + city);
-//                new WeatherTask().execute(city);
-                 captureWeatherFromInternet();
+                // new WeatherTask().execute(city);
+                captureWeatherFromInternet();
             }
         }, mDelayTime);
 
@@ -265,10 +265,10 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             mState.setNetworkRSSI(Integer.MIN_VALUE);
                         } else {
                             mHandler.post(new Runnable() {
-                                
+
                                 @Override
                                 public void run() {
-                                   captureWeatherFromInternet();
+                                    captureWeatherFromInternet();
                                 }
                             });
                             final int networkType = netInfo.getType();
@@ -584,14 +584,14 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 String errMessage = jb.getString("errMsg");
                 JSONObject jb1 = jb.getJSONObject("retData");
                 WeatherForm weather = new WeatherForm();
-                weather.setTemp(jb1.getString("l_tmp") + "-" + jb1.getString("h_tmp"));
+                weather.setTemp(jb1.getString("l_tmp") + "℃" + "-" + jb1.getString("h_tmp") + "℃");
                 weather.setWeather(jb1.getString(URLDecoder.decode("weather")));
                 weather.setDdate(jb1.getString("date"));
                 weather.setName(jb1.getString(URLDecoder.decode("city")));
                 weather.setId(jb1.getString("citycode"));
                 mIsGetWeather = true;
                 mWeatherDetail = weather.getWeather();
-                mTemperature = weather.getTemp() + " "+weather.getName();
+                mTemperature = weather.getTemp() + " " + weather.getName();
                 Log.d(TAG, "mWeatherDetail = " + mWeatherDetail + "mTemperature = " + mTemperature);
                 String[] info = new String[] {
                         mWeatherDetail, mTemperature

@@ -402,6 +402,7 @@ public final class R {
          */
         public static final int temp_degree=0x7f070025;
         public static final int temperature=0x7f07000e;
+        public static final int tempurter_unit=0x7f07005b;
         public static final int time=0x7f07000d;
         public static final int wu=0x7f07003c;
         public static final int xiaoxue=0x7f070035;
