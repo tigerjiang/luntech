@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -33,11 +34,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.luntech.launcher.AsyncImageLoader.ImageCallback;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
+import com.luntech.launcher.view.ApplicationsAdapter;
 import com.luntech.launcher.view.TvStatusBar;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -51,6 +54,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.zip.ZipException;
 
 public class Launcher extends Activity {
@@ -534,9 +538,9 @@ public class Launcher extends Activity {
                     Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
-                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
-                    newFragment.show(getFragmentManager(), "dialog");
-                    return true;
+                    Intent selectIntent = new Intent();
+                    selectIntent.setClass(mContext, AppSelectedActivity.class);
+                    startActivityForResult(selectIntent, 1);
                 }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
@@ -619,6 +623,24 @@ public class Launcher extends Activity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("replace", "onActivityResult");
+        switch (resultCode) {
+            case RESULT_OK:
+                String pkg = data.getStringExtra("app");
+                ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
+                setResult(app, true);
+                Log.d("replace", "launcher " + app.toString());
+            break;
+            case RESULT_CANCELED:
+            break;
+            default:
+            break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void notifyAppList(CustomApplication newApp) {
         for (int i = 0; i < mAllAppList.size(); i++) {
             if (newApp.mGroup.mModules.get(0).getModuleCode()
@@ -683,20 +705,20 @@ public class Launcher extends Activity {
                                     new ByteArrayInputStream(result.getBytes()));
                         }
                     }).start();
-                    break;
+                break;
                 case RETURN_UNZIP_CONFIG_CODE:
 
-                    break;
+                break;
                 case RETURN_HIDDEN_CONFIG_CODE:
-                    break;
+                break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                    break;
+                break;
                 case RETURN_SYSTEM_CONFIG_CODE:
                     String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
                             new ByteArrayInputStream(result.getBytes()));
                     // Log.d(TAG, "ad " + adContent);
                     mAdvertisementView.setText(adContent);
-                    break;
+                break;
                 case SHOW_FEATURE_VIEW:
                     mIsShowAlert = true;
                     // Log.d("show", "SHOW_FEATURE_VIEW");
@@ -704,18 +726,18 @@ public class Launcher extends Activity {
                     mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
                             DISMISS_DELAY_TIME);
-                    break;
+                break;
                 case DISMISS_FEATURE_VIEW:
                     Log.d("show", "DISMISS_FEATURE_VIEW");
                     mFeatureMenuLayout.setVisibility(View.GONE);
-                    break;
+                break;
                 case NO_OPERATION:
                     Log.d("show", "NO_OPERATION");
                     mFeatureMenuLayout.setVisibility(View.GONE);
                     mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
-                    break;
+                break;
             }
             super.handleMessage(msg);
         }
@@ -883,5 +905,4 @@ public class Launcher extends Activity {
         Log.d(TAG, "do nothing");
     }
 
-    
 }

@@ -1,9 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootview_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg"
-    android:id="@+id/rootview_layout"
     android:paddingBottom="@dimen/global_margin_bottom"
     android:paddingLeft="@dimen/global_margin_left"
     android:paddingRight="@dimen/global_margin_right"
@@ -44,8 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/global_thumb_shadow_height"
                 android:layout_alignParentBottom="true"
-                android:src="@drawable/global_thumb_1_shadow"
                 android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_1_shadow"
                 android:visibility="visible" />
 
             <TextView
@@ -106,8 +106,8 @@
             android:layout_height="@dimen/global_thumb_3_height"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/thumb_2_layout"
-            android:layout_marginTop="-15dp"
             android:layout_marginLeft="-15dp"
+            android:layout_marginTop="-15dp"
             android:layout_toRightOf="@+id/thumb_1_layout"
             android:background="@drawable/focus_selector"
             android:clickable="true"
@@ -184,8 +184,8 @@
         android:layout_height="@dimen/global_ad_layout_height"
         android:layout_below="@+id/middle_layout"
         android:layout_centerHorizontal="true"
-        android:background="@color/transparent" 
-        android:visibility="gone">
+        android:background="@color/transparent"
+        android:visibility="gone" >
 
         <TextView
             android:id="@+id/feature_menu"

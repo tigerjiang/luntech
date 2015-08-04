@@ -338,8 +338,8 @@ public class ToolUtils {
                     }
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
                     String name = parser.getName();
-                    storeValueIntoSP(context, Launcher.ADVERTISEMENT_KEY, AdContent.toString());
                     if (name.equals("marquees")) {
+                        storeValueIntoSP(context, Launcher.ADVERTISEMENT_KEY, AdContent.toString());
                         Log.d(TAG, "end ad over");
                     }
                 }
