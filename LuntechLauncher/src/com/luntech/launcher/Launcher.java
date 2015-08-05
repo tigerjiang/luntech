@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -116,6 +117,7 @@ public class Launcher extends Activity {
     private DownloadTask mDownloadTask;
 
     private boolean mIsShowAlert = false;
+    private int mGridPosition = 0;
 
     CustomApplication mFirstApp;
     CustomApplication mSecondApp;
@@ -250,6 +252,7 @@ public class Launcher extends Activity {
                 Logger.d(" clicke app for " + app.toString());
                 ComponentName componentName = app.getComponentName();
                 safeStartApk(componentName);
+                mGridPosition = position;
             }
         });
         mGridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -258,6 +261,7 @@ public class Launcher extends Activity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Logger.d("select position " + position);
                 mSelectedApp = (CustomApplication) parent.getItemAtPosition(position);
+                mGridPosition = position;
                 refreshFeatureMenuView();
             }
 
@@ -341,15 +345,23 @@ public class Launcher extends Activity {
 
             @Override
             public void onClick(View v) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setComponent(new ComponentName("com.skzh.elifetv",
+                            "com.skzh.elifetv.ui.GovernInfoActivity"));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    // safeStartApk(module2.mApps.get(0).getComponentName());
+                } catch (Exception e) {
 
-                Intent intent = new Intent();
-               intent.setAction(Intent.ACTION_VIEW);
-                intent.setComponent(new ComponentName("com.skzh.elifetv",
-                       "com.skzh.elifetv.ui.GovernInfoActivity"));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                // safeStartApk(module2.mApps.get(0).getComponentName());
-
+                    // Toast.makeText(mContext, "App no found for " +
+                    // componentName,
+                    // Toast.LENGTH_SHORT)
+                    // .show();
+                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                }
             }
         });
         final Module module3 = mThirdApp.mGroup.mModules.get(0);
@@ -375,14 +387,24 @@ public class Launcher extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName("com.skzh.elifetv",
-                        "com.skzh.elifetv.MainActivity"));
-                intent.putExtra("frag_index", "3");
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                // safeStartApk(module3.mApps.get(0).getComponentName());
+                try {
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.skzh.elifetv",
+                            "com.skzh.elifetv.MainActivity"));
+                    intent.putExtra("frag_index", "3");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    // safeStartApk(module3.mApps.get(0).getComponentName());
 
+                } catch (Exception e) {
+
+                    // Toast.makeText(mContext, "App no found for " +
+                    // componentName,
+                    // Toast.LENGTH_SHORT)
+                    // .show();
+                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                }
             }
         });
     }
@@ -525,12 +547,21 @@ public class Launcher extends Activity {
 
             if (keyCode == KeyEvent.KEYCODE_MENU) {
                 if (mThumb_1_layout.isFocused()) {
+                    Log.d("replace", "mThumb_1_layout.isFocused()");
                     mSelectedApp = mAllAppList.get(0);
                 } else if (mThumb_2_layout.isFocused()) {
+                    Log.d("replace", "mThumb_2_layout.isFocused()");
                     mSelectedApp = mAllAppList.get(1);
                 } else if (mThumb_3_layout.isFocused()) {
+                    Log.d("replace", "mThumb_3_layout.isFocused()");
                     mSelectedApp = mAllAppList.get(2);
+                } else if (mGridView.isFocused()) {
+                    int pos = mGridView.getSelectedItemPosition();
+                    Log.d("replace", "mGridView.isFocused()  " + pos + " --- " + mGridPosition);
+                    mSelectedApp = (CustomApplication) mGridView.getAdapter()
+                            .getItem(mGridPosition);
                 }
+                Log.d("replace", " mSelectedApp === " + mSelectedApp.toString());
                 refreshFeatureMenuView();
                 if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
                     // can't replace
@@ -538,9 +569,9 @@ public class Launcher extends Activity {
                     Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
-                    Intent selectIntent = new Intent();
-                    selectIntent.setClass(mContext, AppSelectedActivity.class);
-                    startActivityForResult(selectIntent, 1);
+                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
+                    newFragment.show(getFragmentManager(), "dialog");
+                    return true;
                 }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
                 if (mThumb_1_layout.isFocused()) {
@@ -613,6 +644,7 @@ public class Launcher extends Activity {
             mSelectedApp.mGroup.mModules.get(0).moduleText = app.getTitle();
             mSelectedApp.mGroup.mModules.get(0).moduleReplace = 1;
             mSelectedApp.mGroup.mModules.get(0).mApps.get(0).componentName = app.mComponent;
+            Log.d("replace", " mSelectedApp " + mSelectedApp.toString());
             notifyAppList(mSelectedApp);
             refreshThumbnail();
             mCategoryItemAdapter.notifyDataSetChanged();
@@ -903,6 +935,17 @@ public class Launcher extends Activity {
     public void onBackPressed() {
         // TODO Auto-generated method stub
         Log.d(TAG, "do nothing");
+    }
+
+    private void iniFocusListener() {
+        mRootView.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+            @Override
+            public void onFocusChange(View arg0, boolean arg1) {
+                // TODO Auto-generated method stub
+
+            }
+        });
     }
 
 }
