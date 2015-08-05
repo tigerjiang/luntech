@@ -343,9 +343,9 @@ public class Launcher extends Activity {
             public void onClick(View v) {
 
                 Intent intent = new Intent();
+               intent.setAction(Intent.ACTION_VIEW);
                 intent.setComponent(new ComponentName("com.skzh.elifetv",
-                        "com.skzh.elifetv.MainActivity"));
-                intent.putExtra("frag_index", "1");
+                       "com.skzh.elifetv.ui.GovernInfoActivity"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 // safeStartApk(module2.mApps.get(0).getComponentName());
