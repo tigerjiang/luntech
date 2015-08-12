@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
     android:orientation="vertical" >
 
     <TextView
@@ -14,7 +13,7 @@
         android:singleLine="true"
         android:text="@string/select_app"
         android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_middle"
+        android:textSize="@dimen/global_text_size_large"
         android:textStyle="bold"
         android:visibility="visible" />
 
@@ -27,52 +26,12 @@
         android:layout_marginTop="10dp"
         android:alwaysDrawnWithCache="true"
         android:columnWidth="@dimen/global_category_layout_wiith"
-        android:horizontalSpacing="20dp"
+        android:horizontalSpacing="30dp"
         android:listSelector="@drawable/focus_selector"
-        android:numColumns="6"
+        android:numColumns="5"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="10dp" />
+        android:verticalSpacing="20dp" />
 
-    <ImageView
-        android:id="@+id/devider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_above="@+id/button_layout"
-        android:layout_marginTop="10px"
-        android:paddingLeft="15px"
-        android:paddingRight="15px"
-        android:src="@android:color/white" />
-
-    <LinearLayout
-        android:id="@+id/button_layout"
-        android:layout_width="match_parent"
-        android:layout_height="60px"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:weightSum="2" >
-
-        <Button
-            android:id="@+id/ok"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/focus_selector"
-            android:text="@string/ok"
-            android:textColor="@color/white"
-            android:textSize="@dimen/global_text_size_small" />
-
-        <Button
-            android:id="@+id/cancel"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/focus_selector"
-            android:text="@string/cancel"
-            android:textColor="@color/white"
-            android:textSize="@dimen/global_text_size_small" >
-        </Button>
-    </LinearLayout>
 
 </RelativeLayout>
