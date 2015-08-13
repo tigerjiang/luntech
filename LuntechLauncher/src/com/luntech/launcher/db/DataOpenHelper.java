@@ -7,32 +7,32 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class LauncherOpenHelper extends SQLiteOpenHelper {
+public class DataOpenHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "app_info.db";
     private static final String APPLICATION_TABLE_NAME = "app_info";
     private static final String APPLICATION_TABLE_CREATE = "CREATE TABLE " + APPLICATION_TABLE_NAME
             + " ("
-            + "_id " + " INTEGER, "
-            + "download_id " + " INTEGER, "
-            + "a_name " + " TEXT, "
-            + "a_package " + " TEXT, "
-            + "a_activity " + " TEXT, "
-            + "a_icon " + " TEXT, "
-            + "a_url " + " TEXT, "
-            + "m_code " + " TEXT, "
-            + "m_replace " + " TEXT, "
-            + "m_type " + " TEXT, "
-            + "m_text " + " TEXT, "
-            + "m_bg " + " TEXT, "
-            + "m_icon " + " TEXT, "
-            + "m_shadow " + " TEXT, "
-            + "g_code " + " TEXT, "
-            + "g_flag " + " TEXT, "
-            + "g_text " + " TEXT, "
-            + "g_icon " + " TEXT)";
+            + "_id " + " INTEGER primary key autoincrement,"
+            + "download_id " + " INTEGER , "
+            + "a_name " + " varchar, "
+            + "a_package " + " varchar, "
+            + "a_activity " + " varchar, "
+            + "a_icon " + " varchar, "
+            + "a_url " + " varchar, "
+            + "m_code " + " varchar, "
+            + "m_replace " + " varchar, "
+            + "m_type " + " varchar, "
+            + "m_text " + " varchar, "
+            + "m_bg " + " varchar, "
+            + "m_icon " + " varchar, "
+            + "m_shadow " + " varchar, "
+            + "g_code " + " varchar, "
+            + "g_flag " + " varchar, "
+            + "g_text " + " varchar, "
+            + "g_icon " + " varchar)";
 
-    public LauncherOpenHelper(Context context) {
+    public DataOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
