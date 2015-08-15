@@ -22,6 +22,7 @@ public class HttpUtils {
     public static final String HTTP_CONFIG_APP_URL = "http://zhiuitest.zhihetv.com/?m=zhiui";
     public static final String HTTP_CONFIG_URL = "http://zhiuitest.zhihetv.com/?m=zhiui&a=config";
     public static final String HTTP_WEATHER_URL = " http://zhiuitest.zhihetv.com/?m=weather&cityname=";
+    public static final String HTTP_SCREEN_SAVER_URL = "http://zhiuitest.zhihetv.com/?m=ad&board_id=3&type=1";
    
 
     /**

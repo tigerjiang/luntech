@@ -153,7 +153,7 @@ public final class DownloadTask implements Runnable {
     }
 
     private String getTempFileName() {
-        return mDownloadTo + "/" + FILE_PREFIX + getUrlFileName(mDownloadUrl);
+        return mDownloadTo + "/" + getUrlFileName(mDownloadUrl);
     }
 
     private String getUrlFileName(String url) {

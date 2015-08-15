@@ -2,11 +2,13 @@
 package com.luntech.launcher;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -276,17 +278,17 @@ public class ToolUtils {
                     String name = parser.getName();
                     Log.d(TAG, name);
                     if (name.equals(App.APP_TAG)) {
-//                        Log.d(TAG, "end app " + app.toString());
+                        // Log.d(TAG, "end app " + app.toString());
                         apps.add(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         module.mApps = apps;
-//                        Log.d(TAG, "end apps " + module.mApps.toString());
+                        // Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         application.mGroup.addModule(module);
-//                        Logger.d("end module" + module.toString());
+                        // Logger.d("end module" + module.toString());
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         applications.add(application);
-//                        Logger.d("end group" + application.toString());
+                        // Logger.d("end group" + application.toString());
                     }
                 }
                 parser.next();
@@ -300,8 +302,7 @@ public class ToolUtils {
         return applications;
     }
 
-    public static String getAdConfigureFromConfig(final Context context,
-            InputStream is) {
+    public static String getAdConfigureFromConfig(final Context context, InputStream is) {
         StringBuffer AdContent = new StringBuffer();
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -311,10 +312,10 @@ public class ToolUtils {
                 if (parser.getEventType() == XmlResourceParser.START_TAG) {
                     String name = parser.getName();
                     Log.d(TAG, name);
-                    if(name.equals("bg")){
+                    if (name.equals("bg")) {
                         String url = parser.nextText().trim();
-                        String bgFileName =  url.substring(url.lastIndexOf(".") + 1);
-                      
+                        String bgFileName = url.substring(url.lastIndexOf(".") + 1);
+
                         IDownloadListener listener = new IDownloadListener() {
 
                             @Override
@@ -324,13 +325,14 @@ public class ToolUtils {
 
                             @Override
                             public void onCompleted(final File file) {
-                                storeValueIntoSP(context, Launcher.FULL_BG_KEY, file.getAbsolutePath());
+                                storeValueIntoSP(context, Launcher.FULL_BG_KEY,
+                                        file.getAbsolutePath());
                             }
                         };
-                        DownloadTask task= new DownloadTask(Launcher.DOWNLOAD_TO_PATH, url, listener);
+                        DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, url,
+                                listener);
                         new Thread(task).start();
-                    }
-                    else if (name.equals("marquees")) {
+                    } else if (name.equals("marquees")) {
                         Log.d(TAG, "start ad over");
                     } else if (name.equals("marquee")) {
                         String content = parser.nextText().trim();
@@ -491,5 +493,25 @@ public class ToolUtils {
         } else {
             return changeIdtoDrawable(context, attribute);
         }
+    }
+
+    /**
+     * install app
+     * 
+     * @param context
+     * @param filePath
+     * @return whether apk exist
+     */
+    public static boolean install(Context context, String filePath) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        File file = new File(filePath);
+        if (file != null && file.length() > 0 && file.exists() && file.isFile()) {
+            i.setDataAndType(Uri.parse("file://" + filePath),
+                    "application/vnd.android.package-archive");
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            return true;
+        }
+        return false;
     }
 }

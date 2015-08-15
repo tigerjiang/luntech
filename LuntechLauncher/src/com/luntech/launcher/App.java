@@ -11,6 +11,9 @@ public class App {
     public static final String APP_ACTIVITY_TAG = "a_activity";
     public static final String APP_ICON_TAG = "a_icon";
     public static final String APP_URL_TAG = "a_url";
+    public static final String DOWNLOAD_STATUS_COMPLETED="DOWNLOAD_COMPLETED";
+    public static final String DOWNLOAD_STATUS_DOWNLOADING = "DOWNLOAD_DOWNLOADING";
+    
 
     public App() {
 
@@ -22,6 +25,7 @@ public class App {
     public String appIcon;
     public String appUrl;
     public ComponentName componentName;
+    public String downloadStatus ;
     public String getAppName() {
         return appName;
     }
@@ -75,6 +79,14 @@ public class App {
 
     public void setComponentName(ComponentName componentName) {
         this.componentName = componentName;
+    }
+
+    public String getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(String downloadStatus) {
+        this.downloadStatus = downloadStatus;
     }
 
     @Override
