@@ -98,9 +98,10 @@ public class Launcher extends Activity {
     private static PackageInfo sPackageInfo;
     private static String sPackageName;
     private static int sVersionCode;
-    private static final long REQUEST_DELAY_TIME = 10 * 1000;
+    private static final long REQUEST_DELAY_TIME = 2*60 * 1000;
     private static final long SHOW_DELAY_TIME = 10 * 1000;
     private static final long DISMISS_DELAY_TIME = 3 * 1000;
+    private static  long showScreenSaverTime = 5 * 60 * 100;
 
     public static final String CAPTURE_TIME = "capture_time";
     public static final String CATEGORY_FILE = "network_config.xml";
@@ -129,7 +130,7 @@ public class Launcher extends Activity {
     CustomApplication mThirdApp;
 
     private RelativeLayout mRootView;
-    private ArrayList<File> mScreenSaverFileList = new ArrayList<File>();
+    public static  ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -462,7 +463,7 @@ public class Launcher extends Activity {
             File resourcesFile = new File(resourcesPath);
             if (resourcesFile.exists()&&resourcesFile.isDirectory()) {
                 for (File file : resourcesFile.listFiles()) {
-                    mScreenSaverFileList.add(file);
+                    sScreenSaverFileList.add(file.getAbsolutePath());
                 }
             } else {
                 
@@ -777,6 +778,7 @@ public class Launcher extends Activity {
         public static final int SHOW_FEATURE_VIEW = 7;
         public static final int DISMISS_FEATURE_VIEW = 8;
         public static final int NO_OPERATION = 9;
+        public static final int SHOW_SCREEN_SAVER = 10;
 
         public LauncherHandler() {
             super(Looper.getMainLooper());
@@ -868,6 +870,10 @@ public class Launcher extends Activity {
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
                 break;
+                case SHOW_SCREEN_SAVER:
+                    Intent intent = new Intent(mContext,ScreenSaverActivity.class);
+                    startActivity(intent);
+                    break;
             }
             super.handleMessage(msg);
         }
@@ -893,7 +899,7 @@ public class Launcher extends Activity {
         Log.d("show", "onUserInteraction");
         mHandler.removeMessages(LauncherHandler.NO_OPERATION);
         mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
-        // }
+        restartSendShowScreenSaver();
     }
 
     private OtaInfo parseUpdateInfo(Context context, InputStream is) {
@@ -1193,5 +1199,11 @@ public class Launcher extends Activity {
         };
         DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, ota.url, listener);
         new Thread(task).start();
+    }
+
+    private void restartSendShowScreenSaver() {
+        Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
+        mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
+        mHandler.sendMessageDelayed(msg, showScreenSaverTime);
     }
 }
