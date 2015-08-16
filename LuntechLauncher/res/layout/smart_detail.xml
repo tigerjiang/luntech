@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitCenter"
-        android:src="@drawable/smart_curtain_detail" />
+        android:src="@drawable/smart_curtain_detail"/>
 
     <ImageButton
         android:id="@+id/order_left_btn"
