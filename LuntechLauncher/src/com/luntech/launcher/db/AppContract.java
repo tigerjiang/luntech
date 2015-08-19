@@ -17,8 +17,10 @@ public class AppContract {
         public static final String A_ICON = "a_icon";
         public static final String A_URL = "a_url";
         public static final String A_FILE_NAME = "a_file_name";
+        public static final String A_M_CODE = "a_m_code";
 
         public static final String M_CODE = "m_code";
+        public static final String M_G_CODE = "m_g_code";
         public static final String M_REPLACE = "m_replace";
         public static final String M_TYPE = "m_type";
         public static final String M_TEXT = "m_text";

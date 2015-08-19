@@ -48,7 +48,7 @@ public class ToolUtils {
     private static final String CUSTOM_INFO = "custom_info";
     private static final String NETWORK_INFO = "network_info";
 
-    private static DBDao mDBdao ;
+    private static DBDao mDBdao;
 
     private ToolUtils() {
 
@@ -158,7 +158,7 @@ public class ToolUtils {
     }
 
     public static ArrayList<CustomApplication> getCustomConfigureFromConfig(Context context,
-            File file) {
+                                                                            File file) {
         ArrayList<CustomApplication> applications = new ArrayList<CustomApplication>();
         CustomApplication application = null;
         Module module = null;
@@ -369,16 +369,13 @@ public class ToolUtils {
         return apps;
     }
 
-    public static ArrayList<AppItem> parseCustomConfigureFromInputStream(Context context,
-                                                                    InputStream is) {
+    public static void parseCustomConfigureFromInputStream(Context context,
+                                                           InputStream is) {
         mDBdao = new DBDao(context);
-        ArrayList<CustomApplication> applications = new ArrayList<CustomApplication>();
-        ArrayList<AppItem> apps = new ArrayList<AppItem>();
-        CustomApplication application = null;
-        CustomApplication.Group group = null;
+        Group group = null;
         Module module = null;
-        AppItem app = null;
-          try {
+        App app = null;
+        try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
             XmlPullParser parser = factory.newPullParser();
             parser.setInput(is, "utf-8");
@@ -393,8 +390,7 @@ public class ToolUtils {
                     }
                     // group info
                     else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
-                        application = new CustomApplication();
-                        group = new CustomApplication.Group();
+                        group = new Group();
                         group.setGroupCode(parser.getAttributeValue(0).trim());
                         group.setGroupMoveable(Integer.parseInt(parser
                                 .getAttributeValue(1).trim()));
@@ -425,9 +421,9 @@ public class ToolUtils {
                         module.setModuleShadow(parser.nextText().trim());
                         // apps
                     } else if (name.equals(App.APPS_TAG)) {
-                        apps = new ArrayList<AppItem>();
+                        apps = new ArrayList<App>();
                     } else if (name.equals(App.APP_TAG)) {
-                        app = new AppItem();
+                        app = new App();
                     } else if (name.equals(App.APP_NAME_TAG)) {
                         app.setAppName(parser.nextText().trim());
                     } else if (name.equals(App.APP_PACKAGE_TAG)) {
@@ -446,28 +442,15 @@ public class ToolUtils {
                     if (name.equals(App.APP_TAG)) {
                         // Log.d(TAG, "end app " + app.toString());
                         //group
-                        app.setGroupCode(group.groupCode);
-                        app.setGroupFlag(group.groupFlag);
-                        app.setGroupMoveable(group.groupMoveable);
-                        app.setGroupBg(group.groupBg);
-                        app.setGroupIcon(group.groupIcon);
-                        app.setGroupText(group.groupText);
-                        //module
                         app.setModuleCode(module.moduleCode);
-                        app.setModuleReplace(module.moduleReplace);
-                        app.setModuleType(module.moduleType);
-                        app.setModuleBg(module.moduleBg);
-                        app.setModuleIcon(module.moduleIcon);
-                        app.setModuleShadow(module.moduleShadow);
-                        app.setModuleText(module.moduleText);
                         mDBdao.insert(app);
-                        apps.add(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         // Log.d(TAG, "end apps " + module.mApps.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
-                        // Logger.d("end module" + module.toString());
+                        module.setGroupCode(group.groupCode);
+                        mDBdao.insertModule(module);
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
-                        // Logger.d("end group" + application.toString());
+                        mDBdao.insertGroup(group);
                     }
                 }
                 parser.next();
@@ -478,7 +461,6 @@ public class ToolUtils {
         } catch (IOException e) {
             Log.e(TAG, "packagefilter occurs " + e);
         }
-        return apps;
     }
 
     public static String getAdConfigureFromConfig(final Context context, InputStream is) {
@@ -676,7 +658,7 @@ public class ToolUtils {
 
     /**
      * install app
-     * 
+     *
      * @param context
      * @param filePath
      * @return whether apk exist

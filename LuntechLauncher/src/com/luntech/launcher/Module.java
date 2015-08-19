@@ -20,6 +20,18 @@ public class Module {
     public static final String MODULE_SHADOW_TAG = "m_shadow";
     public ArrayList<App> mApps;
 
+
+    public static class Columns {
+        public static final String M_CODE = "m_code";
+        public static final String M_G_CODE = "m_g_code";
+        public static final String M_REPLACE = "m_replace";
+        public static final String M_TYPE = "m_type";
+        public static final String M_TEXT = "m_text";
+        public static final String M_BG = "m_bg";
+        public static final String M_ICON = "m_icon";
+        public static final String M_SHADOW = "m_shadow";
+    }
+
     private Context mContext;
     private Resources mResources;
     private String mPackageName;
@@ -30,6 +42,10 @@ public class Module {
         mPackageName = mContext.getPackageName();
     }
 
+    public Module() {
+    }
+
+    public String groupCode;
     public String moduleCode;
     public int moduleReplace;
     public int moduleType;
@@ -41,6 +57,18 @@ public class Module {
     public Drawable moduleBgDrawable;
     public Drawable moduleIconDrawable;
     public Drawable moduleShadowDrawable;
+
+    public void setModuleText(CharSequence moduleText) {
+        this.moduleText = moduleText;
+    }
+
+    public String getGroupCode() {
+        return groupCode;
+    }
+
+    public void setGroupCode(String groupCode) {
+        this.groupCode = groupCode;
+    }
 
     public String getModuleCode() {
         return moduleCode;
@@ -163,7 +191,7 @@ public class Module {
     private Drawable changeFiletoDrawable(String fileName) {
         Drawable icon = null;
         String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_PREFIX + "/" + fileName;
-        Log.d("jzh", "change path "+path);
+        Log.d("jzh", "change path " + path);
         if (!TextUtils.isEmpty(path)) {
             icon = Drawable.createFromPath(path);
         }
