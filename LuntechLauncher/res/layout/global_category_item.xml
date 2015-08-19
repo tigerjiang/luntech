@@ -34,6 +34,7 @@
         android:gravity="center"
         android:text="@string/categore_app_1_label"
         android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_middle" />
+        android:textSize="@dimen/global_text_size_middle"
+        />
 
 </RelativeLayout>

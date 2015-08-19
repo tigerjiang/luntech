@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.luntech.launcher.db.AppItem;
+import com.luntech.launcher.db.DBDao;
+
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -44,6 +47,8 @@ public class ToolUtils {
 
     private static final String CUSTOM_INFO = "custom_info";
     private static final String NETWORK_INFO = "network_info";
+
+    private static DBDao mDBdao ;
 
     private ToolUtils() {
 
@@ -248,6 +253,232 @@ public class ToolUtils {
             Log.e(TAG, "packagefilter occurs " + e);
         }
         return applications;
+    }
+
+
+    public static ArrayList<AppItem> parseCustomConfigureFromConfig(Context context,
+                                                                    File file) {
+        mDBdao = new DBDao(context);
+        ArrayList<CustomApplication> applications = new ArrayList<CustomApplication>();
+        ArrayList<AppItem> apps = new ArrayList<AppItem>();
+        CustomApplication application = null;
+        CustomApplication.Group group = null;
+        Module module = null;
+        AppItem app = null;
+        try {
+            InputStream is = new FileInputStream(file);
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+
+                    }
+                    // group info
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        application = new CustomApplication();
+                        group = new CustomApplication.Group();
+                        group.setGroupCode(parser.getAttributeValue(0).trim());
+                        group.setGroupMoveable(Integer.parseInt(parser
+                                .getAttributeValue(1).trim()));
+                        group.setGroupFlag(Integer.parseInt(parser
+                                .getAttributeValue(2).trim()));
+                    } else if (name.equals(CustomApplication.Group.GROUP_TEXT_TAG)) {
+                        group.setGroupText(parser.nextText().trim());
+                    } else if (name.equals(CustomApplication.Group.GROUP_BG_TAG)) {
+                        group.setGroupBg(parser.nextText().trim());
+                    } else if (name.equals(CustomApplication.Group.GROUP_ICON_TAG)) {
+                        group.setGroupIcon(parser.nextText().trim());
+                    }
+                    // Module info
+
+                    else if (name.equals(Module.MODULE_TAG)) {
+                        module = new Module(context);
+                        module.setModuleCode(parser.getAttributeValue(0).trim());
+                        module.setModuleReplace(Integer
+                                .parseInt(parser.getAttributeValue(1).trim()));
+                        module.setModuleType(Integer.parseInt(parser.getAttributeValue(2).trim()));
+                    } else if (name.equals(Module.MODULE_TEXT_TAG)) {
+                        module.setModuleText(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_BG_TAG)) {
+                        module.setModuleBg(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_ICON_TAG)) {
+                        module.setModuleIcon(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_SHADOW_TAG)) {
+                        module.setModuleShadow(parser.nextText().trim());
+                        // apps
+                    } else if (name.equals(App.APPS_TAG)) {
+                        apps = new ArrayList<AppItem>();
+                    } else if (name.equals(App.APP_TAG)) {
+                        app = new AppItem();
+                    } else if (name.equals(App.APP_NAME_TAG)) {
+                        app.setAppName(parser.nextText().trim());
+                    } else if (name.equals(App.APP_PACKAGE_TAG)) {
+                        app.setAppPackage(parser.nextText().trim());
+                    } else if (name.equals(App.APP_ACTIVITY_TAG)) {
+                        app.setAppActivity(parser.nextText().trim());
+                    } else if (name.equals(App.APP_ICON_TAG)) {
+                        app.setAppIcon(parser.nextText().trim());
+                    } else if (name.equals(App.APP_URL_TAG)) {
+                        app.setAppUrl(parser.nextText().trim());
+                    }
+
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(App.APP_TAG)) {
+                        // Log.d(TAG, "end app " + app.toString());
+                        //group
+                        app.setGroupCode(group.groupCode);
+                        app.setGroupFlag(group.groupFlag);
+                        app.setGroupMoveable(group.groupMoveable);
+                        app.setGroupBg(group.groupBg);
+                        app.setGroupIcon(group.groupIcon);
+                        app.setGroupText(group.groupText);
+                        //module
+                        app.setModuleCode(module.moduleCode);
+                        app.setModuleReplace(module.moduleReplace);
+                        app.setModuleType(module.moduleType);
+                        app.setModuleBg(module.moduleBg);
+                        app.setModuleIcon(module.moduleIcon);
+                        app.setModuleShadow(module.moduleShadow);
+                        app.setModuleText(module.moduleText);
+                        mDBdao.insert(app);
+                        apps.add(app);
+                    } else if (name.equals(App.APPS_TAG)) {
+                        // Log.d(TAG, "end apps " + module.mApps.toString());
+                    } else if (name.equals(Module.MODULE_TAG)) {
+                        // Logger.d("end module" + module.toString());
+                    } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        // Logger.d("end group" + application.toString());
+                    }
+                }
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+        return apps;
+    }
+
+    public static ArrayList<AppItem> parseCustomConfigureFromInputStream(Context context,
+                                                                    InputStream is) {
+        mDBdao = new DBDao(context);
+        ArrayList<CustomApplication> applications = new ArrayList<CustomApplication>();
+        ArrayList<AppItem> apps = new ArrayList<AppItem>();
+        CustomApplication application = null;
+        CustomApplication.Group group = null;
+        Module module = null;
+        AppItem app = null;
+          try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+
+                    }
+                    // group info
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        application = new CustomApplication();
+                        group = new CustomApplication.Group();
+                        group.setGroupCode(parser.getAttributeValue(0).trim());
+                        group.setGroupMoveable(Integer.parseInt(parser
+                                .getAttributeValue(1).trim()));
+                        group.setGroupFlag(Integer.parseInt(parser
+                                .getAttributeValue(2).trim()));
+                    } else if (name.equals(CustomApplication.Group.GROUP_TEXT_TAG)) {
+                        group.setGroupText(parser.nextText().trim());
+                    } else if (name.equals(CustomApplication.Group.GROUP_BG_TAG)) {
+                        group.setGroupBg(parser.nextText().trim());
+                    } else if (name.equals(CustomApplication.Group.GROUP_ICON_TAG)) {
+                        group.setGroupIcon(parser.nextText().trim());
+                    }
+                    // Module info
+
+                    else if (name.equals(Module.MODULE_TAG)) {
+                        module = new Module(context);
+                        module.setModuleCode(parser.getAttributeValue(0).trim());
+                        module.setModuleReplace(Integer
+                                .parseInt(parser.getAttributeValue(1).trim()));
+                        module.setModuleType(Integer.parseInt(parser.getAttributeValue(2).trim()));
+                    } else if (name.equals(Module.MODULE_TEXT_TAG)) {
+                        module.setModuleText(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_BG_TAG)) {
+                        module.setModuleBg(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_ICON_TAG)) {
+                        module.setModuleIcon(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_SHADOW_TAG)) {
+                        module.setModuleShadow(parser.nextText().trim());
+                        // apps
+                    } else if (name.equals(App.APPS_TAG)) {
+                        apps = new ArrayList<AppItem>();
+                    } else if (name.equals(App.APP_TAG)) {
+                        app = new AppItem();
+                    } else if (name.equals(App.APP_NAME_TAG)) {
+                        app.setAppName(parser.nextText().trim());
+                    } else if (name.equals(App.APP_PACKAGE_TAG)) {
+                        app.setAppPackage(parser.nextText().trim());
+                    } else if (name.equals(App.APP_ACTIVITY_TAG)) {
+                        app.setAppActivity(parser.nextText().trim());
+                    } else if (name.equals(App.APP_ICON_TAG)) {
+                        app.setAppIcon(parser.nextText().trim());
+                    } else if (name.equals(App.APP_URL_TAG)) {
+                        app.setAppUrl(parser.nextText().trim());
+                    }
+
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(App.APP_TAG)) {
+                        // Log.d(TAG, "end app " + app.toString());
+                        //group
+                        app.setGroupCode(group.groupCode);
+                        app.setGroupFlag(group.groupFlag);
+                        app.setGroupMoveable(group.groupMoveable);
+                        app.setGroupBg(group.groupBg);
+                        app.setGroupIcon(group.groupIcon);
+                        app.setGroupText(group.groupText);
+                        //module
+                        app.setModuleCode(module.moduleCode);
+                        app.setModuleReplace(module.moduleReplace);
+                        app.setModuleType(module.moduleType);
+                        app.setModuleBg(module.moduleBg);
+                        app.setModuleIcon(module.moduleIcon);
+                        app.setModuleShadow(module.moduleShadow);
+                        app.setModuleText(module.moduleText);
+                        mDBdao.insert(app);
+                        apps.add(app);
+                    } else if (name.equals(App.APPS_TAG)) {
+                        // Log.d(TAG, "end apps " + module.mApps.toString());
+                    } else if (name.equals(Module.MODULE_TAG)) {
+                        // Logger.d("end module" + module.toString());
+                    } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        // Logger.d("end group" + application.toString());
+                    }
+                }
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+        return apps;
     }
 
     public static String getAdConfigureFromConfig(final Context context, InputStream is) {

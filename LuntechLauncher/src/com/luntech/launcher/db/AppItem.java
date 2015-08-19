@@ -30,6 +30,7 @@ public class AppItem {
     private int downloadId;
     private String downloadStatus;
 
+
     public String getAppName() {
         return appName;
     }

@@ -1047,6 +1047,7 @@ public class Launcher extends Activity {
                             } else {
                                 ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
                                         time);
+                                ToolUtils.parseCustomConfigureFromInputStream(context,is);
                             }
                         } else {
                             ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
