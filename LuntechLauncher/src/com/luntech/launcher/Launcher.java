@@ -40,6 +40,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.luntech.launcher.AsyncImageLoader.ImageCallback;
+import com.luntech.launcher.db.DBDao;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
@@ -68,7 +69,8 @@ public class Launcher extends Activity {
     private Resources mResources;
     // private List<CategoryItem> mAppList = new ArrayList<CategoryItem>();
     private ArrayList<CustomApplication> mAllAppList = new ArrayList<CustomApplication>();
-    private CustomApplication mSelectedApp;
+//    private CustomApplication mSelectedApp;
+    private Module mSelectedApp;
     private CategoryItemAdapter mCategoryItemAdapter;
     private Context mContext;
     private ChangeReceiver mChangeReceiver;
@@ -125,9 +127,12 @@ public class Launcher extends Activity {
     private boolean mIsShowAlert = false;
     private int mGridPosition = 0;
 
-    CustomApplication mFirstApp;
-    CustomApplication mSecondApp;
-    CustomApplication mThirdApp;
+    public ArrayList<Module> mModules;
+    private DBDao mdao;
+
+    Module mFirstApp;
+    Module mSecondApp;
+    Module mThirdApp;
 
     private RelativeLayout mRootView;
     public static  ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
@@ -139,6 +144,7 @@ public class Launcher extends Activity {
         mResources = getResources();
         mContext = getApplicationContext();
         sPackageName = this.getPackageName();
+        mdao = new DBDao(mContext);
         DOWNLOAD_TO_PATH = this.getFilesDir().getAbsolutePath();
         try {
             sPackageInfo = this.getPackageManager().getPackageInfo(sPackageName, 0);
@@ -152,6 +158,7 @@ public class Launcher extends Activity {
         initHandler();
         initPrecondition();
         parseScreenSaverCover();
+        parseModulesFromDB();
         parseCategoryItem();
         initView();
 
@@ -202,22 +209,6 @@ public class Launcher extends Activity {
                 // capture the category config
                 new FetchTask(screensaver_url, DOWNLOAD_TO_PATH + "/" + SCREENSAVER_CONFIGURE_FILE,
                         LauncherHandler.RETURN_SCREENSAVER_CONFIG_CODE).execute();
-
-                // String result =
-                // HttpUtils.requestAndWriteResourcesFromServer(url,
-                // DOWNLOAD_TO_PATH + "/"
-                // + CAPTURE_FILE
-                // );
-                // if (TextUtils.isEmpty(result)) {
-                // Logger.e("Doesn't found any info from server");
-                // return;
-                // } else {
-                // Logger.d("result = " + result);
-                // Message msg = mHandler
-                // .obtainMessage(LauncherHandler.RETURN_CATEGORY_CONFIG_CODE);
-                // msg.obj = result;
-                // mHandler.sendMessage(msg);
-                // }
 
             }
         }, REQUEST_DELAY_TIME);
@@ -412,7 +403,7 @@ public class Launcher extends Activity {
         });
         final Module module3 = mThirdApp.mGroup.mModules.get(0);
         Logger.d("third module " + module3.toString());
-        mAsyncImageLoader.loadDrawable(module3.getModuleIcon(), mThumb_3_view, new ImageCallback() {
+        mAsyncImageLoader.loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
@@ -455,6 +446,133 @@ public class Launcher extends Activity {
         });
     }
 
+    private void refreshLocakedThumbnail() {
+        mSelectedApp = mModules.get(0);
+        mFirstApp = mModules.get(0);
+        mSecondApp = mModules.get(1);
+        mThirdApp = mModules.get(2);
+        refreshFeatureMenuView();
+        mAsyncImageLoader = new AsyncImageLoader(mContext);
+        mAsyncImageLoader.loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module1.getModuleIcon()));
+        mThumb_1_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                mFirstApp.getModuleShadow()));
+        mThumb_1_label.setText(mFirstApp.getModuleText());
+        mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setComponent(new ComponentName("com.xike.xkliveplay",
+                            "com.xike.xkliveplay.activity.launch.ActivityLaunch"));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    // safeStartApk(module2.mApps.get(0).getComponentName());
+                } catch (Exception e) {
+
+                    // Toast.makeText(mContext, "App no found for " +
+                    // componentName,
+                    // Toast.LENGTH_SHORT)
+                    // .show();
+                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                }
+
+            }
+        });
+        // mThumb_2_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module2.getModuleIcon()));
+        mAsyncImageLoader.loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        mThumb_2_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                mSecondApp.getModuleShadow()));
+        mThumb_2_label.setText(mSecondApp.getModuleText());
+        mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setComponent(new ComponentName("com.skzh.elifetv",
+                            "com.skzh.elifetv.ui.GovernInfoActivity"));
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    // safeStartApk(module2.mApps.get(0).getComponentName());
+                } catch (Exception e) {
+                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                }
+            }
+        });
+
+        mAsyncImageLoader.loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        // mThumb_3_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module3.getModuleIcon()));
+        mThumb_3_shadow.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                mThirdApp.getModuleShadow()));
+        mThumb_3_label.setText(module3.getModuleText());
+        mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setComponent(new ComponentName("com.skzh.elifetv",
+                            "com.skzh.elifetv.MainActivity"));
+                    intent.putExtra("frag_index", "3");
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    // safeStartApk(module3.mApps.get(0).getComponentName());
+
+                } catch (Exception e) {
+
+                    // Toast.makeText(mContext, "App no found for " +
+                    // componentName,
+                    // Toast.LENGTH_SHORT)
+                    // .show();
+                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, e.toString());
+                }
+            }
+        });
+    }
+
     private void parseScreenSaverCover(){
         String screenSaverConfig = DOWNLOAD_TO_PATH + "/" + SCREENSAVER_CONFIGURE_FILE;
         File configFile = new File(screenSaverConfig);
@@ -466,10 +584,10 @@ public class Launcher extends Activity {
                     sScreenSaverFileList.add(file.getAbsolutePath());
                 }
             } else {
-                
+
             }
         } else {
-           
+
         }
     }
     private void parseCategoryItem() {
@@ -490,71 +608,15 @@ public class Launcher extends Activity {
             mAllAppList = ToolUtils.getCustomInfoFromConfig(mContext, R.xml.config);
         }
         Collections.sort(mAllAppList, PARSED_APPS_COMPARATOR);
-        // Log.d(TAG, "Sort " + mAllAppList.toString());
-        // CategoryItem item1 = new CategoryItem();
-        // item1.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_1_logo);
-        // item1.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_1_bg);
-        // item1.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_1_shadow);
-        // item1.mLabel = mResources.getString(R.string.categore_app_1_label);
-        // mAppList.add(0, item1);
-        // CategoryItem item2 = new CategoryItem();
-        // item2.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_2_logo);
-        // item2.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_2_bg);
-        // item2.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_2_shadow);
-        // item2.mLabel = mResources.getString(R.string.categore_app_2_label);
-        // mAppList.add(1, item2);
-        // CategoryItem item3 = new CategoryItem();
-        // item3.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_3_logo);
-        // item3.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_3_bg);
-        // item3.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_3_shadow);
-        // item3.mLabel = mResources.getString(R.string.categore_app_3_label);
-        // mAppList.add(2, item3);
-        // CategoryItem item4 = new CategoryItem();
-        // item4.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_4_logo);
-        // item4.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_4_bg);
-        // item4.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_4_shadow);
-        // item4.mLabel = mResources.getString(R.string.categore_app_4_label);
-        // mAppList.add(3, item4);
-        // CategoryItem item5 = new CategoryItem();
-        // item5.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_5_logo);
-        // item5.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_5_bg);
-        // item5.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_5_shadow);
-        // item5.mLabel = mResources.getString(R.string.categore_app_5_label);
-        // mAppList.add(4, item5);
-        // CategoryItem item6 = new CategoryItem();
-        // item6.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_6_logo);
-        // item6.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_6_bg);
-        // item6.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_6_shadow);
-        // item6.mLabel = mResources.getString(R.string.categore_app_6_label);
-        // mAppList.add(5, item6);
-        // CategoryItem item7 = new CategoryItem();
-        // item7.mAppIcon =
-        // mResources.getDrawable(R.drawable.categore_app_7_logo);
-        // item7.mBackgroundIcon =
-        // mResources.getDrawable(R.drawable.categore_app_7_bg);
-        // item7.mShadowIcon =
-        // mResources.getDrawable(R.drawable.categore_app_7_shadow);
-        // item7.mLabel = mResources.getString(R.string.categore_app_7_label);
-        // mAppList.add(6, item7);
+
     }
+
+    private void parseModulesFromDB() {
+        mModules = mdao.fetchModules();
+        Log.d(TAG, mModules.toString());
+
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -881,9 +943,9 @@ public class Launcher extends Activity {
 
     private void refreshFeatureMenuView() {
         try {
-            if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 0) {
+            if (mSelectedApp.moduleReplace == 0) {
                 mFeatureView.setText(R.string.feature_menu_1);
-            } else if (mSelectedApp.mGroup.mModules.get(0).moduleReplace == 1) {
+            } else if (mSelectedApp.moduleReplace == 1) {
                 mFeatureView.setText(R.string.feature_menu_0);
             }
         } catch (Exception e) {
