@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import com.android.settings.R;
+
+import com.luntech.launcher.R;
+
 public class GeneralSettingActivity extends Activity {
 
     @Override

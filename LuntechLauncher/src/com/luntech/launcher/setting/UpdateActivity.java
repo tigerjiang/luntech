@@ -1,11 +1,12 @@
 package com.luntech.launcher.setting;
 
-import com.android.settings.R;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+
+import com.luntech.launcher.R;
 
 public class UpdateActivity extends Activity {
 	  @Override

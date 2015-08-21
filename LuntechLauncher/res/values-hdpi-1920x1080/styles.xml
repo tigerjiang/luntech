@@ -17,4 +17,18 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="Custom.Button" parent="android:style/Widget.DeviceDefault.Button">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#f0f0f0</item>
+        <item name="android:paddingTop">5dp</item>
+    </style>
+
+    <style name="Custom.Info.TextView" parent="android:style/Widget.DeviceDefault.TextView">
+        <item name="android:textColor">#f0f0f0</item>
+    </style>
+
+    <style name="Custom.Info.TextViewWPadding" parent="Custom.Info.TextView">
+        <item name="android:paddingLeft">@dimen/info_side_margin</item>
+        <item name="android:paddingRight">@dimen/info_side_margin</item>
+    </style>
 </resources>

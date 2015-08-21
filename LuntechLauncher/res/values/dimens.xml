@@ -75,4 +75,94 @@
     <dimen name="custom_divider">6px</dimen>
     <dimen name="custom_first_title_height">116px</dimen>
 
+
+    <dimen name="device_memory_usage_button_width">16dip</dimen>
+    <dimen name="device_memory_usage_button_height">32dip</dimen>
+    <dimen name="action_bar_switch_padding">16dip</dimen>
+    <dimen name="app_icon_size">56dip</dimen>
+    <dimen name="screen_margin_sides">64dip</dimen>
+    <dimen name="screen_margin_top">72dip</dimen>
+    <dimen name="screen_margin_bottom">48dip</dimen>
+    <dimen name="content_margin_left">16dip</dimen>
+    <dimen name="description_margin_top">26dip</dimen>
+    <dimen name="description_margin_sides">40dip</dimen>
+    <dimen name="bind_app_widget_dialog_checkbox_bottom_padding">16dip</dimen>
+    <dimen name="installed_app_details_bullet_offset">8dip</dimen>
+    <dimen name="data_usage_chart_height">252dip</dimen>
+    <dimen name="data_usage_chart_optimalWidth">440dip</dimen>
+    <dimen name="volume_seekbar_side_margin">8dip</dimen>
+    <dimen name="crypt_clock_size">100sp</dimen>
+
+    <item name="setup_title_height" type="dimen">15%</item>
+    <item name="setup_border_width" type="dimen">5%</item>
+
+    <dimen name="setup_margin_bottom">0dip</dimen>
+    <dimen name="setup_title_size">25sp</dimen>
+    <dimen name="setup_button_size">32dip</dimen>
+    <dimen name="setup_item_margin">16dip</dimen>
+    <dimen name="divider_height">3dip</dimen>
+    <dimen name="divider_margin_top">6dip</dimen>
+    <dimen name="divider_margin_bottom">7dip</dimen>
+
+    <!-- Size of icons in the top-level of settings -->
+    <dimen name="header_icon_width">28dp</dimen>
+    <dimen name="appwidget_min_width">260dip</dimen>
+    <dimen name="appwidget_min_height">40dip</dimen>
+    <dimen name="pager_tabs_padding">20dp</dimen>
+
+    <!-- Size of AppWidget previews in KeyguardAppWidgetPickActivity -->
+    <dimen name="appwidget_preview_width">140dip</dimen>
+    <dimen name="appwidget_preview_height">80dip</dimen>
+    <dimen name="keyguard_appwidget_picker_max_width">800dip</dimen>
+    <dimen name="keyguard_appwidget_picker_margin_left">6dip</dimen>
+    <dimen name="keyguard_appwidget_picker_margin_right">6dip</dimen>
+
+    <integer name="keyguard_appwidget_picker_cols">1</integer>
+
+    <dimen name="button_margin_bottom">58dp</dimen>
+    <dimen name="button_margin_top">33.34dp</dimen>
+    <dimen name="margin_right">40dp</dimen>
+    <!-- 93.34 in spec = margin_top+progress_bar_height -->
+    <dimen name="margin_top">87.34dp</dimen>
+    <dimen name="button_width">166.67dp</dimen>
+    <dimen name="button_wide_width">200dp</dimen>
+    <dimen name="button_height">40dp</dimen>
+    <dimen name="info_container_width">800dp</dimen>
+    <dimen name="info_container_height">520.67dp</dimen>
+    <dimen name="progress_bar_height">6dp</dimen>
+    <dimen name="title_margin_top">25.34dp</dimen>
+    <dimen name="descr_margin_top">13.34dp</dimen>
+    <dimen name="info_margin_top">12.67dp</dimen>
+    <dimen name="info_margin_top_wide">32.67dp</dimen>
+    <dimen name="tip_margin_top">26.67dp</dimen>
+    <dimen name="tip_margin_bottom">32dp</dimen>
+    <dimen name="info_side_margin">33.34dp</dimen>
+    <dimen name="action_area_padding">26.67dp</dimen>
+    <dimen name="side_margin_to_fit_into_asset">6px</dimen>
+    <dimen name="small_margin">6.67px</dimen>
+    <dimen name="medium_margin">16.67px</dimen>
+    <dimen name="between_radiobuttons_margin">29.34dp</dimen>
+    <dimen name="margin_network_images">44dp</dimen>
+    <dimen name="progress_bar_channels_margin_top">10dp</dimen>
+    <dimen name="progress_bar_channels_margin_bottom">6.67dp</dimen>
+    <dimen name="progress_bar_channels_width">400dp</dimen>
+    <dimen name="hicloud_text_margin">40dp</dimen>
+    <dimen name="textlabel_margin">230dp</dimen>
+    <dimen name="scan_channels_margin">25dp</dimen>
+    <dimen name="scan_channels_button_margin">20dp</dimen>
+    <dimen name="scan_tuner_mode_spinner_width">180dp</dimen>
+    <dimen name="imageview_delimeter_height">0.66dp</dimen>
+    <dimen name="text_size_large">28px</dimen>
+    <dimen name="text_size_medium">25dp</dimen>
+    <dimen name="text_size_small">20dp</dimen>
+    <!-- Banner carousel -->
+    <dimen name="banner_indicator_margin_bottom">6.67dp</dimen>
+    <dimen name="banner_indicator_height">20dp</dimen>
+    <dimen name="banner_indicator_dot_gap">4dp</dimen>
+    <dimen name="banner_indicator_dot_margin">16dp</dimen>
+    <dimen name="custom_title_size">28px</dimen>
+    <dimen name="custom_title_sumary_size">15px</dimen>
+    <dimen name="custom_content_title_size">38px</dimen>
+    <dimen name="custom_content_bottom_size">25px</dimen>
+    <dimen name="custom_list_item_height">65px</dimen>
 </resources>

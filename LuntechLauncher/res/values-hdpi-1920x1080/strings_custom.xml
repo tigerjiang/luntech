@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Device info -->
+    <string name="custom_about_device">关于设备</string>
+
+    <!-- Recovery from USB -->
+    <string name="recovery_package">系统恢复/升级</string>
+    <string name="recovery_package_des">使用外部的升级包，来恢复和升级您的系统。</string>
+    <string name="net_set">网络设置</string>
+    <string name="display_set">显示设置</string>
+    <string name="about_set">关于我们</string>
+    <string name="about_us">青岛龙泰天翔通信科技有限公司是创业板上市公司300183青岛东软载波科技股份有限公司控股（51%）子公司，注册资本3700万元。公司定位于智慧社区、智慧家居综合运营商，主营产品包括：家庭和中小企业智慧网关设备、以智慧家居为核心的智慧社区多媒体运营服务系统等。是中国联通中国电信、中国广电的资深战略合作伙伴，自2007年起连续入围中国联通的EPON设备集中采购。拥有“ISO9000、ISO14000、OHSAS18000管理体系认证证书”、“高新技术企业证书”、“软件企业认定证书”、“通信信息系统集成证书”。\n\n青岛龙泰天翔通信科技有限公司 （www.luntech.com）</string>
+    <string name="general_set">通用设置</string>
+    <string name="qr_set">多屏互动二维码</string>
+    <string name="qr_scan">请用手机或者PAD扫描以上二维码下载安装多屏互动客户端.</string>
+    <string name="update_set">系统升级</string>
+    <string name="common_info">基本信息</string>
+    <string name="more_set">更多设置</string>
+    <string name="title_activity_main">开机设置导航</string>
+    <string name="previous">上一步</string>
+    <string name="next">下一步</string>
+    <string name="agree">同意</string>
+
+    <!-- Tutorial -->
+    <string name="tutorial_title">遥控器</string>
+    <string name="done">确定</string>
+
+
+    <!-- Languages -->
+    <string name="languages_title">语言设置</string>
+    <string name="languages_descr"> 请选择语言</string>
+    <string name="languages_tip">您也可以在“系统设置”里对本项进行设置</string>
+    <string name="str_curr_lang">您当前语言为</string>
+    <string name="str_change_lang_to">Change to</string>
+
+    <!-- Network -->
+    <string name="network_title">网络设置</string>
+    <string name="network_descr">联网后，您可以观看网络视频、下载应用，享受更多服务！</string>
+    <string name="network_tip">您也可以后续在“系统设置”中进行网络设置。</string>
+    <string name="str_wifi">WIFI:</string>
+    <string name="str_wired">有线网络：</string>
+    <string name="str_configure_wifi">配置WIFI</string>
+    <string name="str_configure_wired">配置网络</string>
+    <string name="str_not_connected">未连接</string>
+    <string name="str_connected">已连接</string>
+    <string name="str_not_detected">未检测到网络设备</string>
+    <string name="str_needs_configuration">需要配置</string>
+    <string name="switch_to_wifi">切换到无线网络</string>
+    <string name="switch_to_wired">切换到有线网络</string>
+
+    <!-- Location -->
+    <string name="location_title">区域设置</string>
+    <string name="location_descr">设置区域方便您享受与本地相关的服务。</string>
+    <string name="location_tip">您也可以后续在“系统设置”中进行区域设置。</string>
+    <string name="str_curr_loc">您当前的区域为</string>
+    <string name="str_change_loc">更改区域</string>
+    <string name="default_location">北京</string>
+    <string name="china">中国</string>
+
+    <!-- Channels -->
+    <string name="channels_title">搜台设置</string>
+    <string name="channels_descr">精彩节目将马上为您呈现。</string>
+    <string name="channels_tip">您也可以后续在设置菜单中进行搜台设置。</string>
+    <string name="str_tv_type_digital_dvbc">有线数字电视</string>
+    <string name="str_tv_type_digital_dtmb">地面数字电视</string>
+    <string name="str_tv_type_analog">模拟电视</string>
+    <string name="str_scan_status_scanning">搜索&#8230;</string>
+    <string name="str_scan_status_complete">搜索完成</string>
+    <string name="str_scan_status_cancelled">取消搜索</string>
+    <string name="str_scan_status_not_scanned">尚未搜索</string>
+    <string name="str_start_scan">开始进行搜索</string>
+    <string name="str_cancel_scan">取消搜索</string>
+    <string name="str_scan_again">再次搜索</string>
+    <string name="str_scan_mode_select_hint">请选择通道搜台</string>
+
+
+    <!-- Live TV Input Source -->
+    <string name="settings_system_about_tv">关于电视</string>
+    <string name="settings_system_about_tv_name">本机型号</string>
+    <string name="settings_system_about_model_number">产品型号</string>
+    <string name="settings_system_about_model_name">产品名称</string>
+    <string name="settings_system_about_serial_number">序列号</string>
+    <string name="settings_system_about_android_version">Android 版本</string>
+    <string name="settings_system_about_baseband_version">固件版本</string>
+    <string name="settings_system_about_kernel_version">内核版本</string>
+    <string name="product_version">产品型号 :</string>
+    <string name="software_version">软件版本 :</string>
+    <string name="local_update_label">本地升级</string>
+    <string name="net_update_label">网络升级</string>
+    <string name="settings_system_about_build_number">版本号</string>
+    <string name="settings_system_mac_address">MAC 地址 :</string>
+    <string name="settings_system_about_mac_address">有线网卡 MAC 地址</string>
+    <string name="settings_system_about_wifi_mac_address">Wi-Fi 网卡 MAC 地址</string>
+    <string name="settings_system_about_wifi_not_enabled">Wi-Fi 未启用</string>
+    <string name="settings_system_about_preparing">正在读取..</string>
+    <string name="settings_system_about_unavailiable">无可用信息</string>
+    <string name="select_alert">请选择要使用电视桌面</string>
+    <string name="no_permission">没有权限</string>
+    <string name="no_feature">功能暂未开发...</string>
+
+    <string-array name="general_item">
+        <item>屏保设置</item>
+        <item>修改默认桌面</item>
+        <item>选择桌面</item>
+    </string-array>
+
+</resources>

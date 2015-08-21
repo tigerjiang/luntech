@@ -27,6 +27,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ContentHandler;
 import java.util.ArrayList;
 import java.util.zip.ZipException;
 
@@ -563,5 +564,64 @@ public class ToolUtils {
             return true;
         }
         return false;
+    }
+
+
+    public static OtaInfo parseUpdateInfo(Context context, InputStream is) {
+        OtaInfo ota = null;
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals("ota")) {
+                        ota = new OtaInfo();
+                    } else if (name.equals("cur_version")) {
+                        ota.currentVersion = parser.nextText().trim();
+                    } else if (name.equals("new_version")) {
+                        ota.newVersion = parser.nextText().trim();
+                    } else if (name.equals("remark")) {
+                        ota.remark = parser.nextText().trim();
+                    } else if (name.equals("filesize")) {
+                        ota.fileSize = parser.nextText().trim();
+                    } else if (name.equals("url")) {
+                        ota.url = parser.nextText().trim();
+                    } else if (name.equals("md5")) {
+                        ota.md5 = parser.nextText().trim();
+                    }
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    if (name.equals("ota")) {
+                        Log.d(TAG, "ota info" + ota.toString());
+                    }
+                }
+                parser.next();
+            }
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+        return ota;
+    }
+
+    public static void doUpdate(final Context context,OtaInfo ota) {
+        IDownloadListener listener = new IDownloadListener() {
+
+            @Override
+            public void onError(String errorCode) {
+
+            }
+
+            @Override
+            public void onCompleted(final File file) {
+                ToolUtils.install(context, file.getAbsolutePath());
+            }
+        };
+        DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, ota.url, listener);
+        new Thread(task).start();
     }
 }

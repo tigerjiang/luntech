@@ -5,4 +5,10 @@
     <color name="gray">#8f8f8f8f</color>
     <color name="hint">#FFFFF0</color>
     <color name="transparent">#8c000000</color>
+    <color name="setup_divider_color">#333333</color>
+    <color name="custom_title_sumary_color">#e4e4e4</color>
+    <color name="custom_content_bottom_color">#e5e5e5</color>
+    <color name="custom_white">#ffffff</color>
+    <color name="custom_select_color">#24b8fe</color>
+    <color name="custom_progress_color">#24b9ff</color>
 </resources>

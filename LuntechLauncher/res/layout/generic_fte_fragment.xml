@@ -60,7 +60,6 @@
             android:layout_marginLeft="5dp"
             android:layout_marginBottom="@dimen/tip_margin_bottom"
             android:layout_marginTop="@dimen/tip_margin_top"
-            android:text="@string/user_agreement_tip"
             android:textColor="@color/custom_content_bottom_color"
             android:textSize="@dimen/custom_content_bottom_size" />
     </LinearLayout>

@@ -17,7 +17,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemProperties;
+//import android.os.SystemProperties;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +26,7 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
+import com.luntech.launcher.R;
 
 
 public class AboutTVDialogFragment extends Fragment {
@@ -109,12 +109,13 @@ public class AboutTVDialogFragment extends Fragment {
 		mItems.get(INDEX_ANDROID_VERSION)
 				.setSummary(Build.VERSION.RELEASE + "");
 		// kernel version
-		mItems.get(INDEX_BASEBAND_VERSION).setSummary(Build.FIRMWARE);
+		mItems.get(INDEX_BASEBAND_VERSION).setSummary(Build.HARDWARE);
 		// build number and date
 		mItems.get(INDEX_KERNEL_VERSION)
 				.setSummary(getFormattedKernelVersion());
-		mItems.get(INDEX_BUILD_NUMBER).setSummary(
-				SystemProperties.get("ro.product.version"));
+//		mItems.get(INDEX_BUILD_NUMBER).setSummary(
+//				SystemProperties.get("ro.product.version"));
+				mItems.get(INDEX_BUILD_NUMBER).setSummary(Build.PRODUCT);
 		String ethernetMacAddress = Utilities.getMacAddress();
 		if (DEBUG) {
 			Log.d(TAG, "updateValuesByTvApi(): got Ethernet MAC address:"
@@ -140,11 +141,6 @@ public class AboutTVDialogFragment extends Fragment {
 		mItems.get(INDEX_WIFI_MAC).setSummary(wifiMac.toUpperCase());
 	}
 
-	private String getBuildDate() {
-		Date d = new Date(Build.TIME);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		return sdf.format(d);
-	}
 
 	/**
 	 * Reads a line from the specified file.
@@ -268,10 +264,6 @@ public class AboutTVDialogFragment extends Fragment {
 			mSummary = new String();
 		}
 
-		public AboutTVListItem(String title, String summary) {
-			setTitle(title);
-			setSummary(summary);
-		}
 
 		private void setTitle(String title) {
 			mTitle = title;

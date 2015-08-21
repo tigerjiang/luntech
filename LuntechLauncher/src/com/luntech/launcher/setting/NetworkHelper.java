@@ -21,11 +21,10 @@ import android.net.ethernet.EthernetManager;
 /**
  * Network routines.
  * 
- * @author brltluza
  */
 public class NetworkHelper {
     // log variables
-    private static final String TAG = "FTE";
+    private static final String TAG = "NetworkHelper";
     private static boolean DEBUG = false;
 
     // WLAN

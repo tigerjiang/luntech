@@ -10,8 +10,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,16 +17,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.settings.R;
+import com.luntech.launcher.R;
+
 
 public class NetworkFragment extends GenericFragment {
 
     // logger variables
-    private static final String TAG = "FTE";
+    private static final String TAG = "NetworkFragment";
     private static boolean DEBUG = false;
 
     // actions to call appropriate Settings Activities

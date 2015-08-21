@@ -88,9 +88,9 @@ public class Launcher extends Activity {
     private TextView mThumb_3_label;
     private ToolUtils mToolUtils;
 
-    private static PackageInfo sPackageInfo;
-    private static String sPackageName;
-    private static int sVersionCode;
+    public static PackageInfo sPackageInfo;
+    public static String sPackageName;
+    public static int sVersionCode;
     private static final long REQUEST_DELAY_TIME = 2*60 * 1000;
     private static final long SHOW_DELAY_TIME = 10 * 1000;
     private static final long DISMISS_DELAY_TIME = 3 * 1000;
@@ -752,7 +752,7 @@ public class Launcher extends Activity {
                 case RETURN_HIDDEN_CONFIG_CODE:
                 break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                    final OtaInfo ota = parseUpdateInfo(mContext,
+                    final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
                             new ByteArrayInputStream(result.getBytes()));
                     if (ota.currentVersion.equals(sVersionCode)) {
                         if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
@@ -765,7 +765,7 @@ public class Launcher extends Activity {
 
                                         @Override
                                         public void onClick(DialogInterface arg0, int arg1) {
-                                            doUpdate(ota);
+                                            ToolUtils.doUpdate(mContext,ota);
                                             arg0.dismiss();
                                         }
                                     });
@@ -833,46 +833,6 @@ public class Launcher extends Activity {
         restartSendShowScreenSaver();
     }
 
-    private OtaInfo parseUpdateInfo(Context context, InputStream is) {
-        OtaInfo ota = null;
-        try {
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(is, "utf-8");
-            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                if (parser.getEventType() == XmlResourceParser.START_TAG) {
-                    String name = parser.getName();
-                    Log.d(TAG, name);
-                    if (name.equals("ota")) {
-                        ota = new OtaInfo();
-                    } else if (name.equals("cur_version")) {
-                        ota.currentVersion = parser.nextText().trim();
-                    } else if (name.equals("new_version")) {
-                        ota.newVersion = parser.nextText().trim();
-                    } else if (name.equals("remark")) {
-                        ota.remark = parser.nextText().trim();
-                    } else if (name.equals("filesize")) {
-                        ota.fileSize = parser.nextText().trim();
-                    } else if (name.equals("url")) {
-                        ota.url = parser.nextText().trim();
-                    } else if (name.equals("md5")) {
-                        ota.md5 = parser.nextText().trim();
-                    }
-                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
-                    String name = parser.getName();
-                    if (name.equals("ota")) {
-                        Log.d(TAG, "ota info" + ota.toString());
-                    }
-                }
-                parser.next();
-            }
-        } catch (XmlPullParserException e) {
-            Log.e(TAG, "XmlPullParserException occurs " + e);
-        } catch (IOException e) {
-            Log.e(TAG, "packagefilter occurs " + e);
-        }
-        return ota;
-    }
 
     private void getScreenSaverFromConfig(Context context, InputStream is) {
         try {
@@ -1118,22 +1078,7 @@ public class Launcher extends Activity {
         new Thread(task).start();
     }
 
-    private void doUpdate(OtaInfo ota) {
-        IDownloadListener listener = new IDownloadListener() {
 
-            @Override
-            public void onError(String errorCode) {
-
-            }
-
-            @Override
-            public void onCompleted(final File file) {
-                ToolUtils.install(mContext, file.getAbsolutePath());
-            }
-        };
-        DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, ota.url, listener);
-        new Thread(task).start();
-    }
 
     private void restartSendShowScreenSaver() {
         Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);

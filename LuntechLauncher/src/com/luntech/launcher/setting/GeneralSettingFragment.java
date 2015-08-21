@@ -13,12 +13,11 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.android.settings.R;
 
-import java.lang.reflect.Array;
+import com.luntech.launcher.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 public class GeneralSettingFragment extends Fragment {
 
