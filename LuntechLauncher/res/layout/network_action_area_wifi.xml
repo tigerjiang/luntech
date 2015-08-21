@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+ * Copyright 2012 - Jamdeo
+ */
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/network_action_area"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/layoutupper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/info_side_margin"
+        android:layout_marginRight="@dimen/info_side_margin"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:paddingBottom="@dimen/between_radiobuttons_margin" >
+
+        <ImageView
+            android:id="@+id/imageview_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left"
+            android:layout_marginLeft="@dimen/margin_network_images"
+            android:layout_marginRight="@dimen/medium_margin"
+            android:src="@drawable/fte_icn_wifi_connection" />
+
+        <TextView
+            android:id="@+id/textview_wifi_text"
+            style="@style/Custom.Info.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/small_margin"
+            android:layout_toRightOf="@id/imageview_wifi"
+            android:text="@string/str_wifi"
+            android:textSize="@dimen/text_size_large" />
+
+        <TextView
+            android:id="@+id/textview_wifi_state"
+            style="@style/Custom.Info.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left"
+            android:layout_toRightOf="@id/textview_wifi_text"
+            android:textSize="@dimen/text_size_large" />
+
+        <Button
+            android:id="@+id/button_configure_wifi"
+            android:layout_width="@dimen/button_wide_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_alignBaseline="@+id/textview_wifi_text"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:background="@drawable/custom_network_set_bg"
+            android:text="@string/str_configure_wifi" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@drawable/top_line"
+        android:src="@drawable/top_line" />
+
+    <RelativeLayout
+        android:id="@+id/layoutlower"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/info_side_margin"
+        android:layout_marginRight="@dimen/info_side_margin"
+        android:layout_weight="1"
+        android:gravity="top" >
+
+        <Button
+            android:id="@+id/button_switch_to_wired"
+            android:layout_width="@dimen/button_wide_width"
+            android:layout_height="@dimen/button_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="right"
+            android:background="@drawable/custom_network_bg"
+            android:text="@string/switch_to_wired" />
+    </RelativeLayout>
+
+</LinearLayout>

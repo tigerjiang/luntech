@@ -1099,6 +1099,7 @@ public class Launcher extends Activity {
     }
 
     private void downloadApk(final Context context, final App app) {
+        mdao.updateDownload(app);
         IDownloadListener listener = new IDownloadListener() {
 
             @Override
@@ -1110,6 +1111,7 @@ public class Launcher extends Activity {
             public void onCompleted(final File file) {
                 app.downloadStatus = App.DOWNLOAD_STATUS_COMPLETED;
                 ToolUtils.install(context, file.getAbsolutePath());
+                mdao.updateDownload(app);
             }
         };
         DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, app.appUrl, listener);
