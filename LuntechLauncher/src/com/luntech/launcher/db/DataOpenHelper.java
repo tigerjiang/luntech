@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DataOpenHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "app_info.db";
     public static final String GROUP_TABLE_NAME = "group_info";
     public static final String MODULE_TABLE_NAME = "module_info";
@@ -21,7 +21,8 @@ public class DataOpenHelper extends SQLiteOpenHelper {
             + "g_flag" + " varchar, "
             + "g_text" + " varchar, "
             + "g_bg" + " varchar, "
-            + "g_icon" + " varchar)";
+            + "g_icon" + " varchar, "
+            + "UNIQUE (g_code))";
 
     private static final String MODULE_TABLE_CREATE = "CREATE TABLE " + MODULE_TABLE_NAME
             + " ("
@@ -33,7 +34,8 @@ public class DataOpenHelper extends SQLiteOpenHelper {
             + "m_bg" + " varchar, "
             + "m_icon" + " varchar, "
             + "m_shadow" + " varchar, "
-            + "m_g_code" + " varchar)";
+            + "m_g_code" + " varchar, "
+            + "CONSTRAINT uc_key UNIQUE (m_code,m_g_code))";
 
     private static final String APP_TABLE_CREATE = "CREATE TABLE " + APP_TABLE_NAME
             + " ("
@@ -48,7 +50,8 @@ public class DataOpenHelper extends SQLiteOpenHelper {
             + "a_icon" + " varchar, "
             + "a_url" + " varchar, "
             + "a_file_name" + " varchar, "
-            + "a_m_code" + " varchar)";
+            + "a_m_code" + " varchar, "
+            + "CONSTRAINT uc_key UNIQUE (a_package,a_m_code))";
 
     public DataOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

@@ -157,6 +157,6 @@ public final class DownloadTask implements Runnable {
     }
 
     private String getUrlFileName(String url) {
-        return url.substring(url.lastIndexOf("."));
+        return url.substring(url.lastIndexOf("/"));
     }
 }

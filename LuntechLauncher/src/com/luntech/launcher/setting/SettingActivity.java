@@ -24,9 +24,9 @@ public class SettingActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_layout);
         // setting
-        settingBaseView = (ImageView) findViewById(R.id.setting_base);
+        settingBaseView = (ImageView) findViewById(R.id.setting_general);
         settingBaseView.setOnClickListener(this);
-        settingDispalyView = (ImageView) findViewById(R.id.setting_display);
+        settingDispalyView = (ImageView) findViewById(R.id.setting_about);
         settingDispalyView.setOnClickListener(this);
         settingNetView = (ImageView) findViewById(R.id.setting_net);
         settingNetView.setOnClickListener(this);
@@ -34,27 +34,27 @@ public class SettingActivity extends Activity implements OnClickListener {
         settingUpdateView.setOnClickListener(this);
         settingMoreView = (ImageView) findViewById(R.id.setting_more);
         settingMoreView.setOnClickListener(this);
-        settingErweiView = (ImageView) findViewById(R.id.setting_erwei);
+        settingErweiView = (ImageView) findViewById(R.id.setting_qr);
         settingErweiView.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == settingBaseView.getId()) {
-            safeStartApk("com.luntech.launcher.setting", "com.luntech.launcher.setting.GeneralSettingActivity");
-        } else if (view.getId() == settingDispalyView.getId()) {
-            safeStartApk("com.luntech.launcher.setting", "com.luntech.launcher.setting.AboutActicity");
-        } else if (view.getId() == settingNetView.getId()) {
-            safeStartApk("com.luntech.launcher.setting", "com.luntech.launcher.setting.NetworkConfigActivity");
-        } else if (view.getId() == settingUpdateView.getId()) {
-            safeStartApk("com.luntech.launcher.setting", "com.luntech.launcher.setting.UpdateActivity");
+        if (view.getId() == R.id.setting_general) {
+            safeStartApk("com.luntech.launcher", "com.luntech.launcher.setting.GeneralSettingActivity");
+        } else if (view.getId() == R.id.setting_about) {
+            safeStartApk("com.luntech.launcher", "com.luntech.launcher.setting.AboutActivity");
+        } else if (view.getId() == R.id.setting_net) {
+            safeStartApk("com.luntech.launcher", "com.luntech.launcher.setting.NetworkConfigActivity");
+        } else if (view.getId() == R.id.setting_update) {
+            safeStartApk("com.luntech.launcher", "com.luntech.launcher.setting.UpdateActivity");
         }
         // else if (view.getId() == settingImView_unfold.getId()){
-        else if (view.getId() == settingMoreView.getId()) {
+        else if (view.getId() == R.id.setting_more) {
             safeStartApk("com.android.settings", "com.android.settings.Settings");
 
-        } else if (view.getId() == settingErweiView.getId()) {
-            safeStartApk("com.luntech.launcher.setting", "com.luntech.launcher.setting.QRActivity");
+        } else if (view.getId() == R.id.setting_qr) {
+            safeStartApk("com.luntech.launcher", "com.luntech.launcher.setting.QRActivity");
         }
     }
 
@@ -64,6 +64,7 @@ public class SettingActivity extends Activity implements OnClickListener {
             pickIntent.setClassName(pkName, className);
             startActivity(pickIntent);
         } catch (Exception e) {
+            e.printStackTrace();
             // TODO: handle exception
         }
     }

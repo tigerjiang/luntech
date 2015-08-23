@@ -4,10 +4,13 @@ package com.luntech.launcher;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.app.DownloadManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -15,6 +18,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +29,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -47,6 +52,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -63,7 +69,7 @@ public class Launcher extends Activity {
     // private List<CategoryItem> mAppList = new ArrayList<CategoryItem>();
     private Module mSelectedApp;
     private ModuleAdapter mModuleAdapter;
-    private Context mContext;
+    private static Context mContext;
     private ChangeReceiver mChangeReceiver;
     private Configuration mConfig = new Configuration();
     private AppManager mAppManager;
@@ -91,10 +97,10 @@ public class Launcher extends Activity {
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
     public static int sVersionCode;
-    private static final long REQUEST_DELAY_TIME = 2*60 * 1000;
+    private static final long REQUEST_DELAY_TIME = 10 * 1000;
     private static final long SHOW_DELAY_TIME = 10 * 1000;
     private static final long DISMISS_DELAY_TIME = 3 * 1000;
-    private static  long showScreenSaverTime = 5 * 60 * 100;
+    public static long showScreenSaverTime = 5 * 60 * 1000;
 
     public static final String CAPTURE_TIME = "capture_time";
     public static final String CATEGORY_FILE = "network_config.xml";
@@ -109,7 +115,7 @@ public class Launcher extends Activity {
     public static final String RESOURCE_DIR = "resource_dir_key";
     public static String DOWNLOAD_TO_PATH;
     private TvStatusBar mStatusBar;
-
+    DownloadManager mDownloadManager;
     AsyncImageLoader mAsyncImageLoader;
     private Handler mHandler;
     private HandlerThread mThread;
@@ -126,16 +132,17 @@ public class Launcher extends Activity {
     Module mThirdApp;
 
     private RelativeLayout mRootView;
-    public static  ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
+    public static ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mResources = getResources();
-        mContext = getApplicationContext();
+        mContext = Launcher.this;
         sPackageName = this.getPackageName();
         mdao = new DBDao(mContext);
+        mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DOWNLOAD_TO_PATH = this.getFilesDir().getAbsolutePath();
         try {
             sPackageInfo = this.getPackageManager().getPackageInfo(sPackageName, 0);
@@ -148,6 +155,7 @@ public class Launcher extends Activity {
         AppManager.create(this);
         initHandler();
         initPrecondition();
+        initScreenSaverTime();
         parseScreenSaverCover();
         parseModulesFromDB();
         initView();
@@ -167,7 +175,22 @@ public class Launcher extends Activity {
         mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
     }
 
+    private void initScreenSaverTime() {
+        String time = ToolUtils.getValueFromSP(mContext, "saver_time");
+        String[] arrayTime = getResources().getStringArray(R.array.screensaver_array);
+        if (!TextUtils.isEmpty(time)) {
+            for (int i = 0; i < arrayTime.length; i++) {
+                if (time.equals(arrayTime[i])) {
+                    showScreenSaverTime = (i + 1) * 5 * 60 * 1000;
+                }
+            }
+        } else {
+            ToolUtils.storeValueIntoSP(mContext, "saver_time", arrayTime[0]);
+        }
+    }
+
     private void initPrecondition() {
+
         if (!HttpUtils.checkConnectivity(mContext)) {
             return;
         }
@@ -242,7 +265,7 @@ public class Launcher extends Activity {
         }
         notifyAllModuleList();
         refreshLocakedThumbnail();
-        mModuleAdapter = new ModuleAdapter(mModules,mContext);
+        mModuleAdapter = new ModuleAdapter(mModules, mContext);
         mGridView.setAdapter(mModuleAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -279,34 +302,42 @@ public class Launcher extends Activity {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {
-            if (TextUtils.isEmpty(app.appUrl)) {
-                Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-            builder.setMessage(R.string.app_background_download);
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            try {
+                mAppManager.getAllApplications();
+                ApplicationInfo descApp = mAppManager.getInfoFromAllActivitys(app.getAppPackage());
+                descApp.startApplication(mContext);
+            } catch (Exception e1) {
+                e.printStackTrace();
 
-                @Override
-                public void onClick(DialogInterface arg0, int arg1) {
-                    if (!TextUtils.isEmpty(app.downloadStatus)) {
-                        if (!app.downloadStatus.equals(App.DOWNLOAD_STATUS_COMPLETED)) {
+                if (TextUtils.isEmpty(app.appUrl)) {
+                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage(R.string.app_background_download);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (!TextUtils.isEmpty(app.downloadStatus)) {
+                            if (!app.downloadStatus.equals(App.DOWNLOAD_STATUS_DOWNLOADING)) {
+                                app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
+                                downloadApk(mContext, app);
+                            } else {
+                                Toast.makeText(mContext, R.string.app_is_downloading,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
                             app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
                             downloadApk(mContext, app);
-                        } else {
-                            Toast.makeText(mContext, R.string.app_is_downloading,
-                                    Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
-                        downloadApk(mContext, app);
+                        arg0.dismiss();
                     }
-                    arg0.dismiss();
-                }
-            });
-            builder.setNegativeButton(R.string.cancel, null);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            Log.d(TAG, e.toString());
+                });
+                builder.setNegativeButton(R.string.cancel, null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Log.d(TAG, e.toString());
+            }
         }
     }
 
@@ -468,13 +499,13 @@ public class Launcher extends Activity {
         });
     }
 
-    private void parseScreenSaverCover(){
+    private void parseScreenSaverCover() {
         String screenSaverConfig = DOWNLOAD_TO_PATH + "/" + SCREENSAVER_CONFIGURE_FILE;
         File configFile = new File(screenSaverConfig);
         if (configFile.exists()) {
             String resourcesPath = DOWNLOAD_TO_PATH + "/" + FILE_SCREENSAVER;
             File resourcesFile = new File(resourcesPath);
-            if (resourcesFile.exists()&&resourcesFile.isDirectory()) {
+            if (resourcesFile.exists() && resourcesFile.isDirectory()) {
                 for (File file : resourcesFile.listFiles()) {
                     sScreenSaverFileList.add(file.getAbsolutePath());
                 }
@@ -488,8 +519,28 @@ public class Launcher extends Activity {
 
     private void parseModulesFromDB() {
         mModules = mdao.fetchModules();
-        Log.d(TAG, mModules.toString());
+        if (mModules != null && mModules.size() > 0) {
 
+        } else {
+            String networkConfig = DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE;
+            File configFile = new File(networkConfig);
+            if (configFile.exists()) {
+                String resourcesPath = DOWNLOAD_TO_PATH + "/" + FILE_PREFIX;
+                File resourcesFile = new File(resourcesPath);
+                if (resourcesFile.exists()) {
+                    mModules = mdao.fetchModules();
+                    if (mModules == null || mModules.size() < 1) {
+                        Log.d(TAG, "Can't parse the network config ");
+                        mModules = ToolUtils.getModulsFromConfig(mContext, R.xml.config);
+                    }
+                } else {
+                    mModules = ToolUtils.getModulsFromConfig(mContext, R.xml.config);
+                }
+            } else {
+                mModules = ToolUtils.getModulsFromConfig(mContext, R.xml.config);
+            }
+            Collections.sort(mModules, PARSED_APPS_COMPARATOR);
+        }
     }
 
 
@@ -661,11 +712,11 @@ public class Launcher extends Activity {
                 ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
                 setResult(app, true);
                 Log.d("replace", "launcher " + app.toString());
-            break;
+                break;
             case RESULT_CANCELED:
-            break;
+                break;
             default:
-            break;
+                break;
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -733,7 +784,7 @@ public class Launcher extends Activity {
                                     new ByteArrayInputStream(result.getBytes()));
                         }
                     }).start();
-                break;
+                    break;
                 case RETURN_SCREENSAVER_CONFIG_CODE:
                     // ToolUtils.getCustomConfigureFromConfig(mContext,
                     // new ByteArrayInputStream(result.getBytes()));
@@ -745,43 +796,48 @@ public class Launcher extends Activity {
                                     new ByteArrayInputStream(result.getBytes()));
                         }
                     }).start();
-                break;
+                    break;
                 case RETURN_UNZIP_CONFIG_CODE:
 
-                break;
+                    break;
                 case RETURN_HIDDEN_CONFIG_CODE:
-                break;
+                    break;
                 case RETURN_UPDATE_CONFIG_CODE:
-                    final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
-                            new ByteArrayInputStream(result.getBytes()));
-                    if (ota.currentVersion.equals(sVersionCode)) {
-                        if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
-                            Log.d(TAG, "find new version for update " + ota.newVersion);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                            builder.setTitle(R.string.update);
-                            builder.setMessage(ota.remark);
-                            builder.setPositiveButton(R.string.ok,
-                                    new DialogInterface.OnClickListener() {
+                    try {
+                        final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
+                                new ByteArrayInputStream(result.getBytes()));
+                        if (ota.currentVersion.equals(String.valueOf(sVersionCode))) {
+                            if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
+                                Log.d(TAG, "find new version for update " + ota.newVersion);
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setTitle(R.string.update);
+                                builder.setMessage(ota.remark);
+                                builder.setPositiveButton(R.string.ok,
+                                        new DialogInterface.OnClickListener() {
 
-                                        @Override
-                                        public void onClick(DialogInterface arg0, int arg1) {
-                                            ToolUtils.doUpdate(mContext,ota);
-                                            arg0.dismiss();
-                                        }
-                                    });
-                            builder.setNegativeButton(R.string.cancel, null);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                                            @Override
+                                            public void onClick(DialogInterface arg0, int arg1) {
+                                                downloadOta(mContext, ota);
+                                                arg0.dismiss();
+                                            }
+                                        });
+                                builder.setNegativeButton(R.string.cancel, null);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
 
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                break;
+
+                    break;
                 case RETURN_SYSTEM_CONFIG_CODE:
                     String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
                             new ByteArrayInputStream(result.getBytes()));
                     // Log.d(TAG, "ad " + adContent);
                     mAdvertisementView.setText(adContent);
-                break;
+                    break;
                 case SHOW_FEATURE_VIEW:
                     mIsShowAlert = true;
                     // Log.d("show", "SHOW_FEATURE_VIEW");
@@ -789,20 +845,21 @@ public class Launcher extends Activity {
                     mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
                             DISMISS_DELAY_TIME);
-                break;
+                    break;
                 case DISMISS_FEATURE_VIEW:
                     Log.d("show", "DISMISS_FEATURE_VIEW");
                     mFeatureMenuLayout.setVisibility(View.GONE);
-                break;
+                    break;
                 case NO_OPERATION:
                     Log.d("show", "NO_OPERATION");
                     mFeatureMenuLayout.setVisibility(View.GONE);
                     mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
-                break;
+                    break;
                 case SHOW_SCREEN_SAVER:
-                    Intent intent = new Intent(mContext,ScreenSaverActivity.class);
+                    Log.d("show", "SHOW_SCREEN_SAVER");
+                    Intent intent = new Intent(mContext, ScreenSaverActivity.class);
                     startActivity(intent);
                     break;
             }
@@ -886,6 +943,11 @@ public class Launcher extends Activity {
                                                 // block
                                                 e.printStackTrace();
                                             }
+                                            File descDir = new File(DOWNLOAD_TO_PATH + "/"
+                                                    + FILE_SCREENSAVER);
+                                            if (!descDir.exists()) {
+                                                descDir.mkdir();
+                                            }
                                             ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
                                                     + FILE_SCREENSAVER);
                                         } catch (ZipException e) {
@@ -898,8 +960,7 @@ public class Launcher extends Activity {
                                 });
                             }
                         };
-                        DownloadTask downloadTask = new DownloadTask(DOWNLOAD_TO_PATH + "/"
-                                + FILE_SCREENSAVER, downloadUrl, listener);
+                        DownloadTask downloadTask = new DownloadTask(DOWNLOAD_TO_PATH, downloadUrl, listener);
                         new Thread(downloadTask).start();
                         return;
                     }
@@ -932,16 +993,23 @@ public class Launcher extends Activity {
                                 CustomApplication.TIME_TAG);
                         if (!TextUtils.isEmpty(storeTime)) {
                             if (time.equals(storeTime)) {
-                                Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
+                                Log.d(TAG, "Desn't need get config from server,Beacuse of the time is same as local "
                                         + storeTime);
                                 return;
                             } else {
                                 ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
                                         time);
-                                ToolUtils.parseCustomConfigureFromInputStream(context,is);
+                                File config = new File(DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE);
+                                if (config.exists()) {
+                                    ToolUtils.parseCustomConfigureFromInputStream(context, new FileInputStream(config));
+                                }
                             }
                         } else {
                             ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
+                            File config = new File(DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE);
+                            if (config.exists()) {
+                                ToolUtils.parseCustomConfigureFromInputStream(context, new FileInputStream(config));
+                            }
                         }
                     } else if (name.equals(CustomApplication.URL_TAG)) {
                         String downloadUrl = parser.nextText().trim();
@@ -958,7 +1026,7 @@ public class Launcher extends Activity {
                             public void onCompleted(final File file) {
 
                                 // Complete download the zip file
-                                Log.d(TAG, "download file for " + file.getAbsolutePath());
+                                Log.d(TAG, "download complete file for " + file.getAbsolutePath());
                                 final long time = System.currentTimeMillis();
                                 mHandler.post(new Runnable() {
 
@@ -972,6 +1040,11 @@ public class Launcher extends Activity {
                                                 // block
                                                 e.printStackTrace();
                                             }
+                                            File descDir = new File(DOWNLOAD_TO_PATH + "/"
+                                                    + FILE_PREFIX);
+                                            if (!descDir.exists()) {
+                                                descDir.mkdir();
+                                            }
                                             ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
                                                     + FILE_PREFIX);
                                         } catch (ZipException e) {
@@ -984,7 +1057,8 @@ public class Launcher extends Activity {
                                 });
                             }
                         };
-                        mDownloadTask = new DownloadTask(DOWNLOAD_TO_PATH + "/" + FILE_PREFIX,
+
+                        mDownloadTask = new DownloadTask(DOWNLOAD_TO_PATH,
                                 downloadUrl, listener);
                         new Thread(mDownloadTask).start();
                         return;
@@ -1039,12 +1113,12 @@ public class Launcher extends Activity {
 
     // ///////////////// Private API Helpers //////////////////////////
 
-    private final Comparator<CustomApplication> PARSED_APPS_COMPARATOR = new Comparator<CustomApplication>() {
+    private final Comparator<Module> PARSED_APPS_COMPARATOR = new Comparator<Module>() {
 
         @Override
-        public int compare(CustomApplication lhs, CustomApplication rhs) {
-            String l_flags = lhs.mGroup.getGroupCode();
-            String r_flags = rhs.mGroup.getGroupCode();
+        public int compare(Module lhs, Module rhs) {
+            String l_flags = lhs.getModuleCode();
+            String r_flags = rhs.getModuleCode();
             boolean flag = false;
             flag = Integer.parseInt(l_flags.replaceAll("\\D+", "")) < Integer.parseInt(r_flags
                     .replaceAll("\\D+", ""));
@@ -1058,31 +1132,77 @@ public class Launcher extends Activity {
         Log.d(TAG, "do nothing");
     }
 
-    private void downloadApk(final Context context, final App app) {
-        mdao.updateDownload(app);
-        IDownloadListener listener = new IDownloadListener() {
-
-            @Override
-            public void onError(String errorCode) {
-
-            }
-
-            @Override
-            public void onCompleted(final File file) {
-                app.downloadStatus = App.DOWNLOAD_STATUS_COMPLETED;
-                ToolUtils.install(context, file.getAbsolutePath());
-                mdao.updateDownload(app);
-            }
-        };
-        DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, app.appUrl, listener);
-        new Thread(task).start();
-    }
-
-
 
     private void restartSendShowScreenSaver() {
         Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
         mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
         mHandler.sendMessageDelayed(msg, showScreenSaverTime);
+    }
+
+
+    private void downloadApk(final Context context, final App app) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(app.appUrl));
+        request.setDestinationInExternalPublicDir("download", getUrlFileName(app.appUrl));
+        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
+        request.setTitle("程序更新");//设置下载中通知栏提示的标题
+        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        @SuppressWarnings("unused")
+        long downloadId = mDownloadManager.enqueue(request);
+        mdao.updateDownload(app);
+    }
+
+    private void downloadOta(final Context context, final OtaInfo ota) {
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(ota.getUrl()));
+        request.setDestinationInExternalPublicDir("download", getUrlFileName(ota.getUrl()));
+        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
+        request.setTitle("程序更新");//设置下载中通知栏提示的标题
+        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        @SuppressWarnings("unused")
+        long downloadId = mDownloadManager.enqueue(request);
+        ToolUtils.storeValueIntoSP(mContext, "ota_id", String.valueOf(downloadId));
+    }
+
+    private String getUrlFileName(String url) {
+        return url.substring(url.lastIndexOf("/"));
+    }
+
+
+    private BroadcastReceiver mCompleteReceiver = new BroadcastReceiver() {
+        //public static HashMap<long, String> downloadSavePath = new HashMap<long, String>();
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // get complete download id
+            String action = intent.getAction();
+            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                Log.d(TAG, "download complete apk ");
+                long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                if (ToolUtils.getValueFromSP(mContext, "ota_id").equals(String.valueOf(completeDownloadId))) {
+                    Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
+                    ToolUtils.install(mContext, installUri);
+                } else {
+                    Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
+                    ToolUtils.install(mContext, installUri);
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(mCompleteReceiver);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerReceiver(mCompleteReceiver, new IntentFilter(
+
+                DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 }

@@ -3,7 +3,7 @@
     android:id="@+id/main_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg" >
+    android:background="@drawable/bg">
 
     <TextView
         android:id="@+id/textview_title"
@@ -13,6 +13,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="@string/about_set"
+        android:textColor="#ffffffff"
         android:textSize="@dimen/custom_title_size" />
 
     <ImageView
@@ -28,11 +29,11 @@
         android:layout_width="wrap_content"
         android:layout_height="800dp"
         android:layout_below="@+id/divider"
-        android:layout_marginTop="30dp"
         android:layout_marginLeft="150dp"
         android:layout_marginRight="150dp"
-        android:text="@string/about_us"
+        android:layout_marginTop="30dp"
         android:gravity="left"
+        android:text="@string/about_us"
         android:textColor="#ffffffff"
         android:textSize="30sp" />
 

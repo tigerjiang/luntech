@@ -165,4 +165,7 @@
     <dimen name="custom_content_title_size">38px</dimen>
     <dimen name="custom_content_bottom_size">25px</dimen>
     <dimen name="custom_list_item_height">65px</dimen>
+    <dimen name="setting_item_height">246px</dimen>
+    <dimen name="setting_item_width">256px</dimen>
+
 </resources>

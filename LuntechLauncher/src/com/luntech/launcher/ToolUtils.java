@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.luntech.launcher.db.AppItem;
 import com.luntech.launcher.db.DBDao;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -27,9 +26,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.ContentHandler;
 import java.util.ArrayList;
-import java.util.zip.ZipException;
 
 public class ToolUtils {
     private static ToolUtils sInstance = new ToolUtils();
@@ -49,7 +46,9 @@ public class ToolUtils {
     private static final String CUSTOM_INFO = "custom_info";
     private static final String NETWORK_INFO = "network_info";
 
-    private static DBDao mDBdao;
+    private static DBDao sDBdao;
+
+
 
     private ToolUtils() {
 
@@ -257,10 +256,107 @@ public class ToolUtils {
     }
 
 
+    public static ArrayList<Module> getModulsFromConfig(Context context, int fileId) {
+        sDBdao = new DBDao(context);
+        Resources r = context.getResources();
+        XmlResourceParser parser = r.getXml(fileId);
+        Group group = null;
+        ArrayList<Module> modlues = new ArrayList<Module>();
+        Module module = null;
+        ArrayList<App> apps = new ArrayList<App>();
+        App app = null;
+        try {
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(CustomApplication.TIME_TAG)) {
+
+                    } else if (name.equals(CustomApplication.URL_TAG)) {
+
+                    }
+                    // group info
+                    else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        group = new Group();
+                        group.setGroupCode(parser.getAttributeValue(0).trim());
+                        group.setGroupMoveable(Integer.parseInt(parser
+                                .getAttributeValue(1).trim()));
+                        group.setGroupFlag(Integer.parseInt(parser
+                                .getAttributeValue(2).trim()));
+                    } else if (name.equals(CustomApplication.Group.GROUP_TEXT_TAG)) {
+                        group.setGroupText(parser.nextText().trim());
+                    } else if (name.equals(CustomApplication.Group.GROUP_BG_TAG)) {
+                        group.setGroupBg(parser.nextText().trim());
+                    } else if (name.equals(CustomApplication.Group.GROUP_ICON_TAG)) {
+                        group.setGroupIcon(parser.nextText().trim());
+                    }
+                    // Module info
+
+                    else if (name.equals(Module.MODULE_TAG)) {
+                        module = new Module(context);
+                        module.setModuleCode(parser.getAttributeValue(0).trim());
+                        module.setModuleReplace(Integer
+                                .parseInt(parser.getAttributeValue(1).trim()));
+                        module.setModuleType(Integer.parseInt(parser.getAttributeValue(2).trim()));
+                    } else if (name.equals(Module.MODULE_TEXT_TAG)) {
+                        module.setModuleText(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_BG_TAG)) {
+                        module.setModuleBg(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_ICON_TAG)) {
+                        module.setModuleIcon(parser.nextText().trim());
+                    } else if (name.equals(Module.MODULE_SHADOW_TAG)) {
+                        module.setModuleShadow(parser.nextText().trim());
+                        // apps
+                    } else if (name.equals(App.APPS_TAG)) {
+                        apps = new ArrayList<App>();
+                    } else if (name.equals(App.APP_TAG)) {
+                        app = new App();
+                    } else if (name.equals(App.APP_NAME_TAG)) {
+                        app.setAppName(parser.nextText().trim());
+                    } else if (name.equals(App.APP_PACKAGE_TAG)) {
+                        app.setAppPackage(parser.nextText().trim());
+                    } else if (name.equals(App.APP_ACTIVITY_TAG)) {
+                        app.setAppActivity(parser.nextText().trim());
+                    } else if (name.equals(App.APP_ICON_TAG)) {
+                        app.setAppIcon(parser.nextText().trim());
+                    } else if (name.equals(App.APP_URL_TAG)) {
+                        app.setAppUrl(parser.nextText().trim());
+                    }
+
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals(App.APP_TAG)) {
+                        // Log.d(TAG, "end app " + app.toString());
+                        //group
+                        app.setModuleCode(module.moduleCode);
+                        module.addApp(app);
+                        sDBdao.insertApp(app);
+                    } else if (name.equals(App.APPS_TAG)) {
+                        Log.d(TAG, "end apps " + app.toString());
+                    } else if (name.equals(Module.MODULE_TAG)) {
+                        module.setGroupCode(group.groupCode);
+                        modlues.add(module);
+                        sDBdao.insertModule(module);
+                    } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        sDBdao.insertGroup(group);
+                    }
+                }
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+        return modlues;
+    }
 
     public static void parseCustomConfigureFromInputStream(Context context,
                                                            InputStream is) {
-        mDBdao = new DBDao(context);
+        sDBdao = new DBDao(context);
+        sDBdao.delete();
         Group group = null;
         Module module = null;
         ArrayList<App> apps = new ArrayList<App>();
@@ -333,14 +429,14 @@ public class ToolUtils {
                         // Log.d(TAG, "end app " + app.toString());
                         //group
                         app.setModuleCode(module.moduleCode);
-                        mDBdao.insertApp(app);
+                        sDBdao.insertApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
                          Log.d(TAG, "end apps " + app.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         module.setGroupCode(group.groupCode);
-                        mDBdao.insertModule(module);
+                        sDBdao.insertModule(module);
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
-                        mDBdao.insertGroup(group);
+                        sDBdao.insertGroup(group);
                     }
                 }
                 parser.next();
@@ -480,7 +576,7 @@ public class ToolUtils {
 
     public static String getValueFromSP(Context context, String key) {
         SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
-        return sp.getString(key, null);
+        return sp.getString(key, "");
     }
 
     public static void writeFile(InputStream is, String localFile) {
@@ -554,6 +650,7 @@ public class ToolUtils {
      * @return whether apk exist
      */
     public static boolean install(Context context, String filePath) {
+        Log.d(TAG, "install apk for "+ filePath);
         Intent i = new Intent(Intent.ACTION_VIEW);
         File file = new File(filePath);
         if (file != null && file.length() > 0 && file.exists() && file.isFile()) {
@@ -566,6 +663,25 @@ public class ToolUtils {
         return false;
     }
 
+    /**
+     * install app
+     *
+     * @param context
+     * @param filePath
+     * @return whether apk exist
+     */
+    public static boolean install(Context context, Uri installUri) {
+        Log.d(TAG, "install apk for "+ installUri.toString());
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        if (installUri != null ) {
+            i.setDataAndType(installUri,
+                    "application/vnd.android.package-archive");
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            return true;
+        }
+        return false;
+    }
 
     public static OtaInfo parseUpdateInfo(Context context, InputStream is) {
         OtaInfo ota = null;

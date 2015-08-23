@@ -16,7 +16,7 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.List;
 
-import android.net.ethernet.EthernetManager;
+//import android.net.ethernet.EthernetManager;
 
 /**
  * Network routines.
@@ -36,7 +36,7 @@ public class NetworkHelper {
 
     private ConnectivityManager mConnectivityManager;
     private WifiManager mWifiManager;
-    private EthernetManager mEthernetManager;
+//    private EthernetManager mEthernetManager;
 
     public NetworkHelper(Context context) {
         mConnectivityManager = (ConnectivityManager) context.
@@ -47,7 +47,7 @@ public class NetworkHelper {
                 .getSystemService(
                 Context.WIFI_SERVICE);
 
-        mEthernetManager = EthernetManager.getInstance();
+//        mEthernetManager = EthernetManager.getInstance();
     }
 
     /**
@@ -96,7 +96,7 @@ public class NetworkHelper {
             }
             mWifiManager.disconnect();
             mWifiManager.setWifiEnabled(false);
-            mEthernetManager.setEnabled(true);
+//            mEthernetManager.setEnabled(true);
         }
 
         mConnectivityManager.setNetworkPreference(ConnectivityManager.TYPE_ETHERNET);
@@ -108,7 +108,7 @@ public class NetworkHelper {
 
     public void disconnectEthernet() {
         mConnectivityManager.setNetworkPreference(ConnectivityManager.TYPE_WIFI);
-        mEthernetManager.setEnabled(false);
+//        mEthernetManager.setEnabled(false);
         mWifiManager.setWifiEnabled(true);
     }
 
