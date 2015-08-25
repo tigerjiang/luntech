@@ -1,0 +1,52 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/app_unfold"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:focusable="false"
+    android:orientation="horizontal"
+    android:visibility="gone">
+
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2px"
+        android:layout_marginTop="31px"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/app_recom1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2px"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" />
+
+        <ImageView
+            android:id="@+id/app_recom2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="2px"
+            android:layout_marginTop="5px"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event"
+            android:scaleType="matrix" />
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/app_recom3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4px"
+        android:layout_marginTop="31px"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="onClick_Event"
+        android:scaleType="matrix" />
+
+</LinearLayout>

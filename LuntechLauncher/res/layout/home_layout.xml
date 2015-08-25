@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <include
+        layout="@layout/status_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <include
+        layout="@layout/mainmenu_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/mainmenu_focusbk_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="73px"
+        android:paddingTop="164px"
+
+        >
+
+        <ImageView
+            android:id="@+id/mainmenu_focusbk"
+            android:layout_width="704px"
+            android:layout_height="435px"
+            android:background="@drawable/menu_focus"
+            android:focusable="false" />
+
+    </FrameLayout>
+
+</FrameLayout>

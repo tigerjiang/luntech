@@ -29,7 +29,6 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -60,7 +59,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.zip.ZipException;
 
-public class Launcher extends Activity {
+public class IPTVLauncher extends Launcher {
 
     private static final String TAG = "Launcher";
     private static final boolean DEBUG = true;
@@ -135,7 +134,7 @@ public class Launcher extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         mResources = getResources();
-        mContext = Launcher.this;
+        mContext = IPTVLauncher.this;
         sPackageName = this.getPackageName();
         mdao = new DBDao(mContext);
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -609,7 +608,7 @@ public class Launcher extends Activity {
                     Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (mSelectedApp.moduleReplace == 1) {
-                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
+                    final DialogFragment newFragment = AppDialogFragment.newInstance(IPTVLauncher.this);
                     newFragment.show(getFragmentManager(), "dialog");
                     return true;
                 }

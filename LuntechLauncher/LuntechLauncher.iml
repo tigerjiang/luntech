@@ -85,5 +85,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-support-v4" level="project" />
     <orderEntry type="library" exported="" name="jsoup-1.7.1" level="project" />
+    <orderEntry type="library" exported="" name="prepare" level="project" />
   </component>
 </module>
