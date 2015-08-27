@@ -26,10 +26,10 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -67,31 +67,10 @@ public class Launcher extends Activity {
     private GridView mGridView;
     private Resources mResources;
     private Module mSelectedApp;
-    private ModuleAdapter mModuleAdapter;
     private static Context mContext;
     private ChangeReceiver mChangeReceiver;
     private Configuration mConfig = new Configuration();
     private AppManager mAppManager;
-    private RelativeLayout mThumb_1_layout;
-
-    private TextView mFeatureView;
-    private LinearLayout mFeatureMenuLayout;
-    private ImageView mThumb_1_view;
-    private ImageView mThumb_1_shadow;
-    private TextView mThumb_1_label;
-
-    private RelativeLayout mThumb_2_layout;
-    private ImageView mThumb_2_view;
-    private ImageView mThumb_2_shadow;
-    private TextView mThumb_2_label;
-
-    private TextView mAdvertisementView;
-
-    private RelativeLayout mThumb_3_layout;
-    private ImageView mThumb_3_view;
-    private ImageView mThumb_3_shadow;
-    private TextView mThumb_3_label;
-    private ToolUtils mToolUtils;
 
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
@@ -101,33 +80,50 @@ public class Launcher extends Activity {
     private static final long DISMISS_DELAY_TIME = 3 * 1000;
     public static long showScreenSaverTime = 5 * 60 * 1000;
 
-    public static final String CATEGORY_FILE = "network_config.xml";
+    public static final String IPTV_CATEGORY_FILE = "iptv_network_config.xml";
+    public static final String IPTV_UPDATE_CONFIGURE_FILE = "iptv_update_config.xml";
+    public static final String IPTV_FILE_PREFIX = "launcher_iptv";
+    public static final String IPTV_TYPE = "iptv";
+
+    public static final String Q1S_TYPE = "q1s";
+    public static final String Q1S_CATEGORY_FILE = "q1s_network_config.xml";
+    public static final String Q1S_UPDATE_CONFIGURE_FILE = "q1s_update_config.xml";
+    public static final String Q1S_FILE_PREFIX = "launcher_q1s";
+
+
     public static final String AD_CONFIGURE_FILE = "ad_config.xml";
-    public static final String UPDATE_CONFIGURE_FILE = "update_config.xml";
     public static final String SCREENSAVER_CONFIGURE_FILE = "screensaver_config.xml";
-    public static String FILE_PREFIX = "launcher";
+
+    public static final String CAPTURE_CATEGORY_config_ACTION = "com.luntech.action.GET_APP";
+    public static final String CAPTURE_UPDATE_CONFIGURE_ACTION = "com.luntech.action.GET_UPDATE";
+    public static final String CAPTURE_AD_CONFIGURE_ACTION = "com.luntech.action.GET_AD";
+    public static final String CAPTURE_SCREENSAVER_CONFIGURE_ACTION = "com.luntech.action.GEAT_SAVER";
+
+    protected static String mCategoryFile;
+    protected static String mUpdateConfigureFile;
+    protected static String mFilePrefix;
+    protected static String mType;
     public static String FILE_SCREENSAVER = "screensaver";
     public static final String ADVERTISEMENT_KEY = "advertisement_key";
     public static final String FULL_BG_KEY = "full_bg_key";
     public static String DOWNLOAD_TO_PATH;
-    private TvStatusBar mStatusBar;
-    DownloadManager mDownloadManager;
+    protected TvStatusBar mStatusBar;
+    protected LinearLayout mFeatureMenuLayout;
+    protected TextView mAdvertisementView;
+    protected TextView mFeatureView;
+    protected DownloadManager mDownloadManager;
     AsyncImageLoader mAsyncImageLoader;
-    private Handler mHandler;
+    protected Handler mHandler;
     private HandlerThread mThread;
     private DownloadTask mDownloadTask;
 
     private boolean mIsShowAlert = false;
     private int mGridPosition = 0;
 
+    private ToolUtils mToolUtils;
     public ArrayList<Module> mModules;
     private DBDao mdao;
 
-    Module mFirstApp;
-    Module mSecondApp;
-    Module mThirdApp;
-
-    private RelativeLayout mRootView;
     public static ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
 
     @Override
@@ -154,7 +150,7 @@ public class Launcher extends Activity {
         initScreenSaverTime();
         parseScreenSaverCover();
         parseModulesFromDB();
-        initView();
+        notifyAllModuleList();
 
     }
 
@@ -191,7 +187,7 @@ public class Launcher extends Activity {
                 String app_url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
                 Logger.e("request url " + app_url);
                 // capture the category config
-                new FetchTask(app_url, DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE,
+                new FetchTask(app_url, DOWNLOAD_TO_PATH + "/" + mCategoryFile,
                         LauncherHandler.RETURN_CATEGORY_CONFIG_CODE).execute();
 
                 String config_url = HttpUtils.HTTP_CONFIG_URL + httpArg;
@@ -203,7 +199,7 @@ public class Launcher extends Activity {
                 String update_url = HttpUtils.HTTP_UPDATE_APP_URL + httpArg;
                 Logger.e("request url " + update_url);
                 // capture the category config
-                new FetchTask(update_url, DOWNLOAD_TO_PATH + "/" + UPDATE_CONFIGURE_FILE,
+                new FetchTask(update_url, DOWNLOAD_TO_PATH + "/" + mUpdateConfigureFile,
                         LauncherHandler.RETURN_UPDATE_CONFIG_CODE).execute();
 
                 String screensaver_url = HttpUtils.HTTP_SCREEN_SAVER_URL;
@@ -217,74 +213,7 @@ public class Launcher extends Activity {
 
     }
 
-    private void initView() {
-        mRootView = (RelativeLayout) findViewById(R.id.rootview_layout);
-        mStatusBar = (TvStatusBar) findViewById(R.id.status_layout);
-        mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_layout);
-        mFeatureView = (TextView) findViewById(R.id.feature_menu);
-        mFeatureMenuLayout = (LinearLayout) findViewById(R.id.feature_layout);
-        mThumb_1_view = (ImageView) findViewById(R.id.thumb_1_view);
-        mThumb_1_shadow = (ImageView) findViewById(R.id.thumb_1_cover_view);
-        mThumb_1_label = (TextView) findViewById(R.id.thumb_1_label);
-        mThumb_2_layout = (RelativeLayout) findViewById(R.id.thumb_2_layout);
-        mThumb_2_view = (ImageView) findViewById(R.id.thumb_2_view);
-        mThumb_2_shadow = (ImageView) findViewById(R.id.thumb_2_cover_view);
-        mThumb_2_label = (TextView) findViewById(R.id.thumb_2_label);
-        mThumb_3_layout = (RelativeLayout) findViewById(R.id.thumb_3_layout);
-        mThumb_3_view = (ImageView) findViewById(R.id.thumb_3_view);
-        mThumb_3_shadow = (ImageView) findViewById(R.id.thumb_3_cover_view);
-        mThumb_3_label = (TextView) findViewById(R.id.thumb_3_label);
-
-        mAdvertisementView = (TextView) findViewById(R.id.ad_content_1);
-        mAppManager = AppManager.getInstance();
-        mAppManager.getSelectedApplications();
-        mGridView = (GridView) findViewById(R.id.category_layout);
-        String adContent = ToolUtils.getValueFromSP(mContext, ADVERTISEMENT_KEY);
-        if (!TextUtils.isEmpty(adContent)) {
-            mAdvertisementView.setText(adContent);
-        }
-
-        String bgPath = ToolUtils.getValueFromSP(mContext, FULL_BG_KEY);
-        if (!TextUtils.isEmpty(bgPath)) {
-            try {
-                mRootView.setBackground(Drawable.createFromPath(bgPath));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        notifyAllModuleList();
-        refreshLocakedThumbnail();
-        mModuleAdapter = new ModuleAdapter(mModules, mContext);
-        mGridView.setAdapter(mModuleAdapter);
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                App app = ((Module) parent.getItemAtPosition(position)).mApps.get(0);
-                Logger.d(" clicke app for " + app.toString());
-                ComponentName componentName = app.getComponentName();
-                safeStartApk(app);
-                mGridPosition = position;
-            }
-        });
-        mGridView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Logger.d("select position " + position);
-                mSelectedApp = (Module) parent.getItemAtPosition(position);
-                mGridPosition = position;
-                refreshFeatureMenuView();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    void safeStartApk(final App app) {
+    protected void safeStartApk(final App app) {
         try {
             Intent intent = new Intent();
             intent.setComponent(app.getComponentName());
@@ -330,164 +259,6 @@ public class Launcher extends Activity {
         }
     }
 
-
-    private void refreshLocakedThumbnail() {
-        mSelectedApp = mModules.get(0);
-        mFirstApp = mModules.get(0);
-        mSecondApp = mModules.get(1);
-        mThirdApp = mModules.get(2);
-        refreshFeatureMenuView();
-        mAsyncImageLoader = new AsyncImageLoader(mContext);
-        mAsyncImageLoader.loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
-
-            @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
-            }
-        });
-        // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-        // module1.getModuleIcon()));
-        mAsyncImageLoader.loadDrawable(mFirstApp.getModuleShadow(), mThumb_1_shadow, new ImageCallback() {
-
-            @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
-            }
-        });
-        mThumb_1_label.setText(mFirstApp.getModuleText());
-        mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setComponent(new ComponentName("com.xike.xkliveplay",
-                            "com.xike.xkliveplay.activity.launch.ActivityLaunch"));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    // safeStartApk(module2.mApps.get(0).getComponentName());
-                } catch (Exception e) {
-
-                    // Toast.makeText(mContext, "App no found for " +
-                    // componentName,
-                    // Toast.LENGTH_SHORT)
-                    // .show();
-                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, e.toString());
-                }
-
-            }
-        });
-        // mThumb_2_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-        // module2.getModuleIcon()));
-        mAsyncImageLoader.loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
-
-            @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
-            }
-        });
-        mAsyncImageLoader.loadDrawable(mSecondApp.getModuleShadow(), mThumb_2_shadow, new ImageCallback() {
-
-            @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
-            }
-        });
-        mThumb_2_label.setText(mSecondApp.getModuleText());
-        mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setComponent(new ComponentName("com.skzh.elifetv",
-                            "com.skzh.elifetv.ui.GovernInfoActivity"));
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    // safeStartApk(module2.mApps.get(0).getComponentName());
-                } catch (Exception e) {
-                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, e.toString());
-                }
-            }
-        });
-
-        mAsyncImageLoader.loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
-
-            @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
-            }
-        });
-        mAsyncImageLoader.loadDrawable(mThirdApp.getModuleShadow(), mThumb_3_shadow, new ImageCallback() {
-
-            @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
-            }
-        });
-        // mThumb_3_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-        // module3.getModuleIcon()));
-        mThumb_3_label.setText(mThirdApp.getModuleText());
-        mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                try {
-                    Intent intent = new Intent();
-                    intent.setComponent(new ComponentName("com.skzh.elifetv",
-                            "com.skzh.elifetv.MainActivity"));
-                    intent.putExtra("frag_index", "3");
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    // safeStartApk(module3.mApps.get(0).getComponentName());
-
-                } catch (Exception e) {
-
-                    // Toast.makeText(mContext, "App no found for " +
-                    // componentName,
-                    // Toast.LENGTH_SHORT)
-                    // .show();
-                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, e.toString());
-                }
-            }
-        });
-    }
-
     private void parseScreenSaverCover() {
         String screenSaverConfig = DOWNLOAD_TO_PATH + "/" + SCREENSAVER_CONFIGURE_FILE;
         File configFile = new File(screenSaverConfig);
@@ -511,10 +282,10 @@ public class Launcher extends Activity {
         if (mModules != null && mModules.size() > 0) {
 
         } else {
-            String networkConfig = DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE;
+            String networkConfig = DOWNLOAD_TO_PATH + "/" + mCategoryFile;
             File configFile = new File(networkConfig);
             if (configFile.exists()) {
-                String resourcesPath = DOWNLOAD_TO_PATH + "/" + FILE_PREFIX;
+                String resourcesPath = DOWNLOAD_TO_PATH + "/" + mFilePrefix;
                 File resourcesFile = new File(resourcesPath);
                 if (resourcesFile.exists()) {
                     mModules = mdao.fetchModules();
@@ -576,92 +347,6 @@ public class Launcher extends Activity {
         return cityString;
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        int action = event.getAction();
-        mIsShowAlert = false;
-        Log.d("show", "action " + action + "    keycode" + keyCode);
-        if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
-            // Log.d(TAG, "action " + action + "    keycode" + keyCode);
-            // Log.d(TAG, "focus " + "    keycode" + keyCode);
-
-            if (keyCode == KeyEvent.KEYCODE_MENU) {
-                if (mThumb_1_layout.isFocused()) {
-                    Log.d("replace", "mThumb_1_layout.isFocused()");
-                    mSelectedApp = mModules.get(0);
-                } else if (mThumb_2_layout.isFocused()) {
-                    Log.d("replace", "mThumb_2_layout.isFocused()");
-                    mSelectedApp = mModules.get(1);
-                } else if (mThumb_3_layout.isFocused()) {
-                    Log.d("replace", "mThumb_3_layout.isFocused()");
-                    mSelectedApp = mModules.get(2);
-                } else if (mGridView.isFocused()) {
-                    int pos = mGridView.getSelectedItemPosition();
-                    Log.d("replace", "mGridView.isFocused()  " + pos + " --- " + mGridPosition);
-                    mSelectedApp = (Module) mGridView.getAdapter()
-                            .getItem(mGridPosition);
-                }
-                Log.d("replace", " mSelectedApp === " + mSelectedApp.toString());
-                refreshFeatureMenuView();
-                if (mSelectedApp.moduleReplace == 0) {
-                    // can't replace
-                    Log.d(TAG, "cacn't replace the app");
-                    Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
-                    return true;
-                } else if (mSelectedApp.moduleReplace == 1) {
-                    final DialogFragment newFragment = AppDialogFragment.newInstance(Launcher.this);
-                    newFragment.show(getFragmentManager(), "dialog");
-                    return true;
-                }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                if (mThumb_1_layout.isFocused()) {
-                    mThumb_2_layout.requestFocus();
-                    mSelectedApp = mModules.get(1);
-                }
-                refreshFeatureMenuView();
-                return true;
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
-                if (mThumb_1_layout.isFocused()) {
-                    Log.d(TAG, "mThumb_1_layout ");
-                    mGridView.setSelection(0);
-                    mGridView.requestFocus();
-                    mSelectedApp = mModules.get(3);
-                } else if (mThumb_2_layout.isFocused()) {
-                    Log.d(TAG, "mThumb_2_layout ");
-                    mThumb_3_layout.requestFocus();
-                    mSelectedApp = mModules.get(2);
-                } else if (mThumb_3_layout.isFocused()) {
-                    Log.d(TAG, "mThumb_3_layout ");
-                    mGridView.setSelection(0);
-                    mGridView.requestFocus();
-                    mSelectedApp = mModules.get(3);
-                }
-                refreshFeatureMenuView();
-                return true;
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_UP) {
-                if (mGridView.isFocused()) {
-                    mThumb_1_layout.requestFocus();
-                    mSelectedApp = mModules.get(0);
-                } else if (mThumb_3_layout.isFocused()) {
-                    mThumb_2_layout.requestFocus();
-                    mSelectedApp = mModules.get(1);
-                }
-                refreshFeatureMenuView();
-                return true;
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                if (mThumb_2_layout.isFocused()) {
-                    mThumb_1_layout.requestFocus();
-                    mSelectedApp = mModules.get(0);
-                } else if (mThumb_3_layout.isFocused()) {
-                    mThumb_1_layout.requestFocus();
-                    mSelectedApp = mModules.get(0);
-                }
-                refreshFeatureMenuView();
-                return true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
     public void setResult(ApplicationInfo app, boolean isSelected) {
         if (isSelected && app != null && mSelectedApp != null) {
@@ -683,8 +368,6 @@ public class Launcher extends Activity {
             mSelectedApp.mApps.get(0).componentName = app.mComponent;
             Log.d("replace", " mSelectedApp " + mSelectedApp.toString());
             notifyModuleList(mSelectedApp);
-//            refreshLocakedThumbnail();
-            mModuleAdapter.notifyDataSetChanged();
             Log.d("jzh", "setResult  RESULT_OK " + app.toString());
         } else {
             setResult(RESULT_CANCELED, null);
@@ -738,133 +421,19 @@ public class Launcher extends Activity {
         }
     }
 
-    class LauncherHandler extends Handler {
 
-        public static final int RETURN_CATEGORY_CONFIG_CODE = 1;
-        public static final int RETURN_UNZIP_CONFIG_CODE = 2;
-        public static final int RETURN_HIDDEN_CONFIG_CODE = 3;
-        public static final int RETURN_UPDATE_CONFIG_CODE = 4;
-        public static final int RETURN_SYSTEM_CONFIG_CODE = 5;
-        public static final int RETURN_SCREENSAVER_CONFIG_CODE = 6;
-        public static final int SHOW_FEATURE_VIEW = 7;
-        public static final int DISMISS_FEATURE_VIEW = 8;
-        public static final int NO_OPERATION = 9;
-        public static final int SHOW_SCREEN_SAVER = 10;
-
-        public LauncherHandler() {
-            super(Looper.getMainLooper());
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            final String result = (String) msg.obj;
-            if (TextUtils.isEmpty(result)) {
-                Logger.e("result is empty");
-            }
-            switch (msg.what) {
-                case RETURN_CATEGORY_CONFIG_CODE:
-                    // ToolUtils.getCustomConfigureFromConfig(mContext,
-                    // new ByteArrayInputStream(result.getBytes()));
-                    new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            getCustomConfigureFromConfig(mContext,
-                                    new ByteArrayInputStream(result.getBytes()));
-                        }
-                    }).start();
-                    break;
-                case RETURN_SCREENSAVER_CONFIG_CODE:
-                    // ToolUtils.getCustomConfigureFromConfig(mContext,
-                    // new ByteArrayInputStream(result.getBytes()));
-                    new Thread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            getScreenSaverFromConfig(mContext,
-                                    new ByteArrayInputStream(result.getBytes()));
-                        }
-                    }).start();
-                    break;
-                case RETURN_UNZIP_CONFIG_CODE:
-
-                    break;
-                case RETURN_HIDDEN_CONFIG_CODE:
-                    break;
-                case RETURN_UPDATE_CONFIG_CODE:
-                    try {
-                        final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
-                                new ByteArrayInputStream(result.getBytes()));
-                        if (ota.currentVersion.equals(String.valueOf(sVersionCode))) {
-                            if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
-                                Log.d(TAG, "find new version for update " + ota.newVersion);
-                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                                builder.setTitle(R.string.update);
-                                builder.setMessage(ota.remark);
-                                builder.setPositiveButton(R.string.ok,
-                                        new DialogInterface.OnClickListener() {
-
-                                            @Override
-                                            public void onClick(DialogInterface arg0, int arg1) {
-                                                downloadOta(mContext, ota);
-                                                arg0.dismiss();
-                                            }
-                                        });
-                                builder.setNegativeButton(R.string.cancel, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    break;
-                case RETURN_SYSTEM_CONFIG_CODE:
-                    String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
-                            new ByteArrayInputStream(result.getBytes()));
-                    // Log.d(TAG, "ad " + adContent);
-                    mAdvertisementView.setText(adContent);
-                    break;
-                case SHOW_FEATURE_VIEW:
-                    mIsShowAlert = true;
-                    // Log.d("show", "SHOW_FEATURE_VIEW");
-                    mFeatureMenuLayout.setVisibility(View.VISIBLE);
-                    mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
-                    mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
-                            DISMISS_DELAY_TIME);
-                    break;
-                case DISMISS_FEATURE_VIEW:
-                    Log.d("show", "DISMISS_FEATURE_VIEW");
-                    mFeatureMenuLayout.setVisibility(View.GONE);
-                    break;
-                case NO_OPERATION:
-                    Log.d("show", "NO_OPERATION");
-                    mFeatureMenuLayout.setVisibility(View.GONE);
-                    mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
-                    mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
-                            SHOW_DELAY_TIME);
-                    break;
-                case SHOW_SCREEN_SAVER:
-                    Log.d("show", "SHOW_SCREEN_SAVER");
-                    Intent intent = new Intent(mContext, ScreenSaverActivity.class);
-                    startActivity(intent);
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    }
 
     private void refreshFeatureMenuView() {
-        try {
-            if (mSelectedApp.moduleReplace == 0) {
-                mFeatureView.setText(R.string.feature_menu_1);
-            } else if (mSelectedApp.moduleReplace == 1) {
-                mFeatureView.setText(R.string.feature_menu_0);
+        if (mFeatureView != null) {
+            try {
+                if (mSelectedApp.moduleReplace == 0) {
+                    mFeatureView.setText(R.string.feature_menu_1);
+                } else if (mSelectedApp.moduleReplace == 1) {
+                    mFeatureView.setText(R.string.feature_menu_0);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -880,240 +449,7 @@ public class Launcher extends Activity {
     }
 
 
-    private void getScreenSaverFromConfig(Context context, InputStream is) {
-        try {
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(is, "utf-8");
-            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                if (parser.getEventType() == XmlResourceParser.START_TAG) {
-                    String name = parser.getName();
-                    Log.d(TAG, name);
-                    if (name.equals("time")) {
-                        String time = parser.nextText().trim();
-                        String storeTime = ToolUtils.getValueFromSP(context, "screen_saver_time");
-                        if (!TextUtils.isEmpty(storeTime)) {
-                            if (time.equals(storeTime)) {
-                                Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
-                                        + storeTime);
-                                return;
-                            } else {
-                                ToolUtils.storeValueIntoSP(context, "screen_saver_time", time);
-                            }
-                        } else {
-                            ToolUtils.storeValueIntoSP(context, "screen_saver_time", time);
-                        }
-                    } else if (name.equals("url")) {
-                        String downloadUrl = parser.nextText().trim();
-                        ToolUtils.storeValueIntoSP(context, "screen_saver_url", downloadUrl);
-                        // Download the new zip resources
-                        IDownloadListener listener = new IDownloadListener() {
 
-                            @Override
-                            public void onError(String errorCode) {
-
-                            }
-
-                            @Override
-                            public void onCompleted(final File file) {
-
-                                // Complete download the zip file
-                                Log.d(TAG, "download file for " + file.getAbsolutePath());
-                                final long time = System.currentTimeMillis();
-                                mHandler.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            try {
-                                                Thread.sleep(5000);
-                                            } catch (InterruptedException e) {
-                                                // TODO Auto-generated catch
-                                                // block
-                                                e.printStackTrace();
-                                            }
-                                            File descDir = new File(DOWNLOAD_TO_PATH + "/"
-                                                    + FILE_SCREENSAVER);
-                                            if (!descDir.exists()) {
-                                                descDir.mkdir();
-                                            }
-                                            ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
-                                                    + FILE_SCREENSAVER);
-                                        } catch (ZipException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                });
-                            }
-                        };
-                        DownloadTask downloadTask = new DownloadTask(DOWNLOAD_TO_PATH, downloadUrl, listener);
-                        new Thread(downloadTask).start();
-                        return;
-                    }
-                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
-                    String name = parser.getName();
-                    // Log.d(TAG, name);
-                }
-                parser.next();
-            }
-
-        } catch (XmlPullParserException e) {
-            Log.e(TAG, "XmlPullParserException occurs " + e);
-        } catch (IOException e) {
-            Log.e(TAG, "packagefilter occurs " + e);
-        }
-    }
-
-    private void getCustomConfigureFromConfig(Context context, InputStream is) {
-        try {
-            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-            XmlPullParser parser = factory.newPullParser();
-            parser.setInput(is, "utf-8");
-            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
-                if (parser.getEventType() == XmlResourceParser.START_TAG) {
-                    String name = parser.getName();
-                    Log.d(TAG, name);
-                    if (name.equals(CustomApplication.TIME_TAG)) {
-                        String time = parser.nextText().trim();
-                        String storeTime = ToolUtils.getValueFromSP(context,
-                                CustomApplication.TIME_TAG);
-                        if (!TextUtils.isEmpty(storeTime)) {
-                            if (time.equals(storeTime)) {
-                                Log.d(TAG, "Desn't need get config from server,Beacuse of the time is same as local "
-                                        + storeTime);
-                                return;
-                            } else {
-                                ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
-                                        time);
-                                File config = new File(DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE);
-                                if (config.exists()) {
-                                    ToolUtils.parseCustomConfigureFromInputStream(context, new FileInputStream(config));
-                                }
-                            }
-                        } else {
-                            ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
-                            File config = new File(DOWNLOAD_TO_PATH + "/" + CATEGORY_FILE);
-                            if (config.exists()) {
-                                ToolUtils.parseCustomConfigureFromInputStream(context, new FileInputStream(config));
-                            }
-                        }
-                    } else if (name.equals(CustomApplication.URL_TAG)) {
-                        String downloadUrl = parser.nextText().trim();
-                        ToolUtils.storeValueIntoSP(context, CustomApplication.URL_TAG, downloadUrl);
-                        // Download the new zip resources
-                        IDownloadListener listener = new IDownloadListener() {
-
-                            @Override
-                            public void onError(String errorCode) {
-
-                            }
-
-                            @Override
-                            public void onCompleted(final File file) {
-
-                                // Complete download the zip file
-                                Log.d(TAG, "download complete file for " + file.getAbsolutePath());
-                                final long time = System.currentTimeMillis();
-                                mHandler.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            try {
-                                                Thread.sleep(5000);
-                                            } catch (InterruptedException e) {
-                                                // TODO Auto-generated catch
-                                                // block
-                                                e.printStackTrace();
-                                            }
-                                            File descDir = new File(DOWNLOAD_TO_PATH + "/"
-                                                    + FILE_PREFIX);
-                                            if (!descDir.exists()) {
-                                                descDir.mkdir();
-                                            }
-                                            ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
-                                                    + FILE_PREFIX);
-                                        } catch (ZipException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                });
-                            }
-                        };
-
-                        mDownloadTask = new DownloadTask(DOWNLOAD_TO_PATH,
-                                downloadUrl, listener);
-                        new Thread(mDownloadTask).start();
-                        return;
-                    }
-                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
-                    String name = parser.getName();
-                    // Log.d(TAG, name);
-                }
-                parser.next();
-            }
-
-        } catch (XmlPullParserException e) {
-            Log.e(TAG, "XmlPullParserException occurs " + e);
-        } catch (IOException e) {
-            Log.e(TAG, "packagefilter occurs " + e);
-        }
-    }
-
-    class FetchTask extends AsyncTask<Void, Integer, String> {
-
-        private String mUrl;
-        private String mFileName;
-        private int mReturnCode;
-
-        public FetchTask(String mUrl, String mFileName, int returnCode) {
-            super();
-            this.mUrl = mUrl;
-            this.mFileName = mFileName;
-            this.mReturnCode = returnCode;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            if (TextUtils.isEmpty(result)) {
-                Logger.e("Doesn't found any info from server");
-                return;
-            } else {
-                Logger.d("result = " + result);
-                Message msg = mHandler.obtainMessage(mReturnCode);
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-            super.onPostExecute(result);
-        }
-
-        @Override
-        protected String doInBackground(Void... params) {
-            String result = HttpUtils.requestAndWriteResourcesFromServer(mUrl, mFileName);
-            return result;
-        }
-    }
-
-    // ///////////////// Private API Helpers //////////////////////////
-
-    private final Comparator<Module> PARSED_APPS_COMPARATOR = new Comparator<Module>() {
-
-        @Override
-        public int compare(Module lhs, Module rhs) {
-            String l_flags = lhs.getModuleCode();
-            String r_flags = rhs.getModuleCode();
-            boolean flag = false;
-            flag = Integer.parseInt(l_flags.replaceAll("\\D+", "")) < Integer.parseInt(r_flags
-                    .replaceAll("\\D+", ""));
-            return flag ? -1 : 0;
-        }
-    };
 
     @Override
     public void onBackPressed() {
@@ -1129,57 +465,7 @@ public class Launcher extends Activity {
     }
 
 
-    private void downloadApk(final Context context, final App app) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(app.appUrl));
-        request.setDestinationInExternalPublicDir("download", getUrlFileName(app.appUrl));
-        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
-        request.setTitle("程序更新");//设置下载中通知栏提示的标题
-        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-        @SuppressWarnings("unused")
-        long downloadId = mDownloadManager.enqueue(request);
-        mdao.updateDownload(app);
-    }
-
-    private void downloadOta(final Context context, final OtaInfo ota) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(ota.getUrl()));
-        request.setDestinationInExternalPublicDir("download", getUrlFileName(ota.getUrl()));
-        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
-        request.setTitle("程序更新");//设置下载中通知栏提示的标题
-        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        @SuppressWarnings("unused")
-        long downloadId = mDownloadManager.enqueue(request);
-        ToolUtils.storeValueIntoSP(mContext, "ota_id", String.valueOf(downloadId));
-    }
-
-    private String getUrlFileName(String url) {
-        return url.substring(url.lastIndexOf("/"));
-    }
-
-
-    private BroadcastReceiver mCompleteReceiver = new BroadcastReceiver() {
-        //public static HashMap<long, String> downloadSavePath = new HashMap<long, String>();
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // get complete download id
-            String action = intent.getAction();
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                Log.d(TAG, "download complete apk ");
-                long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                if (ToolUtils.getValueFromSP(mContext, "ota_id").equals(String.valueOf(completeDownloadId))) {
-                    Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
-                    ToolUtils.install(mContext, installUri);
-                } else {
-                    Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
-                    ToolUtils.install(mContext, installUri);
-                }
-            }
-        }
-    };
 
     @Override
     protected void onStop() {

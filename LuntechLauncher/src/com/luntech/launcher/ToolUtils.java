@@ -46,8 +46,10 @@ public class ToolUtils {
     private static final String CUSTOM_INFO = "custom_info";
     private static final String NETWORK_INFO = "network_info";
 
-    private static DBDao sDBdao;
+    private static final String IPTV_CUSTOM_INFO = "iptv_custom_info";
+    private static final String Q1S_CUSTOM_INFO = "q1s_custom_info";
 
+    private static DBDao sDBdao;
 
 
     private ToolUtils() {
@@ -431,7 +433,7 @@ public class ToolUtils {
                         app.setModuleCode(module.moduleCode);
                         sDBdao.insertApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
-                         Log.d(TAG, "end apps " + app.toString());
+                        Log.d(TAG, "end apps " + app.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         module.setGroupCode(group.groupCode);
                         sDBdao.insertModule(module);
@@ -537,45 +539,101 @@ public class ToolUtils {
     }
 
     public void setConfigured(Context context, String key, String pkg) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be stored!");
+            return;
+        }
         Editor spe = sp.edit();
         spe.putString(key, pkg);
         spe.commit();
     }
 
     public void setConfiguredPkg(Context context, String keyCode, String pkg) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be stored!");
+            return;
+        }
         Editor spe = sp.edit();
         spe.putString(keyCode, pkg);
         spe.commit();
     }
 
     public String getConfiguredPkg(Context context, String name) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be get!");
+            return null;
+        }
         return sp.getString(name, null);
     }
 
     public void clearConfiguredPkg(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be done!");
+            return;
+        }
         Editor spe = sp.edit();
         spe.remove(key);
         spe.commit();
     }
 
     public String getConfigured(Context context, String name) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be get!");
+            return null;
+        }
         return sp.getString(name, null);
     }
 
     public static void storeValueIntoSP(Context context, String key, String value) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be stored!");
+            return;
+        }
         Editor spe = sp.edit();
         spe.putString(key, value);
         spe.commit();
     }
 
     public static String getValueFromSP(Context context, String key) {
-        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be get!");
+            return "";
+        }
         return sp.getString(key, "");
     }
 
@@ -625,7 +683,7 @@ public class ToolUtils {
 
     public static Drawable changeFiletoDrawable(Context context, String fileName) {
         Drawable icon = null;
-        String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_PREFIX + "/" + fileName;
+        String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mFilePrefix + "/" + fileName;
         Log.d("jzh", "change path " + path);
         if (!TextUtils.isEmpty(path)) {
             icon = Drawable.createFromPath(path);
@@ -650,7 +708,7 @@ public class ToolUtils {
      * @return whether apk exist
      */
     public static boolean install(Context context, String filePath) {
-        Log.d(TAG, "install apk for "+ filePath);
+        Log.d(TAG, "install apk for " + filePath);
         Intent i = new Intent(Intent.ACTION_VIEW);
         File file = new File(filePath);
         if (file != null && file.length() > 0 && file.exists() && file.isFile()) {
@@ -671,9 +729,9 @@ public class ToolUtils {
      * @return whether apk exist
      */
     public static boolean install(Context context, Uri installUri) {
-        Log.d(TAG, "install apk for "+ installUri.toString());
+        Log.d(TAG, "install apk for " + installUri.toString());
         Intent i = new Intent(Intent.ACTION_VIEW);
-        if (installUri != null ) {
+        if (installUri != null) {
             i.setDataAndType(installUri,
                     "application/vnd.android.package-archive");
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -724,7 +782,7 @@ public class ToolUtils {
         return ota;
     }
 
-    public static void doUpdate(final Context context,OtaInfo ota) {
+    public static void doUpdate(final Context context, OtaInfo ota) {
         IDownloadListener listener = new IDownloadListener() {
 
             @Override

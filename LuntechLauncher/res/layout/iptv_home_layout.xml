@@ -1,0 +1,204 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootview_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    android:paddingBottom="@dimen/global_margin_bottom"
+    android:paddingLeft="@dimen/global_margin_left"
+    android:paddingRight="@dimen/global_margin_right"
+    android:paddingTop="@dimen/global_margin_top" >
+
+    <com.luntech.launcher.view.TvStatusBar
+        android:id="@+id/status_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" />
+
+    <RelativeLayout
+        android:id="@+id/middle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/status_layout"
+        android:layout_marginTop="@dimen/global_vertical_devider_height_2" >
+
+        <RelativeLayout
+            android:id="@+id/thumb_1_layout"
+            android:layout_width="@dimen/global_thumb_1_width"
+            android:layout_height="@dimen/global_thumb_1_height"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/focus_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" >
+
+            <ImageView
+                android:id="@+id/thumb_1_view"
+                android:layout_width="@dimen/global_thumb_1_width"
+                android:layout_height="@dimen/global_thumb_1_height"
+                android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_1_logo" />
+
+            <ImageView
+                android:id="@+id/thumb_1_cover_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_1_shadow"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/thumb_1_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="@string/global_thumb_1_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_large"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/thumb_2_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/global_thumb_2_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="-15dp"
+            android:layout_toRightOf="@+id/thumb_1_layout"
+            android:background="@drawable/focus_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" >
+
+            <ImageView
+                android:id="@+id/thumb_2_view"
+                android:layout_width="@dimen/global_thumb_2_width"
+                android:layout_height="@dimen/global_thumb_2_height"
+                android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_2_logo" />
+
+            <ImageView
+                android:id="@+id/thumb_2_cover_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignBottom="@+id/thumb_2_view"
+                android:layout_alignParentBottom="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_2_shadow" />
+
+            <TextView
+                android:id="@+id/thumb_2_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="@string/global_thumb_2_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_large" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/thumb_3_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/global_thumb_3_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/thumb_2_layout"
+            android:layout_marginLeft="-15dp"
+            android:layout_marginTop="-15dp"
+            android:layout_toRightOf="@+id/thumb_1_layout"
+            android:background="@drawable/focus_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="onClick_Event" >
+
+            <ImageView
+                android:id="@+id/thumb_3_view"
+                android:layout_width="@dimen/global_thumb_3_width"
+                android:layout_height="@dimen/global_thumb_3_height"
+                android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_3_logo" />
+
+            <ImageView
+                android:id="@+id/thumb_3_cover_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/global_thumb_3_shadow" />
+
+            <TextView
+                android:id="@+id/thumb_3_label"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/global_thumb_shadow_height"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="@string/global_thumb_3_label"
+                android:textColor="@color/white"
+                android:textSize="@dimen/global_text_size_large" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/category_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/middle_layout"
+        android:layout_marginTop="-18dp"
+        android:cacheColorHint="#00000000"
+        android:columnWidth="@dimen/global_category_layout_wiith"
+        android:horizontalSpacing="15dp"
+        android:listSelector="@drawable/focus_selector"
+        android:numColumns="7"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp" />
+
+    <com.luntech.launcher.view.AlwaysMarqueeTextView
+        android:id="@+id/ad_content_1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/global_ad_layout_height"
+        android:layout_below="@+id/category_layout"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/ad_information_bg"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="left|center_vertical"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:paddingLeft="@dimen/global_vertical_devider_height"
+        android:paddingRight="@dimen/global_vertical_devider_height"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:text="@string/ad_text_1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_text_size_small" />
+
+    <LinearLayout
+        android:id="@+id/feature_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/global_ad_layout_height"
+        android:layout_below="@+id/middle_layout"
+        android:layout_centerHorizontal="true"
+        android:background="@color/transparent"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/feature_menu"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/global_ad_layout_height"
+            android:gravity="center|left"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:singleLine="true"
+            android:text="@string/feature_menu_1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/global_text_size_large"
+            android:visibility="visible" />
+    </LinearLayout>
+
+</RelativeLayout>

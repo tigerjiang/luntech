@@ -190,7 +190,7 @@ public class Module {
 
     private Drawable changeFiletoDrawable(String fileName) {
         Drawable icon = null;
-        String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_PREFIX + "/" + fileName;
+        String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mFilePrefix + "/" + fileName;
         Log.d("jzh", "change path " + path);
         if (!TextUtils.isEmpty(path)) {
             icon = Drawable.createFromPath(path);

@@ -1,14 +1,9 @@
 package com.luntech.launcher;
 
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
@@ -124,7 +119,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.home_layout);
+        setContentView(R.layout.q1s_home_layout);
 
         bgFrameLayout = (FrameLayout) findViewById(R.id.homeLayout);
         setBgImage();
