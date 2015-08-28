@@ -66,11 +66,11 @@ public class GeneralSettingFragment extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                     if (which == 0) {
 
-                                        ToolUtils.storeValueIntoSP(mContext, "saver_time", mTimes.get(0));
+                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(0));
                                     } else if (which == 1) {
-                                        ToolUtils.storeValueIntoSP(mContext, "saver_time", mTimes.get(1));
+                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(1));
                                     } else if (which == 2) {
-                                        ToolUtils.storeValueIntoSP(mContext, "saver_time", mTimes.get(2));
+                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(2));
                                     }
                                     Launcher.showScreenSaverTime = (which + 1) * 5 * 60 * 1000;
                                     dialog.dismiss();
@@ -89,9 +89,9 @@ public class GeneralSettingFragment extends Fragment {
                     intent2.putExtra(Intent.EXTRA_TITLE, selectAlert);
                     intent2.putExtra(Intent.EXTRA_INTENT, intent);
                     startActivity(intent2);
-                }else if (position == 3) {
+                } else if (position == 3) {
                     Intent intent = new Intent();
-                    intent.setClass(mContext,SetCity.class);
+                    intent.setClass(mContext, SetCity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }

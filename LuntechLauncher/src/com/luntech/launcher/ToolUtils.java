@@ -1,7 +1,10 @@
 
 package com.luntech.launcher;
 
+import android.app.AlertDialog;
+import android.app.DownloadManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -11,8 +14,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.luntech.launcher.db.DBDao;
+import com.luntech.launcher.secondary.AppManager;
+import com.luntech.launcher.secondary.ApplicationInfo;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -29,7 +35,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class ToolUtils {
-    private static ToolUtils sInstance = new ToolUtils();
+    private static ToolUtils sInstance = null;
 
     private static final String APP_TAG = "app";
     private static final String TYPE_TAG = "type";
@@ -52,13 +58,13 @@ public class ToolUtils {
     private static DBDao sDBdao;
 
 
-    private ToolUtils() {
-
+    private ToolUtils(Context context) {
+        sDBdao = new DBDao(context);
     }
 
-    public static ToolUtils getInstance() {
+    public static ToolUtils getInstance(Context context) {
         if (sInstance == null) {
-            return new ToolUtils();
+            return new ToolUtils(context);
         } else {
             return sInstance;
         }
@@ -258,11 +264,11 @@ public class ToolUtils {
     }
 
 
-    public static ArrayList<Module> getModulsFromConfig(Context context, int fileId) {
-        sDBdao = new DBDao(context);
+    public static ArrayList<Group> getGroupsFromConfig(Context context, int fileId) {
         Resources r = context.getResources();
         XmlResourceParser parser = r.getXml(fileId);
         Group group = null;
+        ArrayList<Group> groups = new ArrayList<Group>();
         ArrayList<Module> modlues = new ArrayList<Module>();
         Module module = null;
         ArrayList<App> apps = new ArrayList<App>();
@@ -339,9 +345,11 @@ public class ToolUtils {
                     } else if (name.equals(Module.MODULE_TAG)) {
                         module.setGroupCode(group.groupCode);
                         modlues.add(module);
+                        group.addModule(module);
                         sDBdao.insertModule(module);
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
                         sDBdao.insertGroup(group);
+                        groups.add(group);
                     }
                 }
                 parser.next();
@@ -352,12 +360,11 @@ public class ToolUtils {
         } catch (IOException e) {
             Log.e(TAG, "packagefilter occurs " + e);
         }
-        return modlues;
+        return groups;
     }
 
     public static void parseCustomConfigureFromInputStream(Context context,
                                                            InputStream is) {
-        sDBdao = new DBDao(context);
         sDBdao.delete();
         Group group = null;
         Module module = null;
@@ -474,7 +481,7 @@ public class ToolUtils {
 
                             @Override
                             public void onCompleted(final File file) {
-                                storeValueIntoSP(context, Launcher.FULL_BG_KEY,
+                                storeCommonValueIntoSP(context, Launcher.FULL_BG_KEY,
                                         file.getAbsolutePath());
                             }
                         };
@@ -490,7 +497,7 @@ public class ToolUtils {
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
                     String name = parser.getName();
                     if (name.equals("marquees")) {
-                        storeValueIntoSP(context, Launcher.ADVERTISEMENT_KEY, AdContent.toString());
+                        storeCommonValueIntoSP(context, Launcher.ADVERTISEMENT_KEY, AdContent.toString());
                         Log.d(TAG, "end ad over");
                     }
                 }
@@ -637,6 +644,19 @@ public class ToolUtils {
         return sp.getString(key, "");
     }
 
+    public static String getCommonValueFromSP(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        return sp.getString(key, "");
+    }
+
+    public static void storeCommonValueIntoSP(Context context, String key, String value) {
+        SharedPreferences sp = context.getSharedPreferences(CUSTOM_INFO, Context.MODE_PRIVATE);
+        Editor spe = sp.edit();
+        spe.putString(key, value);
+        spe.commit();
+    }
+
+
     public static void writeFile(InputStream is, String localFile) {
         BufferedReader reader = null;
         BufferedWriter writer = null;
@@ -725,7 +745,6 @@ public class ToolUtils {
      * install app
      *
      * @param context
-     * @param filePath
      * @return whether apk exist
      */
     public static boolean install(Context context, Uri installUri) {
@@ -798,4 +817,84 @@ public class ToolUtils {
         DownloadTask task = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, ota.url, listener);
         new Thread(task).start();
     }
+
+    public  static void safeStartApk(final Context context, final App app) {
+        try {
+            Intent intent = new Intent();
+            intent.setComponent(app.getComponentName());
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            AppManager appManager = AppManager.getInstance();
+            try {
+                appManager.getAllApplications();
+                ApplicationInfo descApp = appManager.getInfoFromAllActivitys(app.getAppPackage());
+                descApp.startApplication(context);
+            } catch (Exception e1) {
+                e.printStackTrace();
+
+                if (TextUtils.isEmpty(app.appUrl)) {
+                    Toast.makeText(context, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage(R.string.app_background_download);
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        if (!TextUtils.isEmpty(app.downloadStatus)) {
+                            if (!app.downloadStatus.equals(App.DOWNLOAD_STATUS_DOWNLOADING)) {
+                                app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
+                                downloadApk(context, app);
+                            } else {
+                                Toast.makeText(context, R.string.app_is_downloading,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
+                            downloadApk(context, app);
+                        }
+                        arg0.dismiss();
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Log.d(TAG, e.toString());
+            }
+        }
+    }
+
+    public static void downloadApk(final Context context, final App app) {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(app.appUrl));
+        request.setDestinationInExternalPublicDir("download", getUrlFileName(app.appUrl));
+        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
+        request.setTitle("程序更新");//设置下载中通知栏提示的标题
+        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        @SuppressWarnings("unused")
+        long downloadId = downloadManager.enqueue(request);
+        sDBdao.updateDownload(app);
+    }
+
+    public static void downloadOta(final Context context, final OtaInfo ota) {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(ota.getUrl()));
+        request.setDestinationInExternalPublicDir("download", getUrlFileName(ota.getUrl()));
+        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
+        request.setTitle("程序更新");//设置下载中通知栏提示的标题
+        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+
+        @SuppressWarnings("unused")
+        long downloadId = downloadManager.enqueue(request);
+        ToolUtils.storeCommonValueIntoSP(context, "ota_id", String.valueOf(downloadId));
+    }
+
+    private static String getUrlFileName(String url) {
+        return url.substring(url.lastIndexOf("/"));
+    }
+
 }

@@ -26,6 +26,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.Log;
@@ -55,22 +56,20 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.zip.ZipException;
 
 public class Launcher extends Activity {
 
     private static final String TAG = "Launcher";
     private static final boolean DEBUG = true;
-    private GridView mGridView;
     private Resources mResources;
-    private Module mSelectedApp;
+    protected Module mSelectedApp;
     private static Context mContext;
     private ChangeReceiver mChangeReceiver;
     private Configuration mConfig = new Configuration();
-    private AppManager mAppManager;
 
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
@@ -99,6 +98,8 @@ public class Launcher extends Activity {
     public static final String CAPTURE_AD_CONFIGURE_ACTION = "com.luntech.action.GET_AD";
     public static final String CAPTURE_SCREENSAVER_CONFIGURE_ACTION = "com.luntech.action.GEAT_SAVER";
 
+    public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
+
     protected static String mCategoryFile;
     protected static String mUpdateConfigureFile;
     protected static String mFilePrefix;
@@ -120,9 +121,10 @@ public class Launcher extends Activity {
     private boolean mIsShowAlert = false;
     private int mGridPosition = 0;
 
-    private ToolUtils mToolUtils;
+    protected ToolUtils mToolUtils;
+    protected ArrayList<Group> mGroups;
     public ArrayList<Module> mModules;
-    private DBDao mdao;
+    protected DBDao mdao;
 
     public static ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
 
@@ -143,25 +145,15 @@ public class Launcher extends Activity {
 
             e.printStackTrace();
         }
-        mToolUtils = ToolUtils.getInstance();
+        mToolUtils = ToolUtils.getInstance(LauncherApplication.getAppContext());
         AppManager.create(this);
-        initHandler();
         initPrecondition();
         initScreenSaverTime();
-        parseScreenSaverCover();
-        parseModulesFromDB();
-        notifyAllModuleList();
-
     }
 
-    private void initHandler() {
-        mHandler = new LauncherHandler();
-        mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
-        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, SHOW_DELAY_TIME);
-    }
 
     private void initScreenSaverTime() {
-        String time = ToolUtils.getValueFromSP(mContext, "saver_time");
+        String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
         String[] arrayTime = getResources().getStringArray(R.array.screensaver_array);
         if (!TextUtils.isEmpty(time)) {
             for (int i = 0; i < arrayTime.length; i++) {
@@ -170,11 +162,11 @@ public class Launcher extends Activity {
                 }
             }
         } else {
-            ToolUtils.storeValueIntoSP(mContext, "saver_time", arrayTime[0]);
+            ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", arrayTime[0]);
         }
     }
 
-    private void initPrecondition() {
+    protected void initPrecondition() {
 
         if (!HttpUtils.checkConnectivity(mContext)) {
             return;
@@ -183,103 +175,19 @@ public class Launcher extends Activity {
 
             @Override
             public void run() {
-                String httpArg = "&package_name=" + sPackageName + "&version=" + sVersionCode;
-                String app_url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
-                Logger.e("request url " + app_url);
-                // capture the category config
-                new FetchTask(app_url, DOWNLOAD_TO_PATH + "/" + mCategoryFile,
-                        LauncherHandler.RETURN_CATEGORY_CONFIG_CODE).execute();
-
-                String config_url = HttpUtils.HTTP_CONFIG_URL + httpArg;
-                Logger.e("request url " + config_url);
-                // capture the category config
-                new FetchTask(config_url, DOWNLOAD_TO_PATH + "/" + AD_CONFIGURE_FILE,
-                        LauncherHandler.RETURN_SYSTEM_CONFIG_CODE).execute();
-
-                String update_url = HttpUtils.HTTP_UPDATE_APP_URL + httpArg;
-                Logger.e("request url " + update_url);
-                // capture the category config
-                new FetchTask(update_url, DOWNLOAD_TO_PATH + "/" + mUpdateConfigureFile,
-                        LauncherHandler.RETURN_UPDATE_CONFIG_CODE).execute();
-
-                String screensaver_url = HttpUtils.HTTP_SCREEN_SAVER_URL;
-                Logger.e("request url " + screensaver_url);
-                // capture the category config
-                new FetchTask(screensaver_url, DOWNLOAD_TO_PATH + "/" + SCREENSAVER_CONFIGURE_FILE,
-                        LauncherHandler.RETURN_SCREENSAVER_CONFIG_CODE).execute();
-
+                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
+                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
+                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
+                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
             }
         }, REQUEST_DELAY_TIME);
 
     }
 
-    protected void safeStartApk(final App app) {
-        try {
-            Intent intent = new Intent();
-            intent.setComponent(app.getComponentName());
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        } catch (Exception e) {
-            try {
-                mAppManager.getAllApplications();
-                ApplicationInfo descApp = mAppManager.getInfoFromAllActivitys(app.getAppPackage());
-                descApp.startApplication(mContext);
-            } catch (Exception e1) {
-                e.printStackTrace();
 
-                if (TextUtils.isEmpty(app.appUrl)) {
-                    Toast.makeText(mContext, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
-                }
-                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                builder.setMessage(R.string.app_background_download);
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-                        if (!TextUtils.isEmpty(app.downloadStatus)) {
-                            if (!app.downloadStatus.equals(App.DOWNLOAD_STATUS_DOWNLOADING)) {
-                                app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
-                                downloadApk(mContext, app);
-                            } else {
-                                Toast.makeText(mContext, R.string.app_is_downloading,
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            app.downloadStatus = App.DOWNLOAD_STATUS_DOWNLOADING;
-                            downloadApk(mContext, app);
-                        }
-                        arg0.dismiss();
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                Log.d(TAG, e.toString());
-            }
-        }
-    }
-
-    private void parseScreenSaverCover() {
-        String screenSaverConfig = DOWNLOAD_TO_PATH + "/" + SCREENSAVER_CONFIGURE_FILE;
-        File configFile = new File(screenSaverConfig);
-        if (configFile.exists()) {
-            String resourcesPath = DOWNLOAD_TO_PATH + "/" + FILE_SCREENSAVER;
-            File resourcesFile = new File(resourcesPath);
-            if (resourcesFile.exists() && resourcesFile.isDirectory()) {
-                for (File file : resourcesFile.listFiles()) {
-                    sScreenSaverFileList.add(file.getAbsolutePath());
-                }
-            } else {
-
-            }
-        } else {
-
-        }
-    }
-
-    private void parseModulesFromDB() {
-        mModules = mdao.fetchModules();
-        if (mModules != null && mModules.size() > 0) {
+    protected void parseGroupsFromDB() {
+        mGroups = mdao.fetchGroups(mType.toUpperCase());
+        if (mGroups != null && mGroups.size() > 0) {
 
         } else {
             String networkConfig = DOWNLOAD_TO_PATH + "/" + mCategoryFile;
@@ -288,21 +196,47 @@ public class Launcher extends Activity {
                 String resourcesPath = DOWNLOAD_TO_PATH + "/" + mFilePrefix;
                 File resourcesFile = new File(resourcesPath);
                 if (resourcesFile.exists()) {
-                    mModules = mdao.fetchModules();
-                    if (mModules == null || mModules.size() < 1) {
+                    mGroups = mdao.fetchGroups(mType.toUpperCase());
+                    if (mGroups == null || mGroups.size() < 1) {
                         Log.d(TAG, "Can't parse the network config ");
-                        mModules = ToolUtils.getModulsFromConfig(mContext, R.xml.config);
+                        if (mType.equals(IPTV_TYPE)) {
+                            mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.iptv_config);
+                        } else if (mType.equals(Q1S_TYPE)) {
+                            mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.q1s_config);
+                        }
                     }
                 } else {
-                    mModules = ToolUtils.getModulsFromConfig(mContext, R.xml.config);
+                    if (mType.equals(IPTV_TYPE)) {
+                        mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.iptv_config);
+                    } else if (mType.equals(Q1S_TYPE)) {
+                        mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.q1s_config);
+                    }
                 }
             } else {
-                mModules = ToolUtils.getModulsFromConfig(mContext, R.xml.config);
+                if (mType.equals(IPTV_TYPE)) {
+                    mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.iptv_config);
+                } else if (mType.equals(Q1S_TYPE)) {
+                    mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.q1s_config);
+                }
             }
-            Collections.sort(mModules, PARSED_APPS_COMPARATOR);
+            Collections.sort(mGroups, PARSED_APPS_COMPARATOR);
         }
     }
 
+    // ///////////////// Private API Helpers //////////////////////////
+
+    private final Comparator<Group> PARSED_APPS_COMPARATOR = new Comparator<Group>() {
+
+        @Override
+        public int compare(Group lhs, Group rhs) {
+            String l_flags = lhs.getGroupCode();
+            String r_flags = rhs.getGroupCode();
+            boolean flag = false;
+            flag = Integer.parseInt(l_flags.replaceAll("\\D+", "")) < Integer.parseInt(r_flags
+                    .replaceAll("\\D+", ""));
+            return flag ? -1 : 0;
+        }
+    };
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -337,7 +271,7 @@ public class Launcher extends Activity {
         super.onResume();
     }
 
-    private String getUserCity() {
+    protected String getUserCity() {
         String cityString = "青岛";
         cityString = Settings.System.getString(mContext.getContentResolver(), "city");
         if (TextUtils.isEmpty(cityString)) {
@@ -348,7 +282,7 @@ public class Launcher extends Activity {
     }
 
 
-    public void setResult(ApplicationInfo app, boolean isSelected) {
+    protected void setResult(ApplicationInfo app, boolean isSelected) {
         if (isSelected && app != null && mSelectedApp != null) {
             String value = mToolUtils.getConfigured(mContext, app.getPackageName());
             if (!TextUtils.isEmpty(value)) {
@@ -381,7 +315,7 @@ public class Launcher extends Activity {
         switch (resultCode) {
             case RESULT_OK:
                 String pkg = data.getStringExtra("app");
-                ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
+                ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
                 setResult(app, true);
                 Log.d("replace", "launcher " + app.toString());
                 break;
@@ -393,23 +327,30 @@ public class Launcher extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void notifyModuleList(Module newModule) {
-        for (int i = 0; i < mModules.size(); i++) {
-            if (newModule.getModuleCode()
-                    .equals(mModules.get(i).getModuleCode())) {
-                mModules.set(i, newModule);
+    protected void notifyModuleList(Module newModule) {
+        for (int j = 0; j < mGroups.size(); j++) {
+            Group group = mGroups.get(j);
+            ArrayList<Module> modules = group.mModules;
+            for (int i = 0; i < modules.size(); i++) {
+                if (newModule.getModuleCode()
+                        .equals(modules.get(i).getModuleCode())) {
+                    modules.set(i, newModule);
+                }
             }
         }
     }
 
-    private void notifyAllModuleList() {
-        for (int i = 0; i < mModules.size(); i++) {
-            final Module module = mModules.get(i);
+    protected void notifyAllModuleList() {
+        for (int j = 0; j < mGroups.size(); j++) {
+            Group group = mGroups.get(j);
+            ArrayList<Module> modules = group.mModules;
+        for (int i = 0; i < modules.size(); i++) {
+            final Module module = modules.get(i);
             String key = module.moduleCode;
             String pkg = mToolUtils.getConfiguredPkg(mContext, key);
             Log.d(TAG, "key  for " + key + pkg);
             if (!TextUtils.isEmpty(pkg)) {
-                ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
+                ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
                 if (app != null) {
                     module.moduleIconDrawable = app.getIcon();
                     module.moduleText = app.getTitle();
@@ -420,35 +361,7 @@ public class Launcher extends Activity {
             }
         }
     }
-
-
-
-    private void refreshFeatureMenuView() {
-        if (mFeatureView != null) {
-            try {
-                if (mSelectedApp.moduleReplace == 0) {
-                    mFeatureView.setText(R.string.feature_menu_1);
-                } else if (mSelectedApp.moduleReplace == 1) {
-                    mFeatureView.setText(R.string.feature_menu_0);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
-
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        // if(!mIsShowAlert){
-        mIsShowAlert = true;
-        Log.d("show", "onUserInteraction");
-        mHandler.removeMessages(LauncherHandler.NO_OPERATION);
-        mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
-        restartSendShowScreenSaver();
-    }
-
-
 
 
     @Override
@@ -457,27 +370,4 @@ public class Launcher extends Activity {
         Log.d(TAG, "do nothing");
     }
 
-
-    private void restartSendShowScreenSaver() {
-        Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
-        mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
-        mHandler.sendMessageDelayed(msg, showScreenSaverTime);
-    }
-
-
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        unregisterReceiver(mCompleteReceiver);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        registerReceiver(mCompleteReceiver, new IntentFilter(
-
-                DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-    }
 }

@@ -124,7 +124,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         bgFrameLayout = (FrameLayout) findViewById(R.id.homeLayout);
         setBgImage();
 
-        LuntechApplication app = ((LuntechApplication) getApplication());
+        LauncherApplication app = ((LauncherApplication) getApplication());
         mLoader = app.setLauncher(this);
 
 

@@ -146,7 +146,7 @@ public class IPTVLauncher extends Launcher {
 
             e.printStackTrace();
         }
-        mToolUtils = ToolUtils.getInstance();
+        mToolUtils = ToolUtils.getInstance(mContext);
         AppManager.create(this);
         initHandler();
         initPrecondition();

@@ -14,6 +14,7 @@ import android.os.*;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -32,9 +33,14 @@ import java.util.zip.ZipException;
  */
 public class LauncherService extends Service {
 
+    private static final String TAG = "LauncherService";
+    private static final boolean DEBUG = true;
     private static final int NEW_INTENT_RECEIVED = 1001;
     private LauncherHandler mLauncherHandler;
     private LauncherReceiver mReceiver;
+    private Context mContext;
+
+    protected DownloadManager mDownloadManager;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -45,10 +51,15 @@ public class LauncherService extends Service {
     public void onCreate() {
         IntentFilter filter = new IntentFilter();
         filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        filter.addAction();
-        filter.addAction();
-        filter.addAction();
+        filter.addAction(Launcher.CAPTURE_AD_CONFIGURE_ACTION);
+        filter.addAction(Launcher.CAPTURE_SCREENSAVER_CONFIGURE_ACTION);
+        filter.addAction(Launcher.CAPTURE_UPDATE_CONFIGURE_ACTION);
+        filter.addAction(Launcher.CAPTURE_CATEGORY_config_ACTION);
+        filter.addAction(Launcher.SHOW_SCREENSAVER_ACTION);
         mReceiver = new LauncherReceiver();
+        registerReceiver(mReceiver, filter);
+        mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        mContext = LauncherApplication.getAppContext();
         super.onCreate();
     }
 
@@ -65,17 +76,17 @@ public class LauncherService extends Service {
         }
         final String action = intent.getAction();
         if (action != null) {
-            if (mUpdateServiceHander == null) {
+            if (mLauncherHandler == null) {
                 final HandlerThread thread = new HandlerThread("LauncherService",
                         android.os.Process.THREAD_PRIORITY_DISPLAY);
                 thread.start();
                 mLauncherHandler = new LauncherHandler(
                         thread.getLooper());
             }
-            final Message msg = mUpdateServiceHander.obtainMessage();
+            final Message msg = mLauncherHandler.obtainMessage();
             msg.what = NEW_INTENT_RECEIVED;
             msg.obj = intent;
-            mUpdateServiceHander.sendMessage(msg);
+            mLauncherHandler.sendMessage(msg);
         } else {
             Log.w(TAG, "Action is null, intent=" + intent);
         }
@@ -96,7 +107,7 @@ public class LauncherService extends Service {
         public static final int RETURN_UPDATE_CONFIG_CODE = 4;
         public static final int RETURN_SYSTEM_CONFIG_CODE = 5;
         public static final int RETURN_SCREENSAVER_CONFIG_CODE = 6;
-        public static final int SHOW_FEATURE_VIEW = 7;
+        public static final int START_SCREEN_SAVER = 7;
         public static final int DISMISS_FEATURE_VIEW = 8;
         public static final int NO_OPERATION = 9;
         public static final int SHOW_SCREEN_SAVER = 10;
@@ -152,13 +163,31 @@ public class LauncherService extends Service {
                                 LauncherHandler.RETURN_SCREENSAVER_CONFIG_CODE).execute();
 
                     } else if (Launcher.CAPTURE_UPDATE_CONFIGURE_ACTION.equals(action)) {
-                        String update_url = HttpUtils.HTTP_UPDATE_APP_URL + httpArg;
+                        String update_url = HttpUtils.HTTP_UPDATE_APP_URL + commonArg;
                         Logger.e("request url " + update_url);
                         // capture the category config
                         new FetchTask(update_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mUpdateConfigureFile,
                                 LauncherHandler.RETURN_UPDATE_CONFIG_CODE).execute();
 
 
+                    } else if (Launcher.SHOW_SCREENSAVER_ACTION.equals(action)) {
+                        Log.d("show", "SHOW_SCREEN_SAVER");
+                        mLauncherHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                parseScreenSaverCover();
+                            }
+                        });
+                    } else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+                        Log.d(TAG, "download complete apk ");
+                        long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+                        if (ToolUtils.getValueFromSP(mContext, "ota_id").equals(String.valueOf(completeDownloadId))) {
+                            Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
+                            ToolUtils.install(mContext, installUri);
+                        } else {
+                            Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
+                            ToolUtils.install(mContext, installUri);
+                        }
                     }
                     break;
                 case RETURN_CATEGORY_CONFIG_CODE:
@@ -185,8 +214,10 @@ public class LauncherService extends Service {
                         }
                     }).start();
                     break;
-                case RETURN_UNZIP_CONFIG_CODE:
-
+                case START_SCREEN_SAVER:
+                    Log.d("show", "SHOW_SCREEN_SAVER");
+                    Intent saverIntent = new Intent(mContext, ScreenSaverActivity.class);
+                    startActivity(saverIntent);
                     break;
                 case RETURN_HIDDEN_CONFIG_CODE:
                     break;
@@ -194,7 +225,7 @@ public class LauncherService extends Service {
                     try {
                         final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
                                 new ByteArrayInputStream(result.getBytes()));
-                        if (ota.currentVersion.equals(String.valueOf(sVersionCode))) {
+                        if (ota.currentVersion.equals(String.valueOf(Launcher.sVersionCode))) {
                             if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
                                 Log.d(TAG, "find new version for update " + ota.newVersion);
                                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -205,12 +236,13 @@ public class LauncherService extends Service {
 
                                             @Override
                                             public void onClick(DialogInterface arg0, int arg1) {
-                                                downloadOta(mContext, ota);
+                                                ToolUtils.downloadOta(mContext, ota);
                                                 arg0.dismiss();
                                             }
                                         });
                                 builder.setNegativeButton(R.string.cancel, null);
                                 AlertDialog dialog = builder.create();
+                                dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
                                 dialog.show();
 
                             }
@@ -223,8 +255,7 @@ public class LauncherService extends Service {
                 case RETURN_SYSTEM_CONFIG_CODE:
                     String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
                             new ByteArrayInputStream(result.getBytes()));
-                    // Log.d(TAG, "ad " + adContent);
-                    mAdvertisementView.setText(adContent);
+                    Log.d(TAG, "ad " + adContent);
                     break;
 
             }
@@ -243,21 +274,21 @@ public class LauncherService extends Service {
                     Log.d(TAG, name);
                     if (name.equals("time")) {
                         String time = parser.nextText().trim();
-                        String storeTime = ToolUtils.getValueFromSP(context, "screen_saver_time");
+                        String storeTime = ToolUtils.getCommonValueFromSP(context, "screen_saver_time");
                         if (!TextUtils.isEmpty(storeTime)) {
                             if (time.equals(storeTime)) {
                                 Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
                                         + storeTime);
                                 return;
                             } else {
-                                ToolUtils.storeValueIntoSP(context, "screen_saver_time", time);
+                                ToolUtils.storeCommonValueIntoSP(context, "screen_saver_time", time);
                             }
                         } else {
-                            ToolUtils.storeValueIntoSP(context, "screen_saver_time", time);
+                            ToolUtils.storeCommonValueIntoSP(context, "screen_saver_time", time);
                         }
                     } else if (name.equals("url")) {
                         String downloadUrl = parser.nextText().trim();
-                        ToolUtils.storeValueIntoSP(context, "screen_saver_url", downloadUrl);
+                        ToolUtils.storeCommonValueIntoSP(context, "screen_saver_url", downloadUrl);
                         // Download the new zip resources
                         IDownloadListener listener = new IDownloadListener() {
 
@@ -272,7 +303,7 @@ public class LauncherService extends Service {
                                 // Complete download the zip file
                                 Log.d(TAG, "download file for " + file.getAbsolutePath());
                                 final long time = System.currentTimeMillis();
-                                mHandler.post(new Runnable() {
+                                mLauncherHandler.post(new Runnable() {
 
                                     @Override
                                     public void run() {
@@ -284,13 +315,13 @@ public class LauncherService extends Service {
                                                 // block
                                                 e.printStackTrace();
                                             }
-                                            File descDir = new File(DOWNLOAD_TO_PATH + "/"
-                                                    + FILE_SCREENSAVER);
+                                            File descDir = new File(Launcher.DOWNLOAD_TO_PATH + "/"
+                                                    + Launcher.FILE_SCREENSAVER);
                                             if (!descDir.exists()) {
                                                 descDir.mkdir();
                                             }
-                                            ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
-                                                    + FILE_SCREENSAVER);
+                                            ZipUtils.upZipFile(file, Launcher.DOWNLOAD_TO_PATH + "/"
+                                                    + Launcher.FILE_SCREENSAVER);
                                         } catch (ZipException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
@@ -301,7 +332,7 @@ public class LauncherService extends Service {
                                 });
                             }
                         };
-                        DownloadTask downloadTask = new DownloadTask(DOWNLOAD_TO_PATH, downloadUrl, listener);
+                        DownloadTask downloadTask = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, downloadUrl, listener);
                         new Thread(downloadTask).start();
                         return;
                     }
@@ -340,14 +371,14 @@ public class LauncherService extends Service {
                             } else {
                                 ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
                                         time);
-                                File config = new File(DOWNLOAD_TO_PATH + "/" + mCategoryFile);
+                                File config = new File(Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mCategoryFile);
                                 if (config.exists()) {
                                     ToolUtils.parseCustomConfigureFromInputStream(context, new FileInputStream(config));
                                 }
                             }
                         } else {
                             ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG, time);
-                            File config = new File(DOWNLOAD_TO_PATH + "/" + mCategoryFile);
+                            File config = new File(Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mCategoryFile);
                             if (config.exists()) {
                                 ToolUtils.parseCustomConfigureFromInputStream(context, new FileInputStream(config));
                             }
@@ -369,7 +400,7 @@ public class LauncherService extends Service {
                                 // Complete download the zip file
                                 Log.d(TAG, "download complete file for " + file.getAbsolutePath());
                                 final long time = System.currentTimeMillis();
-                                mHandler.post(new Runnable() {
+                                mLauncherHandler.post(new Runnable() {
 
                                     @Override
                                     public void run() {
@@ -381,13 +412,13 @@ public class LauncherService extends Service {
                                                 // block
                                                 e.printStackTrace();
                                             }
-                                            File descDir = new File(DOWNLOAD_TO_PATH + "/"
-                                                    + mFilePrefix);
+                                            File descDir = new File(Launcher.DOWNLOAD_TO_PATH + "/"
+                                                    + Launcher.mFilePrefix);
                                             if (!descDir.exists()) {
                                                 descDir.mkdir();
                                             }
-                                            ZipUtils.upZipFile(file, DOWNLOAD_TO_PATH + "/"
-                                                    + mFilePrefix);
+                                            ZipUtils.upZipFile(file, Launcher.DOWNLOAD_TO_PATH + "/"
+                                                    + Launcher.mFilePrefix);
                                         } catch (ZipException e) {
                                             e.printStackTrace();
                                         } catch (IOException e) {
@@ -399,7 +430,7 @@ public class LauncherService extends Service {
                             }
                         };
 
-                        mDownloadTask = new DownloadTask(DOWNLOAD_TO_PATH,
+                        DownloadTask mDownloadTask = new DownloadTask(Launcher.DOWNLOAD_TO_PATH,
                                 downloadUrl, listener);
                         new Thread(mDownloadTask).start();
                         return;
@@ -438,9 +469,9 @@ public class LauncherService extends Service {
                 return;
             } else {
                 Logger.d("result = " + result);
-                Message msg = mHandler.obtainMessage(mReturnCode);
+                Message msg = mLauncherHandler.obtainMessage(mReturnCode);
                 msg.obj = result;
-                mHandler.sendMessage(msg);
+                mLauncherHandler.sendMessage(msg);
             }
             super.onPostExecute(result);
         }
@@ -467,55 +498,24 @@ public class LauncherService extends Service {
         }
     };
 
-    protected void downloadApk(final Context context, final App app) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(app.appUrl));
-        request.setDestinationInExternalPublicDir("download", getUrlFileName(app.appUrl));
-        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
-        request.setTitle("程序更新");//设置下载中通知栏提示的标题
-        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
 
-        @SuppressWarnings("unused")
-        long downloadId = mDownloadManager.enqueue(request);
-        mdao.updateDownload(app);
-    }
-
-    private void downloadOta(final Context context, final OtaInfo ota) {
-        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(ota.getUrl()));
-        request.setDestinationInExternalPublicDir("download", getUrlFileName(ota.getUrl()));
-        request.allowScanningByMediaScanner();//表示允许MediaScanner扫描到这个文件，默认不允许。
-        request.setTitle("程序更新");//设置下载中通知栏提示的标题
-        request.setDescription("程序更新正在下载中:");//设置下载中通知栏提示的介绍
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-
-        @SuppressWarnings("unused")
-        long downloadId = mDownloadManager.enqueue(request);
-        ToolUtils.storeValueIntoSP(mContext, "ota_id", String.valueOf(downloadId));
-    }
-
-    private String getUrlFileName(String url) {
-        return url.substring(url.lastIndexOf("/"));
-    }
-
-
-    private BroadcastReceiver mCompleteReceiver = new BroadcastReceiver() {
-        //public static HashMap<long, String> downloadSavePath = new HashMap<long, String>();
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // get complete download id
-            String action = intent.getAction();
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-                Log.d(TAG, "download complete apk ");
-                long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-                if (ToolUtils.getValueFromSP(mContext, "ota_id").equals(String.valueOf(completeDownloadId))) {
-                    Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
-                    ToolUtils.install(mContext, installUri);
-                } else {
-                    Uri installUri = mDownloadManager.getUriForDownloadedFile(completeDownloadId);
-                    ToolUtils.install(mContext, installUri);
+    private void parseScreenSaverCover() {
+        String screenSaverConfig = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.SCREENSAVER_CONFIGURE_FILE;
+        File configFile = new File(screenSaverConfig);
+        if (configFile.exists()) {
+            String resourcesPath = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_SCREENSAVER;
+            File resourcesFile = new File(resourcesPath);
+            if (resourcesFile.exists() && resourcesFile.isDirectory()) {
+                for (File file : resourcesFile.listFiles()) {
+                    Launcher.sScreenSaverFileList.add(file.getAbsolutePath());
                 }
+                Message msg = mLauncherHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
+                mLauncherHandler.sendMessage(msg);
+            } else {
+
             }
+        } else {
+
         }
-    };
+    }
 }
