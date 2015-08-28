@@ -89,6 +89,8 @@ public class Launcher extends Activity {
     public static final String Q1S_UPDATE_CONFIGURE_FILE = "q1s_update_config.xml";
     public static final String Q1S_FILE_PREFIX = "launcher_q1s";
 
+    public static final String THEME_KEY = "theme";
+
 
     public static final String AD_CONFIGURE_FILE = "ad_config.xml";
     public static final String SCREENSAVER_CONFIGURE_FILE = "screensaver_config.xml";
@@ -100,6 +102,10 @@ public class Launcher extends Activity {
 
     public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
 
+    public static final String IPTV_THEME = "theme_iptv";
+    public static final String Q1S_THEME = "theme_q1s";
+
+    protected String mThemeType;
     protected static String mCategoryFile;
     protected static String mUpdateConfigureFile;
     protected static String mFilePrefix;
@@ -146,9 +152,23 @@ public class Launcher extends Activity {
             e.printStackTrace();
         }
         mToolUtils = ToolUtils.getInstance(LauncherApplication.getAppContext());
+        mThemeType = ToolUtils.getCommonValueFromSP(mContext, THEME_KEY);
         AppManager.create(this);
         initPrecondition();
         initScreenSaverTime();
+        if (TextUtils.isEmpty(mThemeType)) {
+            mThemeType = IPTV_THEME;
+        }
+        Intent themeIntent = new Intent();
+        if (IPTV_THEME.equals(mThemeType)) {
+            themeIntent.setClass(mContext, IPTVLauncher.class);
+        } else if (Q1S_TYPE.equals(mThemeType)) {
+            themeIntent.setClass(mContext, Q1SLauncher.class);
+        } else {
+            themeIntent.setClass(mContext, IPTVLauncher.class);
+        }
+        themeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(themeIntent);
     }
 
 
@@ -344,23 +364,23 @@ public class Launcher extends Activity {
         for (int j = 0; j < mGroups.size(); j++) {
             Group group = mGroups.get(j);
             ArrayList<Module> modules = group.mModules;
-        for (int i = 0; i < modules.size(); i++) {
-            final Module module = modules.get(i);
-            String key = module.moduleCode;
-            String pkg = mToolUtils.getConfiguredPkg(mContext, key);
-            Log.d(TAG, "key  for " + key + pkg);
-            if (!TextUtils.isEmpty(pkg)) {
-                ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
-                if (app != null) {
-                    module.moduleIconDrawable = app.getIcon();
-                    module.moduleText = app.getTitle();
-                    module.mApps.get(0).componentName = app.mComponent;
-                } else {
-                    mToolUtils.clearConfiguredPkg(mContext, key);
+            for (int i = 0; i < modules.size(); i++) {
+                final Module module = modules.get(i);
+                String key = module.moduleCode;
+                String pkg = mToolUtils.getConfiguredPkg(mContext, key);
+                Log.d(TAG, "key  for " + key + pkg);
+                if (!TextUtils.isEmpty(pkg)) {
+                    ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
+                    if (app != null) {
+                        module.moduleIconDrawable = app.getIcon();
+                        module.moduleText = app.getTitle();
+                        module.mApps.get(0).componentName = app.mComponent;
+                    } else {
+                        mToolUtils.clearConfiguredPkg(mContext, key);
+                    }
                 }
             }
         }
-    }
     }
 
 
