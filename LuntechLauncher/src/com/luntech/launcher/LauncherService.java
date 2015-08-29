@@ -3,7 +3,6 @@ package com.luntech.launcher;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.net.Uri;
 import android.os.*;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -145,7 +143,7 @@ public class LauncherService extends Service {
                         ;
                         Logger.e("request url " + config_url);
                         // capture the category config
-                        new FetchTask(config_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.AD_CONFIGURE_FILE,
+                        new FetchTask(config_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mAdConfigureFile,
                                 LauncherHandler.RETURN_SYSTEM_CONFIG_CODE).execute();
                     } else if (Launcher.CAPTURE_CATEGORY_config_ACTION.equals(action)) {
                         String httpArg = commonArg + "&type=" + Launcher.mType;

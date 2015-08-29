@@ -518,7 +518,6 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
 
-
     public String queryAppInfoByPackageName(String packnameString) {
         String activityNameString = null;
         PackageManager pm = this.getPackageManager(); // 获得PackageManager对象
@@ -1029,6 +1028,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         return super.onKeyDown(keyCode, event);
     }
 
+
     //bg
     private void setBgImage() {
         File bgImageFile = new File(IMGPATH_STRING + "bgnofocus1.png");
@@ -1449,12 +1449,10 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     protected void onDestroy() {
-        unregisterReceiver(mBroadcastReceiver);
         android.os.Process.killProcess(android.os.Process.myPid());
 
         super.onDestroy();
     }
-
 
 
     public static Bitmap createReflectedImage(Bitmap originalImage, Bitmap originalImage1) {
@@ -1511,6 +1509,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     public void refreshWorkspace() {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public String getType() {
+        return Q1S_TYPE;
+    }
+
+    @Override
+    public String getAdConfigureFile() {
+        return Q1S_AD_CONFIGURE_FILE;
+    }
+
+    @Override
+    public String getFilePrefix() {
+        return Q1S_FILE_PREFIX;
+    }
+
+    @Override
+    public String getCategoryFileName() {
+        return Q1S_CATEGORY_FILE;
     }
 
 }

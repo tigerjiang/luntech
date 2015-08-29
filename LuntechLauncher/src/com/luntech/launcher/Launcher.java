@@ -61,55 +61,54 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class Launcher extends Activity {
+public abstract class Launcher extends Activity {
 
     private static final String TAG = "Launcher";
     private static final boolean DEBUG = true;
     private Resources mResources;
     protected Module mSelectedApp;
-    private static Context mContext;
+    protected static Context mContext;
     private ChangeReceiver mChangeReceiver;
     private Configuration mConfig = new Configuration();
 
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
     public static int sVersionCode;
-    private static final long REQUEST_DELAY_TIME = 10 * 1000;
-    private static final long SHOW_DELAY_TIME = 10 * 1000;
-    private static final long DISMISS_DELAY_TIME = 3 * 1000;
+    public static final long REQUEST_DELAY_TIME = 10 * 1000;
+    public static final long SHOW_DELAY_TIME = 10 * 1000;
+    public static final long DISMISS_DELAY_TIME = 3 * 1000;
     public static long showScreenSaverTime = 5 * 60 * 1000;
 
     public static final String IPTV_CATEGORY_FILE = "iptv_network_config.xml";
-    public static final String IPTV_UPDATE_CONFIGURE_FILE = "iptv_update_config.xml";
+    public static final String IPTV_AD_CONFIGURE_FILE = "iptv_ad_config.xml";
     public static final String IPTV_FILE_PREFIX = "launcher_iptv";
     public static final String IPTV_TYPE = "iptv";
 
     public static final String Q1S_TYPE = "q1s";
     public static final String Q1S_CATEGORY_FILE = "q1s_network_config.xml";
-    public static final String Q1S_UPDATE_CONFIGURE_FILE = "q1s_update_config.xml";
+    public static final String Q1S_AD_CONFIGURE_FILE = "q1s_ad_config.xml";
     public static final String Q1S_FILE_PREFIX = "launcher_q1s";
-
     public static final String THEME_KEY = "theme";
+    public static final String UPDATE_CONFIGURE_FILE = "update_config.xml";
 
-
-    public static final String AD_CONFIGURE_FILE = "ad_config.xml";
     public static final String SCREENSAVER_CONFIGURE_FILE = "screensaver_config.xml";
-
     public static final String CAPTURE_CATEGORY_config_ACTION = "com.luntech.action.GET_APP";
+
     public static final String CAPTURE_UPDATE_CONFIGURE_ACTION = "com.luntech.action.GET_UPDATE";
     public static final String CAPTURE_AD_CONFIGURE_ACTION = "com.luntech.action.GET_AD";
     public static final String CAPTURE_SCREENSAVER_CONFIGURE_ACTION = "com.luntech.action.GEAT_SAVER";
-
     public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
 
     public static final String IPTV_THEME = "theme_iptv";
-    public static final String Q1S_THEME = "theme_q1s";
 
+    public static final String Q1S_THEME = "theme_q1s";
     protected String mThemeType;
+
+    public static String mAdConfigureFile;
     protected static String mCategoryFile;
-    protected static String mUpdateConfigureFile;
     protected static String mFilePrefix;
     protected static String mType;
+    protected static String mUpdateConfigureFile = UPDATE_CONFIGURE_FILE;
     public static String FILE_SCREENSAVER = "screensaver";
     public static final String ADVERTISEMENT_KEY = "advertisement_key";
     public static final String FULL_BG_KEY = "full_bg_key";
@@ -137,9 +136,10 @@ public class Launcher extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate()");
         setContentView(R.layout.main);
         mResources = getResources();
-        mContext = Launcher.this;
+        mContext = LauncherApplication.getAppContext();
         sPackageName = this.getPackageName();
         mdao = new DBDao(mContext);
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
@@ -154,7 +154,6 @@ public class Launcher extends Activity {
         mToolUtils = ToolUtils.getInstance(LauncherApplication.getAppContext());
         mThemeType = ToolUtils.getCommonValueFromSP(mContext, THEME_KEY);
         AppManager.create(this);
-        initPrecondition();
         initScreenSaverTime();
         if (TextUtils.isEmpty(mThemeType)) {
             mThemeType = IPTV_THEME;
@@ -172,7 +171,7 @@ public class Launcher extends Activity {
     }
 
 
-    private void initScreenSaverTime() {
+    protected void initScreenSaverTime() {
         String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
         String[] arrayTime = getResources().getStringArray(R.array.screensaver_array);
         if (!TextUtils.isEmpty(time)) {
@@ -184,6 +183,13 @@ public class Launcher extends Activity {
         } else {
             ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", arrayTime[0]);
         }
+    }
+
+    protected void initParams() {
+        mCategoryFile = getCategoryFileName();
+        mFilePrefix = getFilePrefix();
+        mType = getType();
+        mAdConfigureFile = getAdConfigureFile();
     }
 
     protected void initPrecondition() {
@@ -267,7 +273,9 @@ public class Launcher extends Activity {
             Log.d(TAG, "OnConfiguration changed was called: " + newConfig + "diff is:" + changes);
         }
         if ((changes & ActivityInfo.CONFIG_LOCALE) != 0) {
-            mStatusBar.searchWeather(getUserCity());
+            if (mStatusBar != null) {
+                mStatusBar.searchWeather(getUserCity());
+            }
             Log.d("jzh", "local change----------------" + getUserCity());
         }
         // set our copy of the configuration for comparing with in
@@ -282,7 +290,9 @@ public class Launcher extends Activity {
 
                 @Override
                 public void run() {
-                    mStatusBar.searchWeather(getUserCity());
+                    if (mStatusBar != null) {
+                        mStatusBar.searchWeather(getUserCity());
+                    }
                 }
             }).start();
         } catch (Exception e) {
@@ -389,5 +399,13 @@ public class Launcher extends Activity {
         // TODO Auto-generated method stub
         Log.d(TAG, "do nothing");
     }
+
+    public abstract String getCategoryFileName();
+
+    public abstract String getType();
+
+    public abstract String getAdConfigureFile();
+
+    public abstract String getFilePrefix();
 
 }
