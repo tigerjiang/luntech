@@ -1,6 +1,7 @@
 package com.luntech.launcher;
 
 
+import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -35,9 +36,12 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.hisense.network.utils.EpgDataInfoLoader.HiLauncherLoader;
 import com.luntech.launcher.secondary.AppManager;
+import com.luntech.launcher.secondary.ApplicationInfo;
+import com.luntech.launcher.view.AppDialogFragment;
 
 
 import java.io.File;
@@ -128,7 +132,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         AppManager.create(this);
         initHandler();
         initParams();
-//        parseGroupsFromDB();
+        parseGroupsFromDB();
         LauncherApplication app = ((LauncherApplication) getApplication());
         mLoader = app.setLauncher(this);
 
@@ -699,53 +703,68 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
         if (hasFocus) {
             if (channelImView_unfold.getId() == id) {
+                mSelectedApp = mGroups.get(1).mModules.get(0);
                 setChannelImViewFocus();
                 mLastFocusView = channelImView_unfold;
 
             } else if (vodImView_unfold.getId() == id) {
+                mSelectedApp = mGroups.get(0).mModules.get(0);
                 setVodImViewFocus();
                 mLastFocusView = vodImView_unfold;
 
             } else if (settingBaseView.getId() == id) {
+                mSelectedApp = mGroups.get(4).mModules.get(0);
                 setSettingBaseImViewFocus();
                 mLastFocusView = settingBaseView;
             } else if (settingDispalyView.getId() == id) {
+                mSelectedApp = mGroups.get(4).mModules.get(1);
                 setSettingDisplayImViewFocus();
                 mLastFocusView = settingDispalyView;
             } else if (settingNetView.getId() == id) {
+                mSelectedApp = mGroups.get(4).mModules.get(2);
                 setSettingNetImViewFocus();
                 mLastFocusView = settingNetView;
             } else if (settingUpdateView.getId() == id) {
+                mSelectedApp = mGroups.get(4).mModules.get(3);
                 setSettingUpdateImViewFocus();
                 mLastFocusView = settingUpdateView;
             } else if (settingMoreView.getId() == id) {
+                mSelectedApp = mGroups.get(4).mModules.get(4);
                 setSettingMoreImViewFocus();
                 mLastFocusView = settingMoreView;
             } else if (settingErweiView.getId() == id) {
+                mSelectedApp = mGroups.get(4).mModules.get(5);
                 setSettingErweiImViewFocus();
                 mLastFocusView = settingErweiView;
             } else if (apprecomView1.getId() == id) {
+                mSelectedApp = mGroups.get(3).mModules.get(0);
                 setApprecomView1Focus();
                 mLastFocusView = apprecomView1;
 
             } else if (apprecomView2.getId() == id) {
+                mSelectedApp = mGroups.get(3).mModules.get(2);
                 setApprecomView2Focus();
                 mLastFocusView = apprecomView2;
             } else if (apprecomView3.getId() == id) {
+                mSelectedApp = mGroups.get(3).mModules.get(1);
                 setApprecomView3Focus();
                 mLastFocusView = apprecomView3;
             } else if (myFavoriteView.getId() == id) {
+                mSelectedApp = mGroups.get(2).mModules.get(0);
                 setMyFavoriteViewFocus();
                 mLastFocusView = myFavoriteView;
             } else if (playhistoryView.getId() == id) {
+                mSelectedApp = mGroups.get(2).mModules.get(1);
                 setPlayhistoryViewFocus();
                 mLastFocusView = playhistoryView;
 
             } else if (favpersonView.getId() == id) {
+                mSelectedApp = mGroups.get(2).mModules.get(2);
                 setFavpersonViewFocus();
                 mLastFocusView = favpersonView;
 
             } else if (localView.getId() == id) {
+                mSelectedApp = mGroups.get(2).mModules.get(3);
                 setLocalViewFocus();
                 mLastFocusView = localView;
             }
@@ -946,7 +965,19 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // TODO Auto-generated method stub
 
-        if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            Log.d("replace", " mSelectedApp === " + mSelectedApp.toString());
+            if (mSelectedApp.moduleReplace == 0) {
+                // can't replace
+                Log.d(TAG, "cacn't replace the app");
+                Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (mSelectedApp.moduleReplace == 1) {
+                final DialogFragment newFragment = AppDialogFragment.newInstance(Q1SLauncher.this);
+                newFragment.show(getFragmentManager(), "dialog");
+                return true;
+            }
+        } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
 
             KEY_DIRECTION = Utility.DIRECTION_LEFT;
 
@@ -1117,11 +1148,20 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     //channel
     private void setChannelImView() {
-        File channelImViewFile = new File(IMGPATH_STRING + "channelnofocus1.png");
-        if (channelImViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "channelnofocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            channelImView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(1).mModules.get(0).getModuleIcon(), channelImView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            channelImView.setBackgroundDrawable(cacheDrawable);
         } else {
             channelImView.setBackgroundResource(R.drawable.channelnofocus1);
         }
@@ -1144,11 +1184,20 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     //vod
     private void setVodImView() {
-        File vodImViewFile = new File(IMGPATH_STRING + "vodnofocus1.png");
-        if (vodImViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "vodnofocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            vodImView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(0).mModules.get(0).getModuleIcon(), vodImView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            vodImView.setBackgroundDrawable(cacheDrawable);
         } else {
             vodImView.setBackgroundResource(R.drawable.vodnofocus1);
         }
@@ -1185,11 +1234,20 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setApprecomView1() {
-        File apprecomView1File = new File(IMGPATH_STRING + "appfocus1.png");
-        if (apprecomView1File.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "appfocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            apprecomView1.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(3).mModules.get(0).getModuleIcon(), apprecomView1, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            apprecomView1.setBackgroundDrawable(cacheDrawable);
         } else {
             apprecomView1.setBackgroundResource(R.drawable.appfocus1);
         }
@@ -1200,15 +1258,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File apprecomView2File = new File(IMGPATH_STRING + "appfocus2.png");
-        if (apprecomView2File.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "appfocus2.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(3).mModules.get(2).getModuleIcon(), apprecomView2, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            apprecomView2.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.appfocus2)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            apprecomView2.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        apprecomView2.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1220,15 +1289,27 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File apprecomView3File = new File(IMGPATH_STRING + "appfocus3.png");
-        if (apprecomView3File.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "appfocus3.png");
+
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(3).mModules.get(2).getModuleIcon(), apprecomView3, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            apprecomView3.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.appfocus3)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            apprecomView3.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        apprecomView3.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1252,15 +1333,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File myFavoriteViewFile = new File(IMGPATH_STRING + "zhihuifocus1.png");
-        if (myFavoriteViewFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "zhihuifocus1.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(2).mModules.get(0).getModuleIcon(), myFavoriteView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            myFavoriteView.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.zhihuifocus1)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            myFavoriteView.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        myFavoriteView.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1272,15 +1364,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File playhistoryViewFile = new File(IMGPATH_STRING + "zhihuifocus2.png");
-        if (playhistoryViewFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "zhihuifocus2.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(2).mModules.get(1).getModuleIcon(), playhistoryView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            playhistoryView.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.zhihuifocus2)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            playhistoryView.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        playhistoryView.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1288,11 +1391,20 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setFavpersonView() {
-        File favpersonViewFile = new File(IMGPATH_STRING + "zhihuifocus3.png");
-        if (favpersonViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "zhihuifocus3.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            favpersonView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(2).mModules.get(2).getModuleIcon(), favpersonView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            favpersonView.setBackgroundDrawable(cacheDrawable);
         } else {
             favpersonView.setBackgroundResource(R.drawable.zhihuifocus3);
         }
@@ -1303,15 +1415,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File localViewFile = new File(IMGPATH_STRING + "zhihuifocus4.png");
-        if (localViewFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "zhihuifocus4.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(2).mModules.get(3).getModuleIcon(), localView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            localView.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.zhihuifocus4)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            localView.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        localView.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1331,33 +1454,60 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingBaseView() {
-        File settingBaseViewFile = new File(IMGPATH_STRING + "settingfocus1.png");
-        if (settingBaseViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingfocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            settingBaseView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(4).mModules.get(0).getModuleIcon(), settingBaseView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            settingBaseView.setBackgroundDrawable(cacheDrawable);
         } else {
             settingBaseView.setBackgroundResource(R.drawable.settingfocus1);
         }
     }
 
     private void setSettingDispalyView() {
-        File settingDispalyViewFile = new File(IMGPATH_STRING + "settingfocus3.png");
-        if (settingDispalyViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingfocus3.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            settingDispalyView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(4).mModules.get(1).getModuleIcon(), settingDispalyView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            settingDispalyView.setBackgroundDrawable(cacheDrawable);
         } else {
             settingDispalyView.setBackgroundResource(R.drawable.settingfocus3);
         }
     }
 
     private void setSettingNetView() {
-        File settingNetViewFile = new File(IMGPATH_STRING + "settingfocus5.png");
-        if (settingNetViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingfocus5.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            settingNetView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(4).mModules.get(2).getModuleIcon(), settingNetView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            settingNetView.setBackgroundDrawable(cacheDrawable);
         } else {
             settingNetView.setBackgroundResource(R.drawable.settingfocus5);
         }
@@ -1368,15 +1518,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File settingUpdateViewFile = new File(IMGPATH_STRING + "settingfocus2.png");
-        if (settingUpdateViewFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingfocus2.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(4).mModules.get(3).getModuleIcon(), settingUpdateView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            settingUpdateView.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.settingfocus2)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            settingUpdateView.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        settingUpdateView.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1388,15 +1549,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File settingMoreViewFile = new File(IMGPATH_STRING + "settingfocus4.png");
-        if (settingMoreViewFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingfocus4.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(4).mModules.get(4).getModuleIcon(), settingMoreView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            settingMoreView.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.settingfocus4)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            settingMoreView.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        settingMoreView.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1408,15 +1580,26 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         Bitmap bitmap = null;
         Drawable drawable = null;
 
-        File settingErweiViewFile = new File(IMGPATH_STRING + "settingfocus6.png");
-        if (settingErweiViewFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingfocus6.png");
+        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mGroups.get(4).mModules.get(5).getModuleIcon(), settingErweiView, new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                if (imageDrawable != null) {
+                    imageView.setImageDrawable(imageDrawable);
+                } else {
+                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageUrl));
+                }
+            }
+        });
+        if (cacheDrawable != null) {
+            settingErweiView.setBackgroundDrawable(cacheDrawable);
         } else {
             bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.settingfocus6)).getBitmap();
+            bitmap = createReflectedImage(bm, bm);
+            drawable = new BitmapDrawable(bitmap);
+            settingErweiView.setBackgroundDrawable(drawable);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-        settingErweiView.setBackgroundDrawable(drawable);
 
         bm = null;
         bitmap = null;
@@ -1424,6 +1607,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void initHomeView() {
+        mAsyncImageLoader = new AsyncImageLoader(mContext);
         bgFrameLayout = (FrameLayout) findViewById(R.id.homeLayout);
         String bgPath = ToolUtils.getValueFromSP(mContext, FULL_BG_KEY);
         if (!TextUtils.isEmpty(bgPath)) {
@@ -1614,6 +1798,34 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     public String getCategoryFileName() {
         return Q1S_CATEGORY_FILE;
+    }
+
+    public void setResult(ApplicationInfo app, boolean isSelected) {
+        if (isSelected && app != null && mSelectedApp != null) {
+            String value = mToolUtils.getConfigured(mContext, app.getPackageName());
+            if (!TextUtils.isEmpty(value)) {
+                if (value.equals(mSelectedApp.getModuleCode())) {
+                    mToolUtils.clearConfiguredPkg(mContext, app.getPackageName());
+                } else {
+                    Log.d("jzh", "setResult cancel for duplicate ");
+                    Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+            mToolUtils.setConfigured(mContext, app.getPackageName(), mSelectedApp.getModuleCode());
+            mToolUtils.setConfiguredPkg(mContext, mSelectedApp.getModuleCode(), app.getPackageName());
+            mSelectedApp.moduleIconDrawable = app.getIcon();
+            mSelectedApp.moduleText = app.getTitle();
+            mSelectedApp.moduleReplace = 1;
+            mSelectedApp.mApps.get(0).componentName = app.mComponent;
+            Log.d("replace", " mSelectedApp " + mSelectedApp.toString());
+            notifyModuleList(mSelectedApp);
+            initHomeView();
+            Log.d("jzh", "setResult  RESULT_OK " + app.toString());
+        } else {
+            setResult(RESULT_CANCELED, null);
+            Log.d("jzh", "setResult RESULT_CANCELED ");
+        }
     }
 
 }

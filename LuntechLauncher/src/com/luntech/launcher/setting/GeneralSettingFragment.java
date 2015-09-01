@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +17,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.luntech.launcher.IPTVLauncher;
 import com.luntech.launcher.Launcher;
+import com.luntech.launcher.Q1SLauncher;
 import com.luntech.launcher.R;
 import com.luntech.launcher.ToolUtils;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +35,7 @@ public class GeneralSettingFragment extends Fragment {
     private List<String> mItems;
     private Context mContext;
     private List<String> mTimes;
+    private List<String> mThemes;
 
     public static GeneralSettingFragment newInstance() {
         GeneralSettingFragment generalFragment = new GeneralSettingFragment();
@@ -57,7 +63,7 @@ public class GeneralSettingFragment extends Fragment {
         mTvGeneralListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String time = ToolUtils.getValueFromSP(mContext, "saver_time");
+                String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
                 int index = mTimes.indexOf(time);
 
                 if (position == 0) {
@@ -90,10 +96,30 @@ public class GeneralSettingFragment extends Fragment {
                     intent2.putExtra(Intent.EXTRA_INTENT, intent);
                     startActivity(intent2);
                 } else if (position == 3) {
-                    Intent intent = new Intent();
-                    intent.setClass(mContext, SetCity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    String theme = ToolUtils.getCommonValueFromSP(mContext, "theme");
+                    if (TextUtils.isEmpty(theme)) {
+                        ToolUtils.storeCommonValueIntoSP(mContext, "theme", "IPTV");
+                    }
+                    int i = mThemes.indexOf(theme);
+                    final Intent themeIntent = new Intent();
+                    new AlertDialog.Builder(mContext).setSingleChoiceItems(R.array.theme_array, i, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (which == 0) {
+                                        ToolUtils.storeCommonValueIntoSP(mContext, "theme", mThemes.get(0));
+                                        themeIntent.setClass(mContext, IPTVLauncher.class);
+                                    } else if (which == 1) {
+                                        ToolUtils.storeCommonValueIntoSP(mContext, "theme", mThemes.get(1));
+                                        themeIntent.setClass(mContext, Q1SLauncher.class);
+                                    }
+                                    themeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(themeIntent);
+                                    dialog.dismiss();
+                                }
+                            }
+                    ).create().show();
+
+
                 }
             }
 
@@ -108,6 +134,9 @@ public class GeneralSettingFragment extends Fragment {
         String[] arrayTime = getResources().getStringArray(R.array.screensaver_array);
         mTimes = new ArrayList<String>();
         mTimes = Arrays.asList(arrayTime);
+        String[] arrayTheme = getResources().getStringArray(R.array.theme_array);
+        mThemes = new ArrayList<String>();
+        mThemes = Arrays.asList(arrayTheme);
     }
 
     class AboutTVGenaralAdapter extends BaseAdapter {

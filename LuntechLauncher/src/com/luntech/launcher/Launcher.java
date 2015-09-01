@@ -69,15 +69,15 @@ public  class Launcher extends Activity {
     public static final String CAPTURE_SCREENSAVER_CONFIGURE_ACTION = "com.luntech.action.GEAT_SAVER";
     public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
 
-    public static final String IPTV_THEME = "theme_iptv";
+    public static final String IPTV_THEME = "IPTV";
 
-    public static final String Q1S_THEME = "theme_q1s";
+    public static final String Q1S_THEME = "Q1S";
     protected String mThemeType;
 
-    public static String mAdConfigureFile;
-    protected static String mCategoryFile;
-    protected static String mFilePrefix;
-    protected static String mType;
+    public static String mAdConfigureFile = IPTV_AD_CONFIGURE_FILE;
+    protected static String mCategoryFile = IPTV_CATEGORY_FILE;
+    protected static String mFilePrefix = IPTV_FILE_PREFIX;
+    protected static String mType = IPTV_TYPE  ;
     public static String mUpdateConfigureFile = UPDATE_CONFIGURE_FILE;
     public static String FILE_SCREENSAVER = "screensaver";
     public static final String ADVERTISEMENT_KEY = "advertisement_key";
@@ -128,14 +128,13 @@ public  class Launcher extends Activity {
             mThemeType = IPTV_THEME;
         }
         Intent themeIntent = new Intent();
-/*        if (IPTV_THEME.equals(mThemeType)) {
+        if (IPTV_THEME.equals(mThemeType)) {
             themeIntent.setClass(mContext, IPTVLauncher.class);
-        } else if (Q1S_TYPE.equals(mThemeType)) {
+        } else if (Q1S_THEME.equals(mThemeType)) {
             themeIntent.setClass(mContext, Q1SLauncher.class);
         } else {
-            themeIntent.setClass(mContext, IPTVLauncher.class);
-        }*/
-        themeIntent.setClass(mContext, IPTVLauncher.class);
+            themeIntent.setClass(mContext, Q1SLauncher.class);
+        }
         themeIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(themeIntent);
     }
@@ -218,7 +217,7 @@ public  class Launcher extends Activity {
                 }
             }
             Collections.sort(mGroups, PARSED_APPS_COMPARATOR);
-            Log.d(TAG,"type "+mType);
+            Log.d(TAG, "type " + mType);
         }
         mModules = mdao.fetchAllModules(mType.toUpperCase());
     }

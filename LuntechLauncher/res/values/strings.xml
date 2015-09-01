@@ -211,12 +211,17 @@
         <item>屏保设置</item>
         <item>修改默认桌面</item>
         <item>选择桌面</item>
-        <item>区域</item>
+        <item>更换主题</item>
     </string-array>
     <string-array name="screensaver_array">
         <item>5分钟</item>
         <item>10分钟</item>
         <item>15分钟</item>
+    </string-array>
+
+    <string-array name="theme_array">
+        <item>IPTV</item>
+        <item>Q1S</item>
     </string-array>
     <string name="app_version">IPTV</string>
     <string name="no_update">已经是最新版本</string>
