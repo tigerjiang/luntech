@@ -61,9 +61,35 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".LauncherApplication"
+        >
         <activity
             android:name="com.luntech.launcher.Launcher"
+            android:configChanges="locale|screenLayout|orientation|layoutDirection"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateUnspecified|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.luntech.launcher.Q1SLauncher"
+            android:configChanges="locale|screenLayout|orientation|layoutDirection"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:windowSoftInputMode="stateUnspecified|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.luntech.launcher.IPTVLauncher"
             android:configChanges="locale|screenLayout|orientation|layoutDirection"
             android:label="@string/app_name"
             android:screenOrientation="landscape"
@@ -209,13 +235,13 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.luntech.launcher.setting.SetCity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+        <!--<activity android:name="com.luntech.launcher.setting.SetCity">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
 
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+            <!--</intent-filter>-->
+        <!--</activity>-->
     </application>
 
 </manifest>

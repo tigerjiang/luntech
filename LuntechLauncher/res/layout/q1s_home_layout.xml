@@ -5,8 +5,8 @@
     android:layout_height="fill_parent">
 
     <include
-        layout="@layout/status_bar"
-        android:layout_width="wrap_content"
+        layout="@layout/statusbar_layout"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
     <include

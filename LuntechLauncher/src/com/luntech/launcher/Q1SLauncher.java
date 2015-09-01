@@ -21,6 +21,10 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -33,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.hisense.network.utils.EpgDataInfoLoader.HiLauncherLoader;
+import com.luntech.launcher.secondary.AppManager;
 
 
 import java.io.File;
@@ -120,10 +125,10 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.q1s_home_layout);
-
-        bgFrameLayout = (FrameLayout) findViewById(R.id.homeLayout);
-        setBgImage();
-
+        AppManager.create(this);
+        initHandler();
+        initParams();
+//        parseGroupsFromDB();
         LauncherApplication app = ((LauncherApplication) getApplication());
         mLoader = app.setLauncher(this);
 
@@ -255,10 +260,96 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     }
 
+    private void initHandler() {
+        mHandler = new LauncherHandler();
+        mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
+        mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW, Launcher.SHOW_DELAY_TIME);
+    }
+
+    class LauncherHandler extends Handler {
+
+        public static final int SHOW_FEATURE_VIEW = 1;
+        public static final int DISMISS_FEATURE_VIEW = 2;
+        public static final int NO_OPERATION = 3;
+        public static final int SHOW_SCREEN_SAVER = 4;
+
+        public LauncherHandler() {
+            super(Looper.getMainLooper());
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            final String result = (String) msg.obj;
+            if (TextUtils.isEmpty(result)) {
+                Logger.e("result is empty");
+            }
+            switch (msg.what) {
+                case SHOW_FEATURE_VIEW:
+                    // Log.d("show", "SHOW_FEATURE_VIEW");
+//                    mFeatureMenuLayout.setVisibility(View.VISIBLE);
+                    mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
+                    mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
+                            Launcher.DISMISS_DELAY_TIME);
+                    break;
+                case DISMISS_FEATURE_VIEW:
+                    Log.d("show", "DISMISS_FEATURE_VIEW");
+//                    mFeatureMenuLayout.setVisibility(View.GONE);
+                    break;
+                case NO_OPERATION:
+                    Log.d("show", "NO_OPERATION");
+//                    mFeatureMenuLayout.setVisibility(View.GONE);
+                    mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
+                    mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
+                            SHOW_DELAY_TIME);
+                    break;
+                case SHOW_SCREEN_SAVER:
+                    Log.d("show", "SHOW_SCREEN_SAVER");
+                    Intent intent = new Intent(mContext, ScreenSaverActivity.class);
+                    startActivity(intent);
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
+    private void refreshFeatureMenuView() {
+        try {
+            if (mSelectedApp.moduleReplace == 0) {
+                mFeatureView.setText(R.string.feature_menu_1);
+            } else if (mSelectedApp.moduleReplace == 1) {
+                mFeatureView.setText(R.string.feature_menu_0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        Log.d("show", "onUserInteraction");
+//        mHandler.removeMessages(LauncherHandler.NO_OPERATION);
+//        mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
+//        restartSendShowScreenSaver();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        // TODO Auto-generated method stub
+        Log.d(TAG, "do nothing");
+    }
+
+
+    private void restartSendShowScreenSaver() {
+        Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
+        mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
+        mHandler.sendMessageDelayed(msg, showScreenSaverTime);
+    }
+
 
     @Override
     protected void onStart() {
-        // TODO Auto-generated method stub
         super.onStart();
     }
 
@@ -551,50 +642,45 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
 
     public void onClick_Event(View view) {
+        App app = null;
         if (view.getId() == vodImView_unfold.getId()) {
-
-            safeStartApk("com.xike.xkliveplay", "com.xike.xkliveplay.activity.launch.ActivityLaunch");
-
+            app = mGroups.get(0).mModules.get(0).mApps.get(0);
         } else if (view.getId() == channelImView_unfold.getId()) {
-            //safeStartApk("com.softwine.secondary", "com.softwine.secondary.MediaAppsGridActivity");
-            safeStartApk("cn.com.wasu.main", "cn.com.wasu.main.WasuTVMainActivity");
+            app = mGroups.get(1).mModules.get(0).mApps.get(0);
         } else if (view.getId() == apprecomView1.getId()) {
-            safeStartApk("com.qihoo360.mobilesafe_tv", "com.qihoo360.mobilesafe.ui.index.AppEnterActivity");
+
+            app = mGroups.get(3).mModules.get(0).mApps.get(0);
 
         } else if (view.getId() == apprecomView2.getId()) {
-            safeStartApk("com.softwine.secondary", "com.softwine.secondary.ApplicationsGridActivity");
+            app = mGroups.get(3).mModules.get(2).mApps.get(0);
 
         } else if (view.getId() == apprecomView3.getId()) {
-            safeStartApk("com.luntech.zhihemarket", "com.luntech.zhihemarket.LoginActivity");
+            app = mGroups.get(3).mModules.get(1).mApps.get(0);
 
         } else if (view.getId() == myFavoriteView.getId()) {
-            //safeStartApk("com.softwine.secondary", "com.softwine.secondary.SmartAppsGridActivity");
-            safeStartApk("com.eastsoft.android.ihome", "com.eastsoft.android.ihome.login.Launcher");
+            app = mGroups.get(2).mModules.get(0).mApps.get(0);
         } else if (view.getId() == playhistoryView.getId()) {
-            safeStartApk("com.softwine.secondary", "com.softwine.secondary.LongTaiAppsGridActivity");
+            app = mGroups.get(2).mModules.get(1).mApps.get(0);
         } else if (view.getId() == favpersonView.getId()) {
-            //safeStartApk("com.softwine.secondary", "com.softwine.secondary.GameAppsGridActivity");
-            String activityNameString = queryAppInfoByPackageName("com.egame.tv");
-            safeStartApk("com.egame.tv", activityNameString);
+            app = mGroups.get(2).mModules.get(2).mApps.get(0);
         } else if (view.getId() == settingBaseView.getId()) {
-            safeStartApk("com.android.settings", "com.sugar.settings.AboutActivity");
+            app = mGroups.get(4).mModules.get(0).mApps.get(0);
         } else if (view.getId() == settingDispalyView.getId()) {
-            safeStartApk("com.android.settings", "com.sugar.settings.DisplayConfigActivity");
+            app = mGroups.get(4).mModules.get(1).mApps.get(0);
         } else if (view.getId() == settingNetView.getId()) {
-            safeStartApk("com.android.settings", "com.sugar.settings.NetworkConfigActivity");
+            app = mGroups.get(4).mModules.get(2).mApps.get(0);
         } else if (view.getId() == settingUpdateView.getId()) {
-            safeStartApk("com.android.settings", "com.sugar.settings.UpdateActivity");
+            app = mGroups.get(4).mModules.get(3).mApps.get(0);
         }
         //else if (view.getId() == settingImView_unfold.getId()){
         else if (view.getId() == settingMoreView.getId()) {
-            safeStartApk("com.android.settings", "com.android.settings.Settings");
-
+            app = mGroups.get(4).mModules.get(4).mApps.get(0);
         } else if (view.getId() == settingErweiView.getId()) {
-            safeStartApk("com.android.settings", "com.sugar.settings.QRActivity");
+            app = mGroups.get(4).mModules.get(5).mApps.get(0);
         } else if (view.getId() == localView.getId()) {
-            //safeStartApk("com.example.testapp", "com.example.testapp.MediaAppsGridActivity");
-            safeStartApk("com.softwinner.TvdFileManager", "com.softwinner.TvdFileManager.MainUI");
+            app = mGroups.get(2).mModules.get(3).mApps.get(0);
         }
+        ToolUtils.safeStartApk(mContext, app);
     }
 
     void safeStartApk(String pkName, String className) {
@@ -1029,20 +1115,6 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
 
-    //bg
-    private void setBgImage() {
-        File bgImageFile = new File(IMGPATH_STRING + "bgnofocus1.png");
-        if (bgImageFile.exists()) {
-            Bitmap bmBitmap = BitmapFactory.decodeFile(IMGPATH_STRING + "bgnofocus1.png");
-            Drawable drawable = new BitmapDrawable(bmBitmap);
-            bgFrameLayout.setBackgroundDrawable(drawable);
-            Log.d(TAG, " launcher use new bg  ");
-        } else {
-            Log.d(TAG, " launcher use old bg  ");
-            bgFrameLayout.setBackgroundResource(R.drawable.bg);
-        }
-    }
-
     //channel
     private void setChannelImView() {
         File channelImViewFile = new File(IMGPATH_STRING + "channelnofocus1.png");
@@ -1352,6 +1424,16 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void initHomeView() {
+        bgFrameLayout = (FrameLayout) findViewById(R.id.homeLayout);
+        String bgPath = ToolUtils.getValueFromSP(mContext, FULL_BG_KEY);
+        if (!TextUtils.isEmpty(bgPath)) {
+            try {
+                bgFrameLayout.setBackground(Drawable.createFromPath(bgPath));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+//        notifyAllModuleList();
         focusBkLayout = (FrameLayout) findViewById(R.id.mainmenu_focusbk_layout);
         focusBkImageView = (ImageView) findViewById(R.id.mainmenu_focusbk);
 
@@ -1511,22 +1593,25 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     }
 
-    @Override
+    private void initParams() {
+        mCategoryFile = getCategoryFileName();
+        mFilePrefix = getFilePrefix();
+        mType = getType();
+        mAdConfigureFile = getAdConfigureFile();
+    }
+
     public String getType() {
         return Q1S_TYPE;
     }
 
-    @Override
     public String getAdConfigureFile() {
         return Q1S_AD_CONFIGURE_FILE;
     }
 
-    @Override
     public String getFilePrefix() {
         return Q1S_FILE_PREFIX;
     }
 
-    @Override
     public String getCategoryFileName() {
         return Q1S_CATEGORY_FILE;
     }

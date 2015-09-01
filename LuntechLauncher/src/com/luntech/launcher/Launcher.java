@@ -2,66 +2,36 @@
 package com.luntech.launcher;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.content.res.XmlResourceParser;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
 import android.provider.Settings;
-import android.support.v4.content.ContextCompat;
-import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.luntech.launcher.AsyncImageLoader.ImageCallback;
 import com.luntech.launcher.db.DBDao;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
-import com.luntech.launcher.view.AppDialogFragment;
 import com.luntech.launcher.view.TvStatusBar;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public abstract class Launcher extends Activity {
+public  class Launcher extends Activity {
 
     private static final String TAG = "Launcher";
     private static final boolean DEBUG = true;
@@ -108,7 +78,7 @@ public abstract class Launcher extends Activity {
     protected static String mCategoryFile;
     protected static String mFilePrefix;
     protected static String mType;
-    protected static String mUpdateConfigureFile = UPDATE_CONFIGURE_FILE;
+    public static String mUpdateConfigureFile = UPDATE_CONFIGURE_FILE;
     public static String FILE_SCREENSAVER = "screensaver";
     public static final String ADVERTISEMENT_KEY = "advertisement_key";
     public static final String FULL_BG_KEY = "full_bg_key";
@@ -128,7 +98,7 @@ public abstract class Launcher extends Activity {
 
     protected ToolUtils mToolUtils;
     protected ArrayList<Group> mGroups;
-    public ArrayList<Module> mModules;
+    protected ArrayList<Module> mModules;
     protected DBDao mdao;
 
     public static ArrayList<String> sScreenSaverFileList = new ArrayList<String>();
@@ -154,22 +124,29 @@ public abstract class Launcher extends Activity {
         mToolUtils = ToolUtils.getInstance(LauncherApplication.getAppContext());
         mThemeType = ToolUtils.getCommonValueFromSP(mContext, THEME_KEY);
         AppManager.create(this);
-        initScreenSaverTime();
         if (TextUtils.isEmpty(mThemeType)) {
             mThemeType = IPTV_THEME;
         }
         Intent themeIntent = new Intent();
-        if (IPTV_THEME.equals(mThemeType)) {
+/*        if (IPTV_THEME.equals(mThemeType)) {
             themeIntent.setClass(mContext, IPTVLauncher.class);
         } else if (Q1S_TYPE.equals(mThemeType)) {
             themeIntent.setClass(mContext, Q1SLauncher.class);
         } else {
             themeIntent.setClass(mContext, IPTVLauncher.class);
-        }
-        themeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }*/
+        themeIntent.setClass(mContext, IPTVLauncher.class);
+        themeIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(themeIntent);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        initScreenSaverTime();
+        initPrecondition();
+
+    }
 
     protected void initScreenSaverTime() {
         String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
@@ -185,19 +162,14 @@ public abstract class Launcher extends Activity {
         }
     }
 
-    protected void initParams() {
-        mCategoryFile = getCategoryFileName();
-        mFilePrefix = getFilePrefix();
-        mType = getType();
-        mAdConfigureFile = getAdConfigureFile();
-    }
 
     protected void initPrecondition() {
 
         if (!HttpUtils.checkConnectivity(mContext)) {
             return;
         }
-        mHandler.postDelayed(new Runnable() {
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
 
             @Override
             public void run() {
@@ -246,7 +218,9 @@ public abstract class Launcher extends Activity {
                 }
             }
             Collections.sort(mGroups, PARSED_APPS_COMPARATOR);
+            Log.d(TAG,"type "+mType);
         }
+        mModules = mdao.fetchAllModules(mType.toUpperCase());
     }
 
     // ///////////////// Private API Helpers //////////////////////////
@@ -399,13 +373,4 @@ public abstract class Launcher extends Activity {
         // TODO Auto-generated method stub
         Log.d(TAG, "do nothing");
     }
-
-    public abstract String getCategoryFileName();
-
-    public abstract String getType();
-
-    public abstract String getAdConfigureFile();
-
-    public abstract String getFilePrefix();
-
 }

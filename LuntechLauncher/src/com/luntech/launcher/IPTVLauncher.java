@@ -74,14 +74,14 @@ public class IPTVLauncher extends Launcher {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.iptv_home_layout);
         AppManager.create(this);
-        initParams();
-        initPrecondition();
         initHandler();
+        initParams();;
         parseGroupsFromDB();
         initView();
     }
+
 
     private void initHandler() {
         mHandler = new LauncherHandler();
@@ -550,24 +550,28 @@ public class IPTVLauncher extends Launcher {
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
-    @Override
+    private void initParams() {
+        mCategoryFile = getCategoryFileName();
+        mFilePrefix = getFilePrefix();
+        mType = getType();
+        mAdConfigureFile = getAdConfigureFile();
+    }
+
     public String getType() {
         return IPTV_TYPE;
     }
 
-    @Override
     public String getAdConfigureFile() {
         return IPTV_AD_CONFIGURE_FILE;
     }
 
-    @Override
     public String getFilePrefix() {
         return IPTV_FILE_PREFIX;
     }
 
-    @Override
     public String getCategoryFileName() {
         return Launcher.IPTV_CATEGORY_FILE;
     }

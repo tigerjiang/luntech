@@ -67,7 +67,7 @@ public class UpdateFragment extends Fragment {
         mLocalUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String httpArg = "&package_name=com.luntech.launcher"  + "&version=201507";
+                String httpArg = "&package_name="+Launcher.sPackageName  + "&version="+Launcher.sVersionCode;
                 final String update_url = HttpUtils.HTTP_UPDATE_APP_URL + httpArg;
                 Logger.e("request url " + update_url);
                 mHandler.post(new Runnable() {

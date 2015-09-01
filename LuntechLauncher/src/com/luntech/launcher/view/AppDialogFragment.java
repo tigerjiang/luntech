@@ -22,6 +22,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.luntech.launcher.IPTVLauncher;
 import com.luntech.launcher.Launcher;
 import com.luntech.launcher.R;
 import com.luntech.launcher.secondary.AppManager;
@@ -98,8 +99,8 @@ public class AppDialogFragment extends DialogFragment {
 
                 mSelectedApp = mAppList.get(position);
                 Activity activity = getActivity();
-                if (activity instanceof Launcher) {
-                    ((Launcher) activity).setResult(mSelectedApp, true);
+                if (activity instanceof IPTVLauncher) {
+                    ((IPTVLauncher) activity).setResult(mSelectedApp, true);
                 }
                 dismiss();
             }
