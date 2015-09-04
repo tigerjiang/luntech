@@ -31,7 +31,7 @@
 
         <ImageView
             android:id="@+id/mainmenu_focusbk"
-            android:layout_width="704px"
+            android:layout_width="714px"
             android:layout_height="435px"
             android:background="@drawable/menu_focus"
             android:focusable="false" />

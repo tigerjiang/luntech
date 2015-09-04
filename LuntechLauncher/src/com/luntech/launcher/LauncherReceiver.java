@@ -16,7 +16,7 @@ public class LauncherReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (DEBUG) {
-            Log.d(TAG, "received request, passing to service");
+            Log.d(TAG, "received request, passing to service " + action);
         }
         intent.setClass(context, LauncherService.class);
         context.startService(intent);

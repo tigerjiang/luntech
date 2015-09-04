@@ -15,19 +15,19 @@
         android:layout_marginTop="31px"
         android:orientation="vertical">
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/app_recom1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="214px"
+            android:layout_height="184px"
             android:layout_marginLeft="2px"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onClick_Event" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/app_recom2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="214px"
+            android:layout_height="184px"
             android:layout_marginLeft="2px"
             android:layout_marginTop="5px"
             android:clickable="true"
@@ -38,10 +38,10 @@
     </LinearLayout>
 
 
-    <ImageView
+    <com.luntech.launcher.view.QisItem
         android:id="@+id/app_recom3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="441px"
+        android:layout_height="373px"
         android:layout_marginLeft="4px"
         android:layout_marginTop="31px"
         android:clickable="true"

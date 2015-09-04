@@ -80,6 +80,8 @@ public class IPTVLauncher extends Launcher {
         initParams();;
         parseGroupsFromDB();
         initView();
+        initScreenSaverTime();
+        initPrecondition();
     }
 
 

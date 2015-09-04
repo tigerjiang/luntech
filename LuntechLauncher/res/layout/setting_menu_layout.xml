@@ -16,30 +16,30 @@
         android:focusable="false"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting_base"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="215px"
+            android:layout_height="184px"
             android:layout_marginLeft="2px"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onClick_Event"
             android:scaleType="matrix" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting_display"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="215px"
+            android:layout_height="184px"
             android:layout_marginLeft="4px"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onClick_Event"
             android:scaleType="matrix" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting_net"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="215px"
+            android:layout_height="184px"
             android:layout_marginLeft="4px"
             android:clickable="true"
             android:focusable="true"
@@ -58,30 +58,30 @@
         android:orientation="horizontal">
 
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting_update"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="215px"
+            android:layout_height="184px"
             android:layout_marginLeft="2px"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onClick_Event"
             android:scaleType="fitStart" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="215px"
+            android:layout_height="184px"
             android:layout_marginLeft="4px"
             android:clickable="true"
             android:focusable="true"
             android:onClick="onClick_Event"
             android:scaleType="matrix" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting_erwei"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="215px"
+            android:layout_height="184px"
             android:layout_marginLeft="4px"
             android:clickable="true"
             android:focusable="true"

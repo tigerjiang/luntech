@@ -32,13 +32,14 @@
 
         <TextView
             android:id="@+id/time_view"
-            android:layout_width="wrap_content"
+            android:layout_width="200px"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/global_vertical_devider_height_1"
             android:layout_toLeftOf="@+id/luntech_icon"
             android:gravity="center"
+            android:singleLine="true"
             android:text="@string/time"
             android:textColor="@color/white"
             android:textSize="@dimen/global_text_size_large" >

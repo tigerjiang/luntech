@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.luntech.launcher.IPTVLauncher;
 import com.luntech.launcher.Launcher;
+import com.luntech.launcher.Q1SLauncher;
 import com.luntech.launcher.R;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
@@ -101,6 +102,8 @@ public class AppDialogFragment extends DialogFragment {
                 Activity activity = getActivity();
                 if (activity instanceof IPTVLauncher) {
                     ((IPTVLauncher) activity).setResult(mSelectedApp, true);
+                } else if (activity instanceof Q1SLauncher) {
+                    ((Q1SLauncher) activity).setResult(mSelectedApp, true);
                 }
                 dismiss();
             }

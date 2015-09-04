@@ -35,9 +35,9 @@ public class LauncherService extends Service {
     private static final boolean DEBUG = true;
     private static final int NEW_INTENT_RECEIVED = 1001;
     private LauncherHandler mLauncherHandler;
-    private LauncherReceiver mReceiver;
-    private Context mContext;
 
+    private Context mContext;
+    private String mResult;
     protected DownloadManager mDownloadManager;
 
     @Override
@@ -47,15 +47,7 @@ public class LauncherService extends Service {
 
     @Override
     public void onCreate() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(DownloadManager.ACTION_DOWNLOAD_COMPLETE);
-        filter.addAction(Launcher.CAPTURE_AD_CONFIGURE_ACTION);
-        filter.addAction(Launcher.CAPTURE_SCREENSAVER_CONFIGURE_ACTION);
-        filter.addAction(Launcher.CAPTURE_UPDATE_CONFIGURE_ACTION);
-        filter.addAction(Launcher.CAPTURE_CATEGORY_config_ACTION);
-        filter.addAction(Launcher.SHOW_SCREENSAVER_ACTION);
-        mReceiver = new LauncherReceiver();
-        registerReceiver(mReceiver, filter);
+        Log.d(TAG, "The service is onCreate.");
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         mContext = LauncherApplication.getAppContext();
         super.onCreate();
@@ -117,9 +109,12 @@ public class LauncherService extends Service {
         @Override
         public void handleMessage(Message msg) {
 
-            final String result = (String) msg.obj;
-            if (TextUtils.isEmpty(result)) {
-                Logger.e("result is empty");
+
+            if (msg.obj instanceof String) {
+                mResult = (String) msg.obj;
+                if (TextUtils.isEmpty(mResult)) {
+                    Logger.e("result is empty");
+                }
             }
             switch (msg.what) {
                 case NEW_INTENT_RECEIVED:
@@ -196,7 +191,7 @@ public class LauncherService extends Service {
                         @Override
                         public void run() {
                             getCustomConfigureFromConfig(mContext,
-                                    new ByteArrayInputStream(result.getBytes()));
+                                    new ByteArrayInputStream(mResult.getBytes()));
                         }
                     }).start();
                     break;
@@ -208,7 +203,7 @@ public class LauncherService extends Service {
                         @Override
                         public void run() {
                             getScreenSaverFromConfig(mContext,
-                                    new ByteArrayInputStream(result.getBytes()));
+                                    new ByteArrayInputStream(mResult.getBytes()));
                         }
                     }).start();
                     break;
@@ -222,7 +217,7 @@ public class LauncherService extends Service {
                 case RETURN_UPDATE_CONFIG_CODE:
                     try {
                         final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
-                                new ByteArrayInputStream(result.getBytes()));
+                                new ByteArrayInputStream(mResult.getBytes()));
                         if (ota.currentVersion.equals(String.valueOf(Launcher.sVersionCode))) {
                             if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
                                 Log.d(TAG, "find new version for update " + ota.newVersion);
@@ -252,7 +247,7 @@ public class LauncherService extends Service {
                     break;
                 case RETURN_SYSTEM_CONFIG_CODE:
                     String adContent = ToolUtils.getAdConfigureFromConfig(mContext,
-                            new ByteArrayInputStream(result.getBytes()));
+                            new ByteArrayInputStream(mResult.getBytes()));
                     Log.d(TAG, "ad " + adContent);
                     break;
 

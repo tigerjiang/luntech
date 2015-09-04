@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public  class Launcher extends Activity {
+public class Launcher extends Activity {
 
     private static final String TAG = "Launcher";
     private static final boolean DEBUG = true;
@@ -62,6 +63,7 @@ public  class Launcher extends Activity {
     public static final String UPDATE_CONFIGURE_FILE = "update_config.xml";
 
     public static final String SCREENSAVER_CONFIGURE_FILE = "screensaver_config.xml";
+
     public static final String CAPTURE_CATEGORY_config_ACTION = "com.luntech.action.GET_APP";
 
     public static final String CAPTURE_UPDATE_CONFIGURE_ACTION = "com.luntech.action.GET_UPDATE";
@@ -77,7 +79,7 @@ public  class Launcher extends Activity {
     public static String mAdConfigureFile = IPTV_AD_CONFIGURE_FILE;
     protected static String mCategoryFile = IPTV_CATEGORY_FILE;
     protected static String mFilePrefix = IPTV_FILE_PREFIX;
-    protected static String mType = IPTV_TYPE  ;
+    protected static String mType = IPTV_TYPE;
     public static String mUpdateConfigureFile = UPDATE_CONFIGURE_FILE;
     public static String FILE_SCREENSAVER = "screensaver";
     public static final String ADVERTISEMENT_KEY = "advertisement_key";
@@ -142,10 +144,8 @@ public  class Launcher extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        initScreenSaverTime();
-        initPrecondition();
-
     }
+
 
     protected void initScreenSaverTime() {
         String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
@@ -172,10 +172,10 @@ public  class Launcher extends Activity {
 
             @Override
             public void run() {
-                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
-                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
-                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
-                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
             }
         }, REQUEST_DELAY_TIME);
 
@@ -371,5 +371,11 @@ public  class Launcher extends Activity {
     public void onBackPressed() {
         // TODO Auto-generated method stub
         Log.d(TAG, "do nothing");
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy()");
+        super.onDestroy();
     }
 }

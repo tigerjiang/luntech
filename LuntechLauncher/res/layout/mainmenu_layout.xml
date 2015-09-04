@@ -12,17 +12,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/channel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="103px"
+            android:layout_height="560px"
             android:visibility="gone" />
 
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/channel_unfold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="660px"
+            android:layout_height="373px"
             android:layout_marginTop="36px"
             android:clickable="true"
             android:focusable="true"
@@ -31,16 +31,16 @@
             android:visibility="gone" />
 
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/vod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="103px"
+            android:layout_height="560px"
             android:layout_marginLeft="2px" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/vod_unfold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="660px"
+            android:layout_height="373px"
             android:layout_marginLeft="2px"
             android:layout_marginTop="36px"
             android:clickable="true"
@@ -51,39 +51,40 @@
 
             />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="103px"
+            android:layout_height="560px"
             android:layout_marginLeft="2px" />
 
         <include
             layout="@layout/favoritemenu_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="660px"
             android:layout_height="wrap_content" />
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/application"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="103px"
+            android:layout_height="560px"
             android:layout_marginLeft="2px" />
 
         <include
             layout="@layout/appmenu_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="660px"
+            android:layout_height="wrap_content"  />
 
 
-        <ImageView
+        <com.luntech.launcher.view.QisItem
             android:id="@+id/setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="2px" />
+            android:layout_width="103px"
+            android:layout_height="560px"
+            android:layout_marginLeft="2px"
+            />
 
 
         <include
             layout="@layout/setting_menu_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="660px"
             android:layout_height="wrap_content" />
 
         <!--

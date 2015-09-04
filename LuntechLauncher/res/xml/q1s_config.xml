@@ -69,8 +69,8 @@
             <apps>
                 <app>
                     <a_name />
-                    <a_package>com.luntech.launcher</a_package>
-                    <a_activity>com.luntech.launcher/.secondary.LongTaiAppsGridActivity</a_activity>
+                    <a_package>com.eastsoft.android.ihome</a_package>
+                    <a_activity>com.eastsoft.android.ihome/.login.Launcher</a_activity>
                     <a_icon />
                     <a_url />
                 </app>
@@ -87,8 +87,8 @@
             <apps>
                 <app>
                     <a_name />
-                    <a_package>com.eastsoft.android.ihome</a_package>
-                    <a_activity>com.eastsoft.android.ihome/.login.Launcher</a_activity>
+                    <a_package>com.luntech.launcher</a_package>
+                    <a_activity>com.luntech.launcher/.secondary.LongTaiAppsGridActivity</a_activity>
                     <a_icon />
                     <a_url />
                 </app>
@@ -149,8 +149,8 @@
             <apps>
                 <app>
                     <a_name />
-                    <a_package>com.luntech.zhihemarket</a_package>
-                    <a_activity>com.luntech.zhihemarket/.LoginActivity</a_activity>
+                    <a_package>com.qihoo360.mobilesafe_tv</a_package>
+                    <a_activity></a_activity>
                     <a_icon />
                     <a_url />
                 </app>
