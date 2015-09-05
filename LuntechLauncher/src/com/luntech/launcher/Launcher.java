@@ -172,10 +172,10 @@ public class Launcher extends Activity {
 
             @Override
             public void run() {
-//                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
-//                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
-//                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
-//                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
+                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
+                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
+                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
+                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
             }
         }, REQUEST_DELAY_TIME);
 

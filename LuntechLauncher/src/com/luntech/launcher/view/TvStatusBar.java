@@ -41,7 +41,6 @@ import com.luntech.launcher.WeatherForm;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
 import org.w3c.dom.NodeList;
 
 import java.io.BufferedReader;
@@ -317,7 +316,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                             mState.setDate(mTimeManager.formatDateTime(time,
                                     TimeManager.DateTimeFormat.DATE_CURRENT_FORMAT));
                             mState.setTime(mTimeManager.formatDateTime(time,
-                                    TimeManager.DateTimeFormat.TIME_SHORT));
+                                    TimeManager.DateTimeFormat.TIME_AM_PM));
                             if (mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
                                 notifyStateChange();
                             }
@@ -437,6 +436,7 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
                 // Date Time info
                 if (refreshAll || mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
+                    Log.d(TAG,"time "+mState.getDate() + "   " + mState.getTime());
                     mTimeView.setText(mState.getDate() + "   " + mState.getTime());
                     mState.clearChanges(TvStatus.DATE_TIME_INFO);
                 }

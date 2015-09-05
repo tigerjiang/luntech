@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/time_view"
-            android:layout_width="200px"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"

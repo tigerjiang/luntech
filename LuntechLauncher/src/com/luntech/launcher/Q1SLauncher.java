@@ -36,6 +36,7 @@ import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hisense.network.utils.EpgDataInfoLoader.HiLauncherLoader;
@@ -58,10 +59,10 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     //channel menu
     private com.luntech.launcher.view.QisItem channelImView;
-    private  com.luntech.launcher.view.QisItem channelImView_unfold;
+    private com.luntech.launcher.view.QisItem channelImView_unfold;
 
     //vod menu
-    private  com.luntech.launcher.view.QisItem  vodImView;
+    private com.luntech.launcher.view.QisItem vodImView;
     private com.luntech.launcher.view.QisItem vodImView_unfold;
 
     //application menu
@@ -88,16 +89,21 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     private com.luntech.launcher.view.QisItem settingUpdateView;
     private com.luntech.launcher.view.QisItem settingMoreView;
     private com.luntech.launcher.view.QisItem settingErweiView;
+
+    private LinearLayout mFeatureMenuLayout;
+    private TextView mFeatureView;
+
+    private AppManager mAppManager;
     //private ImageView settingImView_unfold;
     //module
     private Module mChannelModule, mVodModule, mAppModule1, mAppModule2, mAppModule3,
             mZhihuiModule1, mZhihuiModule2, mZhihuiModule3, mZhihuiModule4, mSettingModue1, mSettingModue2, mSettingModue3,
             mSettingModue4,
             mSettingModue5, mSettingModue6;
-    private Group mChannelGroup,mVodGroup,mAppGroup,mSettingGroup,mZhihuiGroup;
+    private Group mChannelGroup, mVodGroup, mAppGroup, mSettingGroup, mZhihuiGroup;
 
     private com.luntech.launcher.view.QisItem mSelectedView;
-    private  com.luntech.launcher.view.QisItem mSelectedUnFocusView;
+    private com.luntech.launcher.view.QisItem mSelectedUnFocusView;
 
     private View mLastFocusView;
     //main menu background layout
@@ -141,6 +147,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
         setContentView(R.layout.q1s_home_layout);
         AppManager.create(this);
+        mAppManager = AppManager.getInstance();
         initHandler();
         initParams();
         parseGroupsFromDB();
@@ -303,7 +310,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             switch (msg.what) {
                 case SHOW_FEATURE_VIEW:
                     // Log.d("show", "SHOW_FEATURE_VIEW");
-//                    mFeatureMenuLayout.setVisibility(View.VISIBLE);
+                    mFeatureMenuLayout.setVisibility(View.VISIBLE);
                     mHandler.removeMessages(LauncherHandler.DISMISS_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.DISMISS_FEATURE_VIEW,
                             Launcher.DISMISS_DELAY_TIME);
@@ -314,7 +321,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
                     break;
                 case NO_OPERATION:
                     Log.d("show", "NO_OPERATION");
-//                    mFeatureMenuLayout.setVisibility(View.GONE);
+                    mFeatureMenuLayout.setVisibility(View.GONE);
                     mHandler.removeMessages(LauncherHandler.SHOW_FEATURE_VIEW);
                     mHandler.sendEmptyMessageDelayed(LauncherHandler.SHOW_FEATURE_VIEW,
                             SHOW_DELAY_TIME);
@@ -345,9 +352,9 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     public void onUserInteraction() {
         super.onUserInteraction();
         Log.d("show", "onUserInteraction");
-//        mHandler.removeMessages(LauncherHandler.NO_OPERATION);
-//        mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
-//        restartSendShowScreenSaver();
+        mHandler.removeMessages(LauncherHandler.NO_OPERATION);
+        mHandler.sendEmptyMessage(LauncherHandler.NO_OPERATION);
+        restartSendShowScreenSaver();
     }
 
 
@@ -714,7 +721,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else if (view.getId() == settingNetView.getId()) {
             app = mSettingModue3.mApps.get(0);
         } else if (view.getId() == settingUpdateView.getId()) {
-            app =mSettingModue4.mApps.get(0);
+            app = mSettingModue4.mApps.get(0);
         }
         //else if (view.getId() == settingImView_unfold.getId()){
         else if (view.getId() == settingMoreView.getId()) {
@@ -731,7 +738,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     public void onFocusChange(View v, boolean hasFocus) {
         // TODO Auto-generated method stub
         int id = v.getId();
-        mSelectedView = (com.luntech.launcher.view.QisItem)v;
+        mSelectedView = (com.luntech.launcher.view.QisItem) v;
         if (hasFocus) {
             if (channelImView_unfold.getId() == id) {
                 mSelectedApp = mGroups.get(1).mModules.get(0);
@@ -799,6 +806,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
                 setLocalViewFocus();
                 mLastFocusView = localView;
             }
+            refreshFeatureMenuView();
         }
     }
 
@@ -1004,8 +1012,9 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
                 Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
                 return true;
             } else if (mSelectedApp.moduleReplace == 1) {
-                final DialogFragment newFragment = AppDialogFragment.newInstance(Q1SLauncher.this);
-                newFragment.show(getFragmentManager(), "dialog");
+                Intent intent = new Intent();
+                intent.setClass(mContext, AppSelectedActivity.class);
+                startActivityForResult(intent, 2);
                 return true;
             }
         } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
@@ -1176,6 +1185,23 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         return super.onKeyDown(keyCode, event);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("replace", "onActivityResult");
+        switch (resultCode) {
+            case RESULT_OK:
+                String pkg = data.getStringExtra("app");
+                ApplicationInfo app = mAppManager.getInfoFromAllActivitys(pkg);
+                setResult(app, true);
+                Log.d("replace", "launcher " + app.toString());
+                break;
+            case RESULT_CANCELED:
+                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     //channel
     private void setChannelImView() {
@@ -1311,8 +1337,16 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            apprecomView1.setIconView(R.drawable.appfocus1);
 //        }
+        String key = mAppModule1.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            apprecomView1.setIconView(app.getIcon());
+        }else{
+            apprecomView1.setIconView(R.drawable.apprecom1_icon);
+        }
         apprecomView1.setBgView(R.drawable.apprecom1_bg);
-        apprecomView1.setIconView(R.drawable.apprecom1_icon);
         apprecomView1.setmNameView(mAppModule1.getModuleText());
     }
 
@@ -1847,6 +1881,8 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             }
         }
 
+        mFeatureMenuLayout = (LinearLayout) findViewById(R.id.feature_layout);
+        mFeatureView = (TextView) findViewById(R.id.feature_menu);
         focusBkLayout = (FrameLayout) findViewById(R.id.mainmenu_focusbk_layout);
         focusBkImageView = (ImageView) findViewById(R.id.mainmenu_focusbk);
 

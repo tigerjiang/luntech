@@ -119,7 +119,9 @@ public class GeneralSettingFragment extends Fragment {
                             }
                     ).create().show();
 
-
+                }else if (position == 4) {
+                    Intent intent = new Intent(mContext,SetCity.class);
+                    startActivity(intent);
                 }
             }
 

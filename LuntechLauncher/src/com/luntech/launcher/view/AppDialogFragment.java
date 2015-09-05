@@ -6,24 +6,18 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.luntech.launcher.IPTVLauncher;
-import com.luntech.launcher.Launcher;
 import com.luntech.launcher.Q1SLauncher;
 import com.luntech.launcher.R;
 import com.luntech.launcher.secondary.AppManager;
@@ -146,11 +140,11 @@ public class AppDialogFragment extends DialogFragment {
 
             if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = mLayoutInflater.inflate(R.layout.selected_application_icon, null);
+                convertView = mLayoutInflater.inflate(R.layout.app_item_icon, null);
                 viewHolder.mAppIcon = (ImageView) convertView
-                        .findViewById(R.id.selected_app_icon_image);
+                        .findViewById(R.id.app_icon);
                 viewHolder.mAppLabel = (TextView) convertView
-                        .findViewById(R.id.selected_app_icon_label);
+                        .findViewById(R.id.app_label);
                 convertView.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     coreApp="true"
+    android:sharedUserId="android.uid.system"
     package="com.luntech.launcher"
     android:process="system"
     android:versionCode="201507"
     android:versionName="1.0">
 
     <uses-sdk
-        android:minSdkVersion="16"
+        android:minSdkVersion="17"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -56,6 +57,9 @@
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
+"
 
     <application
         android:name=".LauncherApplication"
@@ -69,6 +73,14 @@
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateUnspecified|adjustPan">
+                 <intent-filter>
+               
+                <category android:name="android.intent.category.HOME" />
+				<action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -236,13 +248,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--<activity android:name="com.luntech.launcher.setting.SetCity">-->
-        <!--<intent-filter>-->
-        <!--<action android:name="android.intent.action.MAIN"/>-->
+        <activity
+            android:name="com.luntech.launcher.setting.SetCity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
-        <!--<category android:name="android.intent.category.DEFAULT"/>-->
-        <!--</intent-filter>-->
-        <!--</activity>-->
         <receiver android:name=".LauncherReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -253,7 +266,6 @@
                 <action android:name="com.luntech.action.GET_AD" />
                 <action android:name="com.luntech.action.GEAT_SAVER" />
                 <action android:name="com.luntech.action.SHOW_SAVER" />
-
 
 
             </intent-filter>

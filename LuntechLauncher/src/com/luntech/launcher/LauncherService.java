@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.os.*;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
@@ -34,6 +35,8 @@ public class LauncherService extends Service {
     private static final String TAG = "LauncherService";
     private static final boolean DEBUG = true;
     private static final int NEW_INTENT_RECEIVED = 1001;
+    private static final String KEY_AUTO_TIME = "auto_time";
+    private static final int SYNC_DELAY_TIME = 5*60*1000;
     private LauncherHandler mLauncherHandler;
 
     private Context mContext;
@@ -72,6 +75,9 @@ public class LauncherService extends Service {
                 thread.start();
                 mLauncherHandler = new LauncherHandler(
                         thread.getLooper());
+                final Message msg = mLauncherHandler.obtainMessage();
+                msg.what = LauncherHandler.SYNC_YIME;
+                mLauncherHandler.sendMessageAtTime(msg, SYNC_DELAY_TIME);
             }
             final Message msg = mLauncherHandler.obtainMessage();
             msg.what = NEW_INTENT_RECEIVED;
@@ -98,7 +104,7 @@ public class LauncherService extends Service {
         public static final int RETURN_SYSTEM_CONFIG_CODE = 5;
         public static final int RETURN_SCREENSAVER_CONFIG_CODE = 6;
         public static final int START_SCREEN_SAVER = 7;
-        public static final int DISMISS_FEATURE_VIEW = 8;
+        public static final int SYNC_YIME = 8;
         public static final int NO_OPERATION = 9;
         public static final int SHOW_SCREEN_SAVER = 10;
 
@@ -250,6 +256,17 @@ public class LauncherService extends Service {
                             new ByteArrayInputStream(mResult.getBytes()));
                     Log.d(TAG, "ad " + adContent);
                     break;
+                case SYNC_YIME:
+                    if (Settings.Global.getInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0) == 0) {
+                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
+                    } else {
+                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0);
+                    }
+                    final Message msg1 = mLauncherHandler.obtainMessage();
+                    msg.what = LauncherHandler.SYNC_YIME;
+                    mLauncherHandler.sendMessageAtTime(msg1, SYNC_DELAY_TIME);
+                    break;
+
 
             }
             super.handleMessage(msg);

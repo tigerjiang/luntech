@@ -5,20 +5,20 @@
     android:gravity="center" >
 
     <ImageView
-        android:id="@+id/selected_app_icon_image"
+        android:id="@+id/app_icon"
         android:layout_width="80px"
         android:layout_height="80px"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/global_category_app_logo_margin_top" />
 
     <TextView
-        android:id="@+id/selected_app_icon_label"
+        android:id="@+id/app_label"
         android:layout_width="match_parent"
         android:layout_height="@dimen/global_category_app_shadow_height"
         android:layout_alignParentBottom="true"
         android:singleLine="true"
         android:ellipsize="end"
-        android:layout_below="@+id/selected_app_icon_image"
+        android:layout_below="@+id/app_icon"
         android:gravity="center"
         android:text="@string/categore_app_1_label"
         android:textColor="@color/white"

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/category_app_view"
+    android:layout_width="230px"
+    android:layout_height="123px"
+     >
+    <ImageView
+        android:id="@+id/app_bg"
+        android:layout_width="230px"
+        android:layout_height="123px"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="10px"
+        android:src="@drawable/categore_app_1_bg" />
+
+
+    <ImageView
+        android:id="@+id/app_logo"
+        android:layout_width="@dimen/global_category_app_logo_width"
+        android:layout_height="@dimen/global_category_app_logo_height"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="@dimen/global_category_app_logo_margin_top"
+        android:src="@drawable/categore_app_1_logo" />
+
+    <ImageView
+        android:id="@+id/cover_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/global_category_app_shadow_height"
+        android:layout_alignParentBottom="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/categore_app_1_shadow"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/app_label"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/global_category_app_shadow_height"
+        android:layout_toRightOf="@+id/app_logo"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:layout_marginLeft="10px"
+        android:text="@string/categore_app_1_label"
+        android:textColor="@color/white"
+        android:textSize="@dimen/global_text_size_middle"
+
+        />
+
+</RelativeLayout>

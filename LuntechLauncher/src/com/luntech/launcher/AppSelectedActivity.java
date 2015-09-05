@@ -10,13 +10,16 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
+import com.luntech.launcher.view.AppItemView;
 import com.luntech.launcher.view.ApplicationsAdapter;
 
 import java.util.Collections;
@@ -32,46 +35,54 @@ public class AppSelectedActivity extends Activity {
     private Context mContext;
     private int mPosition;
     private HorizontalScrollView mHorizontalScrollView;
+    private LinearLayout mContentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_selected);
         mContext = this.getApplicationContext();
+        AppManager.create(this);
         mAppManager = AppManager.getInstance();
         initSelectedApp();
     }
 
     private void initSelectedApp() {
-        mSelectedGrid = (GridView) findViewById(R.id.app_gridView);
-        mHorizontalScrollView = (HorizontalScrollView)findViewById(R.id.horizontal_view);
+        mHorizontalScrollView = (HorizontalScrollView) findViewById(R.id.horizontal_view);
+        mContentLayout = (LinearLayout) findViewById(R.id.content_layout);
         mAppList = mAppManager.getSelectedApplications();
         sortByInstallTime(mAppList);
-        mAdapter = new ApplicationsAdapter(mContext, mAppList);
-        mSelectedGrid.setAdapter(mAdapter);
-        mSelectedGrid.setSelection(0);
         int listSize = mAppList.size();
-        // 根据item的数目，动态设定gridview的宽度,现假定每个item的宽度和高度均为100dp，列间距为5dp
-        ViewGroup.LayoutParams params = mSelectedGrid.getLayoutParams();
-        int itemWidth = 100;
-        int spacingWidth = 20;
+//        for(int i =0;i<listSize;i++){
+//            final ApplicationInfo app = mAppList.get(i);
+//            Button btn = new Button(mContext);
+//            btn.setText(app.getTitle());
+//            btn.setBackgroundResource(R.drawable.focus_selector);
+//            btn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(mContext, app.getTitle(), Toast.LENGTH_LONG).show();
+//                }
+//            });
+//            mContentLayout.addView(btn);
+//        }
+        for (int i = 0; i < listSize; i++) {
+            AppItemView appItemView = new AppItemView(mContext, mAppList.get(i));
+            appItemView.setFocusable(true);
+            appItemView.setFocusableInTouchMode(true);
+            appItemView.setBackgroundResource(R.drawable.focus_selector);
+            appItemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ApplicationInfo app = ((AppItemView) view).getAppnfo();
+                    setResult(app, true);
+                    finish();
+                }
+            });
+            mContentLayout.addView(appItemView);
+        }
+//        mContentLayout.getChildAt(0).requestFocus();
 
-        params.width = itemWidth * listSize + (listSize - 1) * spacingWidth;
-        mSelectedGrid.setStretchMode(GridView.NO_STRETCH); // 设置为禁止拉伸模式
-        mSelectedGrid.setNumColumns(listSize);
-        mSelectedGrid.setHorizontalSpacing(spacingWidth);
-        mSelectedGrid.setColumnWidth(itemWidth);
-        mSelectedGrid.setLayoutParams(params);
-        mSelectedGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mChangedApp = mAppList.get(position);
-                Toast.makeText(mContext, "selected app" + mChangedApp.mTitle, Toast.LENGTH_LONG)
-                        .show();
-                setResult(mChangedApp, true);
-            }
-        });
     }
 
     private void sortByInstallTime(final List<ApplicationInfo> apps) {
@@ -96,17 +107,6 @@ public class AppSelectedActivity extends Activity {
         int action = event.getAction();
         if (action == KeyEvent.ACTION_DOWN && event.getRepeatCount() == 0) {
 
-            if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
-                mPosition++;
-                if(mPosition>10){
-                    mSelectedGrid.scrollTo(100*mPosition, 0);
-                }
-            } else if (keyCode == KeyEvent.KEYCODE_DPAD_LEFT) {
-                mPosition--;
-            }
-            if (mPosition < mSelectedGrid.getCount() && mPosition >= 0) {
-                mSelectedGrid.setSelection(mPosition);
-            }
 
         }
         return super.onKeyDown(keyCode, event);

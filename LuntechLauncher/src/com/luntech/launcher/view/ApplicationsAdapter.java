@@ -2,8 +2,6 @@
 package com.luntech.launcher.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +42,11 @@ public class ApplicationsAdapter extends ArrayAdapter<ApplicationInfo> {
 
         if (convertView == null) {
             viewHolder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.selected_application_icon, null);
+            convertView = mLayoutInflater.inflate(R.layout.app_item_icon, null);
             viewHolder.mAppIcon = (ImageView) convertView
-                    .findViewById(R.id.selected_app_icon_image);
+                    .findViewById(R.id.app_icon);
             viewHolder.mAppLabel = (TextView) convertView
-                    .findViewById(R.id.selected_app_icon_label);
+                    .findViewById(R.id.app_label);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

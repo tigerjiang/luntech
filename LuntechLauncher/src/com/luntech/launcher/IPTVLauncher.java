@@ -361,8 +361,11 @@ public class IPTVLauncher extends Launcher {
                     Toast.makeText(mContext, R.string.can_not_replace, Toast.LENGTH_SHORT).show();
                     return true;
                 } else if (mSelectedApp.moduleReplace == 1) {
-                    final DialogFragment newFragment = AppDialogFragment.newInstance(IPTVLauncher.this);
-                    newFragment.show(getFragmentManager(), "dialog");
+//                    final DialogFragment newFragment = AppDialogFragment.newInstance(IPTVLauncher.this);
+//                    newFragment.show(getFragmentManager(), "dialog");
+                    Intent intent = new Intent();
+                    intent.setClass(mContext,AppSelectedActivity.class);
+                    startActivityForResult(intent,1);
                     return true;
                 }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
