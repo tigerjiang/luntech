@@ -45,7 +45,7 @@ public class Launcher extends Activity {
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
     public static int sVersionCode;
-    public static final long REQUEST_DELAY_TIME = 10 * 1000;
+    public static final long REQUEST_DELAY_TIME = 10 * 60 * 1000;
     public static final long SHOW_DELAY_TIME = 10 * 1000;
     public static final long DISMISS_DELAY_TIME = 3 * 1000;
     public static long showScreenSaverTime = 5 * 60 * 1000;
@@ -172,10 +172,10 @@ public class Launcher extends Activity {
 
             @Override
             public void run() {
-                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
-                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
-                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
-                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
+//                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
             }
         }, REQUEST_DELAY_TIME);
 

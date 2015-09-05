@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     coreApp="true"
-    android:sharedUserId="android.uid.system"
     package="com.luntech.launcher"
+    android:sharedUserId="android.uid.system"
     android:process="system"
     android:versionCode="201507"
     android:versionName="1.0">

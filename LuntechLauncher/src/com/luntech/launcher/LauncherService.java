@@ -257,11 +257,11 @@ public class LauncherService extends Service {
                     Log.d(TAG, "ad " + adContent);
                     break;
                 case SYNC_YIME:
-                    if (Settings.Global.getInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0) == 0) {
-                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
-                    } else {
-                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0);
-                    }
+//                    if (Settings.Global.getInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0) == 0) {
+//                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
+//                    } else {
+//                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0);
+//                    }
                     final Message msg1 = mLauncherHandler.obtainMessage();
                     msg.what = LauncherHandler.SYNC_YIME;
                     mLauncherHandler.sendMessageAtTime(msg1, SYNC_DELAY_TIME);

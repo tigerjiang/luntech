@@ -1343,7 +1343,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             apprecomView1.setIconView(app.getIcon());
-        }else{
+        } else {
             apprecomView1.setIconView(R.drawable.apprecom1_icon);
         }
         apprecomView1.setBgView(R.drawable.apprecom1_bg);
@@ -1385,8 +1385,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            apprecomView2.setIconView(R.drawable.appfocus2);
 //        }
+        String key = mAppModule3.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            apprecomView2.setIconView(app.getIcon());
+        } else {
+            apprecomView2.setIconView(R.drawable.apprecom2_icon);
+        }
         apprecomView2.setBgView(R.drawable.apprecom2_bg);
-        apprecomView2.setIconView(R.drawable.apprecom2_icon);
+
         apprecomView2.setmNameView(mAppModule3.getModuleText());
     }
 
@@ -1425,8 +1434,16 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            apprecomView3.setIconView(R.drawable.appfocus3);
 //        }
+        String key = mAppModule2.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            apprecomView3.setIconView(app.getIcon());
+        } else {
+            apprecomView3.setIconView(R.drawable.apprecom2_icon);
+        }
         apprecomView3.setBgView(R.drawable.apprecom3_bg);
-        apprecomView3.setIconView(R.drawable.apprecom3_icon);
         apprecomView3.setmNameView(mAppModule2.getModuleText());
     }
 
@@ -1481,8 +1498,18 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            myFavoriteView.setIconView(R.drawable.zhihuifocus1);
 //        }
+
+        String key = mZhihuiModule1.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            myFavoriteView.setIconView(app.getIcon());
+        } else {
+            myFavoriteView.setIconView(R.drawable.zhihui1_icon);
+        }
         myFavoriteView.setBgView(R.drawable.zhihui1_bg);
-        myFavoriteView.setIconView(R.drawable.zhihui1_icon);
+//        myFavoriteView.setIconView(R.drawable.zhihui1_icon);
         myFavoriteView.setmNameView(mZhihuiModule1.getModuleText());
     }
 
@@ -1522,8 +1549,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            playhistoryView.setIconView(R.drawable.zhihuifocus2);
 //        }
+        String key = mZhihuiModule2.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            playhistoryView.setIconView(app.getIcon());
+        } else {
+            playhistoryView.setIconView(R.drawable.zhihui2_icon);
+        }
         playhistoryView.setBgView(R.drawable.zhihui2_bg);
-        playhistoryView.setIconView(R.drawable.zhihui2_icon);
+//        playhistoryView.setIconView(R.drawable.zhihui2_icon);
         playhistoryView.setmNameView(mZhihuiModule2.getModuleText());
     }
 
@@ -1563,8 +1599,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            favpersonView.setIconView(R.drawable.zhihuifocus3);
 //        }
+        String key = mZhihuiModule3.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            favpersonView.setIconView(app.getIcon());
+        } else {
+            favpersonView.setIconView(R.drawable.zhihui3_icon);
+        }
         favpersonView.setBgView(R.drawable.zhihui3_bg);
-        favpersonView.setIconView(R.drawable.zhihui3_icon);
+//        favpersonView.setIconView(R.drawable.zhihui3_icon);
         favpersonView.setmNameView(mZhihuiModule3.getModuleText());
     }
 
@@ -1604,8 +1649,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            localView.setIconView(R.drawable.zhihuifocus4);
 //        }
+        String key = mZhihuiModule4.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            localView.setIconView(app.getIcon());
+        } else {
+            localView.setIconView(R.drawable.zhihui4_icon);
+        }
         localView.setBgView(R.drawable.zhihui4_bg);
-        localView.setIconView(R.drawable.zhihui4_icon);
+//        localView.setIconView(R.drawable.zhihui4_icon);
         localView.setmNameView(mZhihuiModule4.getModuleText());
     }
 
@@ -1659,8 +1713,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            settingBaseView.setIconView(R.drawable.setting_focus1);
 //        }
+        String key = mSettingModue1.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            settingBaseView.setIconView(app.getIcon());
+        } else {
+            settingBaseView.setIconView(R.drawable.setting1_icon);
+        }
         settingBaseView.setBgView(R.drawable.setting_item_bg);
-        settingBaseView.setIconView(R.drawable.setting1_icon);
+//        settingBaseView.setIconView(R.drawable.setting1_icon);
         settingBaseView.setmNameView(mSettingModue1.getModuleText());
     }
 
@@ -1700,8 +1763,18 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            settingDispalyView.setIconView(R.drawable.settingfocus3);
 //        }
+
+        String key = mSettingModue2.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            settingDispalyView.setIconView(app.getIcon());
+        } else {
+            settingDispalyView.setIconView(R.drawable.setting2_icon);
+        }
         settingDispalyView.setBgView(R.drawable.setting_item_bg);
-        settingDispalyView.setIconView(R.drawable.setting2_icon);
+//        settingDispalyView.setIconView(R.drawable.setting2_icon);
         settingDispalyView.setmNameView(mSettingModue2.getModuleText());
     }
 
@@ -1741,8 +1814,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            settingNetView.setIconView(R.drawable.settingfocus5);
 //        }
+        String key = mSettingModue3.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            settingNetView.setIconView(app.getIcon());
+        } else {
+            settingNetView.setIconView(R.drawable.setting3_icon);
+        }
         settingNetView.setBgView(R.drawable.setting_item_bg);
-        settingNetView.setIconView(R.drawable.setting3_icon);
+//        settingNetView.setIconView(R.drawable.setting3_icon);
         settingNetView.setmNameView(mSettingModue3.getModuleText());
     }
 
@@ -1782,8 +1864,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            settingUpdateView.setIconView(R.drawable.settingfocus2);
 //        }
+        String key = mSettingModue4.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            settingUpdateView.setIconView(app.getIcon());
+        } else {
+            settingUpdateView.setIconView(R.drawable.setting4_icon);
+        }
         settingUpdateView.setBgView(R.drawable.setting_item_bg);
-        settingUpdateView.setIconView(R.drawable.setting4_icon);
+//        settingUpdateView.setIconView(R.drawable.setting4_icon);
         settingUpdateView.setmNameView(mSettingModue4.getModuleText());
     }
 
@@ -1823,8 +1914,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            settingMoreView.setIconView(R.drawable.settingfocus4);
 //        }
+        String key = mSettingModue5.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            settingMoreView.setIconView(app.getIcon());
+        } else {
+            settingMoreView.setIconView(R.drawable.setting5_icon);
+        }
         settingMoreView.setBgView(R.drawable.setting_item_bg);
-        settingMoreView.setIconView(R.drawable.setting5_icon);
+//        settingMoreView.setIconView(R.drawable.setting5_icon);
         settingMoreView.setmNameView(mSettingModue5.getModuleText());
     }
 
@@ -1864,8 +1964,17 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 //        } else {
 //            settingErweiView.setIconView(R.drawable.settingfocus6);
 //        }
+        String key = mSettingModue6.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            settingErweiView.setIconView(app.getIcon());
+        } else {
+            settingErweiView.setIconView(R.drawable.setting6_icon);
+        }
         settingErweiView.setBgView(R.drawable.setting_item_bg);
-        settingErweiView.setIconView(R.drawable.setting6_icon);
+//        settingErweiView.setIconView(R.drawable.setting6_icon);
         settingErweiView.setmNameView(mSettingModue6.getModuleText());
     }
 
