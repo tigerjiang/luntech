@@ -1,8 +1,10 @@
 
 package com.luntech.launcher;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToolUtils {
     private static ToolUtils sInstance = null;
@@ -339,6 +342,7 @@ public class ToolUtils {
                         //group
                         app.setModuleCode(module.moduleCode);
                         module.addApp(app);
+                        sDBdao.deleteApp(app);
                         sDBdao.insertApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         Log.d(TAG, "end apps " + app.toString());
@@ -346,8 +350,10 @@ public class ToolUtils {
                         module.setGroupCode(group.groupCode);
                         modlues.add(module);
                         group.addModule(module);
+                        sDBdao.deleteModule(module);
                         sDBdao.insertModule(module);
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        sDBdao.deleteGroup(group);
                         sDBdao.insertGroup(group);
                         groups.add(group);
                     }
@@ -357,7 +363,7 @@ public class ToolUtils {
 
         } catch (XmlPullParserException e) {
             Log.e(TAG, "XmlPullParserException occurs " + e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "packagefilter occurs " + e);
         }
         return groups;
@@ -438,13 +444,17 @@ public class ToolUtils {
                         // Log.d(TAG, "end app " + app.toString());
                         //group
                         app.setModuleCode(module.moduleCode);
+                        Log.d(TAG, "end app " + app.toString());
+                        sDBdao.deleteApp(app);
                         sDBdao.insertApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         Log.d(TAG, "end apps " + app.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         module.setGroupCode(group.groupCode);
+                        sDBdao.deleteModule(module);
                         sDBdao.insertModule(module);
                     } else if (name.equals(CustomApplication.Group.GROUP_TAG)) {
+                        sDBdao.deleteGroup(group);
                         sDBdao.insertGroup(group);
                     }
                 }
@@ -453,7 +463,7 @@ public class ToolUtils {
 
         } catch (XmlPullParserException e) {
             Log.e(TAG, "XmlPullParserException occurs " + e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "packagefilter occurs " + e);
         }
     }
@@ -492,11 +502,12 @@ public class ToolUtils {
                         Log.d(TAG, "start ad over");
                     } else if (name.equals("marquee")) {
                         String content = parser.nextText().trim();
-                        AdContent.append(content).append("                             ");
+                        AdContent.append(content).append("                              ");
                     }
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
                     String name = parser.getName();
                     if (name.equals("marquees")) {
+                        AdContent.append("                              ").append(AdContent).append("                              ").append(AdContent).append("                              ").append(AdContent).append("                              ").append(AdContent);
                         storeCommonValueIntoSP(context, Launcher.ADVERTISEMENT_KEY, AdContent.toString());
                         Log.d(TAG, "end ad over");
                     }
@@ -616,6 +627,19 @@ public class ToolUtils {
         return sp.getString(name, null);
     }
 
+    public boolean isExsitsKey(Context context, String key) {
+        SharedPreferences sp = null;
+        if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
+            sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else if (Launcher.mType.equals(Launcher.IPTV_TYPE)) {
+            sp = context.getSharedPreferences(IPTV_CUSTOM_INFO, Context.MODE_PRIVATE);
+        } else {
+            Logger.e("nothing can be get!");
+            return false;
+        }
+        return sp.contains(key);
+    }
+
     public static void storeValueIntoSP(Context context, String key, String value) {
         SharedPreferences sp = null;
         if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
@@ -694,7 +718,7 @@ public class ToolUtils {
         int resId = context.getResources()
                 .getIdentifier(name, "drawable", context.getPackageName());
         if (resId == 0) {
-            Log.e("error", context.getPackageName() + " resource not found for " + name);
+            Log.e("jzh", context.getPackageName() + " resource not found for " + name);
         } else {
             icon = context.getResources().getDrawable(resId);
         }
@@ -818,7 +842,7 @@ public class ToolUtils {
         new Thread(task).start();
     }
 
-    public  static void safeStartApk(final Context context, final App app) {
+    public static void safeStartApk(final Context context, final App app) {
         try {
             Intent intent = new Intent();
             intent.setComponent(app.getComponentName());
@@ -897,4 +921,15 @@ public class ToolUtils {
         return url.substring(url.lastIndexOf("/"));
     }
 
+    public static boolean isApplicationBroughtToBackground(final Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
+        if (!tasks.isEmpty()) {
+            ComponentName topActivity = tasks.get(0).topActivity;
+            if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -8,33 +8,29 @@
         android:id="@+id/app_bg"
         android:layout_width="@dimen/global_category_item_width"
         android:layout_height="@dimen/global_category_item_height"
+        android:scaleType="fitXY"
         android:src="@drawable/categore_app_1_bg" />
 
     <ImageView
         android:id="@+id/app_logo"
         android:layout_width="@dimen/global_category_app_logo_width"
         android:layout_height="@dimen/global_category_app_logo_height"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/global_category_app_logo_margin_top"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/global_vertical_devider_height"
         android:src="@drawable/categore_app_1_logo" />
 
-    <ImageView
-        android:id="@+id/cover_view"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/global_category_app_shadow_height"
-        android:layout_alignParentBottom="true"
-        android:scaleType="fitXY"
-        android:src="@drawable/categore_app_1_shadow" />
 
     <TextView
         android:id="@+id/app_label"
         android:layout_width="match_parent"
         android:layout_height="@dimen/global_category_app_shadow_height"
-        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/global_vertical_devider_height"
+        android:layout_toRightOf="@+id/app_logo"
         android:gravity="center"
+        android:layout_centerVertical="true"
         android:text="@string/categore_app_1_label"
         android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_middle"
+        android:textSize="@dimen/global_text_size_small"
         />
 
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import java.io.ByteArrayInputStream;
 
 
 public class UpdateFragment extends Fragment {
+    private static final String TAG = "UpdateFragment";
     TextView mProductModelView, mMacView, mVsrsionView;
     Button mLocalUpdateBtn, mNetworkUpdateBtn;
     private Context mContext;
@@ -67,17 +70,12 @@ public class UpdateFragment extends Fragment {
         mLocalUpdateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String httpArg = "&package_name="+Launcher.sPackageName  + "&version="+Launcher.sVersionCode;
-                final String update_url = HttpUtils.HTTP_UPDATE_APP_URL + httpArg;
-                Logger.e("request url " + update_url);
-                mHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        new FetchTask(update_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mUpdateConfigureFile,
-                                1).execute();
+//              mContext.sendBroadcast(new Intent(Launcher.CAPTURE_UPDATE_CONFIGURE_ACTION));
+                String commonArg = "&package_name=" + Launcher.sPackageName + "&version=" + Launcher.sVersionCode;
+                String update_url = HttpUtils.HTTP_UPDATE_APP_URL + commonArg;
+                new FetchTask(update_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mUpdateConfigureFile,
+                        1).execute();
 
-                    }
-                });
             }
         });
     }
@@ -85,71 +83,81 @@ public class UpdateFragment extends Fragment {
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                String result = (String) msg.obj;
-                final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
-                        new ByteArrayInputStream(result.getBytes()));
-                if (ota != null
-                        && !TextUtils.isEmpty(ota.currentVersion)
-                        && ota.currentVersion.equals(String.valueOf(Launcher.sVersionCode))) {
-                    if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
-                        Log.d("update", "find new version for update " + ota.newVersion);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                        builder.setTitle(R.string.update);
-                        builder.setMessage(ota.remark);
-                        builder.setPositiveButton(R.string.ok,
-                                new DialogInterface.OnClickListener() {
 
-                                    @Override
-                                    public void onClick(DialogInterface arg0, int arg1) {
-                                        ((UpdateActivity)getActivity()).downloadOta(mContext,ota);
-                                        arg0.dismiss();
-                                    }
-                                });
-                        builder.setNegativeButton(R.string.cancel, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
+            String result = (String) msg.obj;
+            if (!TextUtils.isEmpty(result)) {
+                try {
+                    final OtaInfo ota = ToolUtils.parseUpdateInfo(mContext,
+                            new ByteArrayInputStream(result.getBytes()));
+                    if (ota.currentVersion.equals(String.valueOf(Launcher.sVersionCode))) {
+                        if (Integer.parseInt(ota.currentVersion) < Integer.parseInt(ota.newVersion)) {
+                            Log.d(TAG, "find new version for update " + ota.newVersion);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                            builder.setTitle(R.string.update);
+                            builder.setMessage(ota.remark);
+                            builder.setPositiveButton(R.string.ok,
+                                    new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface arg0, int arg1) {
+                                            ToolUtils.downloadOta(mContext, ota);
+                                            arg0.dismiss();
+                                        }
+                                    });
+                            builder.setNegativeButton(R.string.cancel, null);
+                            AlertDialog dialog = builder.create();
+                            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                            dialog.show();
+
+                        } else {
+                            Toast.makeText(UpdateFragment.this.getActivity(), getString(R.string.no_update), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(UpdateFragment.this.getActivity(), getString(R.string.no_update), Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(UpdateFragment.this.getActivity(), getString(R.string.no_update), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            } else {
+                Toast.makeText(UpdateFragment.this.getActivity(), getString(R.string.no_update), Toast.LENGTH_SHORT).show();
             }
+
         }
     };
-    class FetchTask extends AsyncTask<Void, Integer, String> {
 
-        private String mUrl;
-        private String mFileName;
-        private int mReturnCode;
+        class FetchTask extends AsyncTask<Void, Integer, String> {
 
-        public FetchTask(String mUrl, String mFileName, int returnCode) {
-            super();
-            this.mUrl = mUrl;
-            this.mFileName = mFileName;
-            this.mReturnCode = returnCode;
-        }
+            private String mUrl;
+            private String mFileName;
+            private int mReturnCode;
 
-        @Override
-        protected void onPostExecute(String result) {
-            if (TextUtils.isEmpty(result)) {
-                Logger.e("Doesn't found any info from server");
-                return;
-            } else {
-                Logger.d("result = " + result);
-                Message msg = mHandler.obtainMessage(mReturnCode);
-                msg.obj = result;
-                mHandler.sendMessage(msg);
+            public FetchTask(String mUrl, String mFileName, int returnCode) {
+                super();
+                this.mUrl = mUrl;
+                this.mFileName = mFileName;
+                this.mReturnCode = returnCode;
             }
-            super.onPostExecute(result);
+
+            @Override
+            protected void onPostExecute(String result) {
+                if (TextUtils.isEmpty(result)) {
+                    Logger.e("Doesn't found any info from server");
+                    return;
+                } else {
+                    Logger.d("result = " + result);
+                    Message msg = mHandler.obtainMessage(mReturnCode);
+                    msg.obj = result;
+                    mHandler.sendMessage(msg);
+                }
+                super.onPostExecute(result);
+            }
+
+            @Override
+            protected String doInBackground(Void... params) {
+                String result = HttpUtils.requestAndWriteResourcesFromServer(mUrl, mFileName);
+                return result;
+            }
         }
 
-        @Override
-        protected String doInBackground(Void... params) {
-            String result = HttpUtils.requestAndWriteResourcesFromServer(mUrl, mFileName);
-            return result;
-        }
     }
-
-
-}
 

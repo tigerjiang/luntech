@@ -58,22 +58,22 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     private FrameLayout bgFrameLayout;
 
     //channel menu
-    private com.luntech.launcher.view.QisItem channelImView;
+    private com.luntech.launcher.view.GroupItem channelImView;
     private com.luntech.launcher.view.QisItem channelImView_unfold;
 
     //vod menu
-    private com.luntech.launcher.view.QisItem vodImView;
+    private com.luntech.launcher.view.GroupItem vodImView;
     private com.luntech.launcher.view.QisItem vodImView_unfold;
 
     //application menu
-    private com.luntech.launcher.view.QisItem applicationImView;
+    private com.luntech.launcher.view.GroupItem applicationImView;
     private LinearLayout app_unfold_Layout;
     private com.luntech.launcher.view.QisItem apprecomView1;
     private com.luntech.launcher.view.QisItem apprecomView2;
     private com.luntech.launcher.view.QisItem apprecomView3;
 
     //fovarite menu
-    private com.luntech.launcher.view.QisItem favoriteImView;
+    private com.luntech.launcher.view.GroupItem favoriteImView;
     private LinearLayout favorite_unfold_Layout;
     private com.luntech.launcher.view.QisItem myFavoriteView;
     private com.luntech.launcher.view.QisItem playhistoryView;
@@ -81,7 +81,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     private com.luntech.launcher.view.QisItem localView;
 
     //setting menu
-    private com.luntech.launcher.view.QisItem settingImView;
+    private com.luntech.launcher.view.GroupItem settingImView;
     private LinearLayout setting_unfold_layout;
     private com.luntech.launcher.view.QisItem settingBaseView;
     private com.luntech.launcher.view.QisItem settingDispalyView;
@@ -148,6 +148,8 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         setContentView(R.layout.q1s_home_layout);
         AppManager.create(this);
         mAppManager = AppManager.getInstance();
+        mAppManager.getAllApplications();
+        mAppManager.getSelectedApplications();
         initHandler();
         initParams();
         parseGroupsFromDB();
@@ -317,7 +319,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
                     break;
                 case DISMISS_FEATURE_VIEW:
                     Log.d("show", "DISMISS_FEATURE_VIEW");
-//                    mFeatureMenuLayout.setVisibility(View.GONE);
+                    mFeatureMenuLayout.setVisibility(View.GONE);
                     break;
                 case NO_OPERATION:
                     Log.d("show", "NO_OPERATION");
@@ -327,9 +329,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
                             SHOW_DELAY_TIME);
                     break;
                 case SHOW_SCREEN_SAVER:
-                    Log.d("show", "SHOW_SCREEN_SAVER");
-                    Intent intent = new Intent(mContext, ScreenSaverActivity.class);
-                    startActivity(intent);
+                    if (ToolUtils.isApplicationBroughtToBackground(mContext)) {
+                        Log.d(TAG, "current task is background. can't show screensaver");
+                    } else {
+                        Log.d("show", "SHOW_SCREEN_SAVER");
+                        sendBroadcast(new Intent(SHOW_SCREENSAVER_ACTION));
+                    }
                     break;
             }
             super.handleMessage(msg);
@@ -667,71 +672,86 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void initData() {
-        mChannelGroup = mGroups.get(0);
-        mChannelModule = mChannelGroup.mModules.get(0);
-        mVodGroup = mGroups.get(1);
-        mVodModule = mVodGroup.mModules.get(0);
-        mAppGroup = mGroups.get(3);
-        mAppModule1 = mAppGroup.mModules.get(0);
-        mAppModule2 = mAppGroup.mModules.get(1);
-        mAppModule3 = mAppGroup.mModules.get(2);
-        mZhihuiGroup = mGroups.get(2);
-        mZhihuiModule1 = mZhihuiGroup.mModules.get(0);
-        mZhihuiModule2 = mZhihuiGroup.mModules.get(1);
-        mZhihuiModule3 = mZhihuiGroup.mModules.get(2);
-        mZhihuiModule4 = mZhihuiGroup.mModules.get(3);
-        mSettingGroup = mGroups.get(4);
-        mSettingModue1 = mSettingGroup.mModules.get(0);
-        mSettingModue2 = mSettingGroup.mModules.get(1);
-        mSettingModue3 = mSettingGroup.mModules.get(2);
-        mSettingModue4 = mSettingGroup.mModules.get(3);
-        mSettingModue5 = mSettingGroup.mModules.get(4);
-        mSettingModue6 = mSettingGroup.mModules.get(5);
+        try {
+            mChannelGroup = mGroups.get(0);
+            mChannelModule = mChannelGroup.mModules.get(0);
+            mVodGroup = mGroups.get(1);
+            mVodModule = mVodGroup.mModules.get(0);
+            mAppGroup = mGroups.get(3);
+            mAppModule1 = mAppGroup.mModules.get(0);
+            mAppModule2 = mAppGroup.mModules.get(1);
+            mAppModule3 = mAppGroup.mModules.get(2);
+            mZhihuiGroup = mGroups.get(2);
+            mZhihuiModule1 = mZhihuiGroup.mModules.get(0);
+            mZhihuiModule2 = mZhihuiGroup.mModules.get(1);
+            mZhihuiModule3 = mZhihuiGroup.mModules.get(2);
+            mZhihuiModule4 = mZhihuiGroup.mModules.get(3);
+            mSettingGroup = mGroups.get(4);
+            mSettingModue1 = mSettingGroup.mModules.get(0);
+            mSettingModue2 = mSettingGroup.mModules.get(1);
+            mSettingModue3 = mSettingGroup.mModules.get(2);
+            mSettingModue4 = mSettingGroup.mModules.get(3);
+            mSettingModue5 = mSettingGroup.mModules.get(4);
+            mSettingModue6 = mSettingGroup.mModules.get(5);
+        } catch (Exception e) {
+            mGroups = ToolUtils.getGroupsFromConfig(mContext, R.xml.q1s_config);
+            notifyAllModuleList();
+            e.printStackTrace();
+        }
 
 
     }
 
 
     public void onClick_Event(View view) {
-        App app = null;
         if (view.getId() == vodImView_unfold.getId()) {
-            app = mVodModule.mApps.get(0);
+            mSelectedApp = mVodModule;
         } else if (view.getId() == channelImView_unfold.getId()) {
-            app = mChannelModule.mApps.get(0);
+            mSelectedApp = mChannelModule;
         } else if (view.getId() == apprecomView1.getId()) {
 
-            app = mAppModule1.mApps.get(0);
+            mSelectedApp = mAppModule1;
 
         } else if (view.getId() == apprecomView2.getId()) {
-            app = mAppModule3.mApps.get(0);
+            mSelectedApp = mAppModule3;
 
         } else if (view.getId() == apprecomView3.getId()) {
-            app = mAppModule2.mApps.get(0);
+            mSelectedApp = mAppModule2;
 
         } else if (view.getId() == myFavoriteView.getId()) {
-            app = mZhihuiModule1.mApps.get(0);
+            mSelectedApp = mZhihuiModule1;
         } else if (view.getId() == playhistoryView.getId()) {
-            app = mZhihuiModule2.mApps.get(0);
+            mSelectedApp = mZhihuiModule2;
         } else if (view.getId() == favpersonView.getId()) {
-            app = mZhihuiModule3.mApps.get(0);
+            mSelectedApp = mZhihuiModule3;
         } else if (view.getId() == settingBaseView.getId()) {
-            app = mSettingModue1.mApps.get(0);
+            mSelectedApp = mSettingModue1;
         } else if (view.getId() == settingDispalyView.getId()) {
-            app = mSettingModue2.mApps.get(0);
+            mSelectedApp = mSettingModue2;
         } else if (view.getId() == settingNetView.getId()) {
-            app = mSettingModue3.mApps.get(0);
+            mSelectedApp = mSettingModue3;
         } else if (view.getId() == settingUpdateView.getId()) {
-            app = mSettingModue4.mApps.get(0);
+            mSelectedApp = mSettingModue4;
         }
         //else if (view.getId() == settingImView_unfold.getId()){
         else if (view.getId() == settingMoreView.getId()) {
-            app = mSettingModue5.mApps.get(0);
+            mSelectedApp = mSettingModue5;
         } else if (view.getId() == settingErweiView.getId()) {
-            app = mSettingModue6.mApps.get(0);
+            mSelectedApp = mSettingModue6;
         } else if (view.getId() == localView.getId()) {
-            app = mZhihuiModule4.mApps.get(0);
+            mSelectedApp = mZhihuiModule4;
         }
-        ToolUtils.safeStartApk(mContext, app);
+        App app = mSelectedApp.mApps.get(0);
+        Logger.d(" clicke app for " + app.toString());
+        if (mToolUtils.isExsitsKey(mContext, mSelectedApp.getModuleCode())) {
+            String pkg = mToolUtils.getConfiguredPkg(mContext, mSelectedApp.getModuleCode());
+            AppManager appManager = AppManager.getInstance();
+            appManager.getAllApplications();
+            ApplicationInfo descApp = appManager.getInfoFromAllActivitys(pkg);
+            descApp.startApplication(mContext);
+        } else {
+            ToolUtils.safeStartApk(Q1SLauncher.this, app);
+        }
     }
 
 
@@ -1206,298 +1226,334 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     //channel
     private void setChannelImView() {
 
-        Drawable cacheDrawable = null;
-//        mAsyncImageLoader.loadDrawable(mChannelModule.getModuleBg(), channelImView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mChannelGroup.getGroupBg(), channelImView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
         if (cacheDrawable != null) {
             channelImView.setBgView(cacheDrawable);
         } else {
             channelImView.setBgView(R.drawable.dianbo1_bg);
         }
-        channelImView.setIconView(R.drawable.dianbo1_logo);
+        Drawable cacheDrawable1 =
+                new AsyncImageLoader(mContext).loadDrawable(mChannelGroup.getGroupIcon(), channelImView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable1 != null) {
+            channelImView.setIconView(cacheDrawable1);
+        } else {
+            channelImView.setIconView(R.drawable.dianbo1_logo);
+        }
         channelImView.setmNameView(mChannelGroup.getGroupText());
     }
 
     private void setChannelImViewUnfold() {
-        Bitmap bm = null;
-        Bitmap bitmap = null;
-        Drawable drawable = null;
-        File channelImView_unfoldFile = new File(IMGPATH_STRING + "channelfocus1.png");
-        if (channelImView_unfoldFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "channelfocus1.png");
+
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mChannelModule.getModuleBg(), channelImView_unfold.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable != null) {
+            channelImView_unfold.setBgView(cacheDrawable);
         } else {
-            bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.channelfocus1)).getBitmap();
+            channelImView_unfold.setBgView(R.drawable.vod_bg);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-//        channelImView_unfold.setBackgroundDrawable(drawable);
-        channelImView_unfold.setBgView(R.drawable.vod_bg);
-        channelImView_unfold.setmNameView(mChannelModule.getModuleText());
+
+        String key = mChannelModule.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            channelImView_unfold.setIconView(app.getIcon());
+//            channelImView_unfold.setmNameView(app.getTitle());
+        }else {
+//            channelImView_unfold.setmNameView(mVodModule.getModuleText());
+        }
     }
 
     //vod
     private void setVodImView() {
-        Drawable cacheDrawable = null;
-//                mAsyncImageLoader.loadDrawable(mVodModule.getModuleBg(), vodImView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mVodGroup.getGroupBg(), vodImView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
         if (cacheDrawable != null) {
             vodImView.setBgView(cacheDrawable);
         } else {
             vodImView.setBgView(R.drawable.zhibo1_bg);
         }
-        vodImView.setIconView(R.drawable.zhibo1_logo);
+        Drawable cacheDrawable1 =
+                new AsyncImageLoader(mContext).loadDrawable(mVodGroup.getGroupIcon(), vodImView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable1 != null) {
+            vodImView.setIconView(cacheDrawable1);
+        } else {
+            vodImView.setIconView(R.drawable.zhibo1_logo);
+        }
+
         vodImView.setmNameView(mVodGroup.getGroupText());
     }
 
     private void setVodImView_unfoldView() {
-        Bitmap bm = null;
-        Bitmap bitmap = null;
-        Drawable drawable = null;
-        File vodImView_unfoldFile = new File(IMGPATH_STRING + "vodfocus1.png");
-        if (vodImView_unfoldFile.exists()) {
-            bm = BitmapFactory.decodeFile(IMGPATH_STRING + "vodfocus1.png");
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mVodModule.getModuleBg(), vodImView_unfold.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable != null) {
+            vodImView_unfold.setBgView(cacheDrawable);
         } else {
-            bm = ((BitmapDrawable) getResources().getDrawable(R.drawable.channel_bg)).getBitmap();
+            vodImView_unfold.setBgView(R.drawable.channel_bg);
         }
-        bitmap = createReflectedImage(bm, bm);
-        drawable = new BitmapDrawable(bitmap);
-//        vodImView_unfold.setBgView(drawable);
-        vodImView_unfold.setBgView(R.drawable.channel_bg);
-        bm = null;
-        bitmap = null;
-        drawable = null;
+
+        String key = mVodModule.moduleCode;
+        String pkg = ToolUtils.getValueFromSP(mContext, key);
+        if (!TextUtils.isEmpty(pkg)) {
+            AppManager appManager = AppManager.getInstance();
+            ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
+            vodImView_unfold.setIconView(app.getIcon());
+//            vodImView_unfold.setmNameView(app.getTitle());
+        }else {
+//            vodImView_unfold.setmNameView(mVodModule.getModuleText());
+        }
     }
 
     //app
     private void setApplicationImView() {
-        File applicationImViewFile = new File(IMGPATH_STRING + "appnofocus1.png");
-        if (applicationImViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "appnofocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            applicationImView.setBackgroundDrawable(drawable);
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mAppGroup.getGroupBg(), applicationImView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        if (imageDrawable != null) {
+                            imageView.setImageDrawable(imageDrawable);
+                        } else {
+                            imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                                    imageUrl));
+                        }
+                    }
+                });
+        if (cacheDrawable != null) {
+            applicationImView.setBgView(cacheDrawable);
         } else {
             applicationImView.setBgView(R.drawable.yingyong1_bg);
         }
-        applicationImView.setIconView(R.drawable.yingyong1_logo);
+        Drawable cacheDrawable1 =
+                new AsyncImageLoader(mContext).loadDrawable(mAppGroup.getGroupIcon(), applicationImView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable1 != null) {
+            applicationImView.setIconView(cacheDrawable1);
+        } else {
+            applicationImView.setIconView(R.drawable.yingyong1_logo);
+        }
         applicationImView.setmNameView(mAppGroup.getGroupText());
     }
 
     private void setApprecomView1() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mAppModule1.getModuleBg(), apprecomView1.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            apprecomView1.setBgView(cacheDrawable);
-//        } else {
-//            apprecomView1.setBgView(R.drawable.appfocus1);
-//        }
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mAppModule1.getModuleIcon(), apprecomView1.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            apprecomView1.setIconView(cacheDrawable1);
-//        } else {
-//            apprecomView1.setIconView(R.drawable.appfocus1);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule1.getModuleBg(), apprecomView1.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            apprecomView1.setBgView(cacheDrawable);
+        } else {
+            apprecomView1.setBgView(R.drawable.apprecom1_bg);
+        }
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule1.getModuleIcon(), apprecomView1.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            apprecomView1.setIconView(cacheDrawable1);
+        } else {
+            apprecomView1.setIconView(R.drawable.apprecom1_icon);
+        }
         String key = mAppModule1.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             apprecomView1.setIconView(app.getIcon());
-        } else {
-            apprecomView1.setIconView(R.drawable.apprecom1_icon);
+            apprecomView1.setmNameView(app.getTitle());
+        }else {
+            apprecomView1.setmNameView(mAppModule1.getModuleText());
         }
-        apprecomView1.setBgView(R.drawable.apprecom1_bg);
-        apprecomView1.setmNameView(mAppModule1.getModuleText());
     }
 
     private void setApprecomView2() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mAppModule3.getModuleBg(), apprecomView2.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            apprecomView2.setBgView(cacheDrawable);
-//        } else {
-//            apprecomView2.setBgView(R.drawable.appfocus2);
-//        }
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mAppModule3.getModuleIcon(), apprecomView2.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            apprecomView2.setIconView(cacheDrawable1);
-//        } else {
-//            apprecomView2.setIconView(R.drawable.appfocus2);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule3.getModuleBg(), apprecomView2.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            apprecomView2.setBgView(cacheDrawable);
+        } else {
+            apprecomView2.setBgView(R.drawable.apprecom2_bg);
+        }
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule3.getModuleIcon(), apprecomView2.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            apprecomView2.setIconView(cacheDrawable1);
+        } else {
+            apprecomView2.setIconView(R.drawable.apprecom2_icon);
+        }
         String key = mAppModule3.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             apprecomView2.setIconView(app.getIcon());
-        } else {
-            apprecomView2.setIconView(R.drawable.apprecom2_icon);
-        }
-        apprecomView2.setBgView(R.drawable.apprecom2_bg);
+            apprecomView2.setmNameView(app.getTitle());
+        }else {
 
-        apprecomView2.setmNameView(mAppModule3.getModuleText());
+            apprecomView2.setmNameView(mAppModule3.getModuleText());
+        }
     }
 
     private void setApprecomView3() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mAppModule2.getModuleBg(), apprecomView3.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            apprecomView3.setBgView(cacheDrawable);
-//        } else {
-//            apprecomView3.setBgView(R.drawable.appfocus3);
-//        }
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mAppModule2.getModuleIcon(), apprecomView3.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            apprecomView3.setIconView(cacheDrawable1);
-//        } else {
-//            apprecomView3.setIconView(R.drawable.appfocus3);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule2.getModuleBg(), apprecomView3.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            apprecomView3.setBgView(cacheDrawable);
+        } else {
+            apprecomView3.setBgView(R.drawable.apprecom3_bg);
+        }
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule2.getModuleIcon(), apprecomView3.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            apprecomView3.setIconView(cacheDrawable1);
+        } else {
+            apprecomView3.setIconView(R.drawable.apprecom2_icon);
+        }
         String key = mAppModule2.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             apprecomView3.setIconView(app.getIcon());
-        } else {
-            apprecomView3.setIconView(R.drawable.apprecom2_icon);
+            apprecomView3.setmNameView(app.getTitle());
+        }else {
+            apprecomView3.setmNameView(mAppModule2.getModuleText());
         }
-        apprecomView3.setBgView(R.drawable.apprecom3_bg);
-        apprecomView3.setmNameView(mAppModule2.getModuleText());
     }
 
     //zhihui
     private void setFavoriteImView() {
-        File favoriteImViewFile = new File(IMGPATH_STRING + "zhihuinofocus1.png");
-        if (favoriteImViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "zhihuinofocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            favoriteImView.setBackgroundDrawable(drawable);
+
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mZhihuiGroup.getGroupBg(), favoriteImView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        if (imageDrawable != null) {
+                            imageView.setImageDrawable(imageDrawable);
+                        } else {
+                            imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                                    imageUrl));
+                        }
+                    }
+                });
+        if (cacheDrawable != null) {
+            favoriteImView.setBgView(cacheDrawable);
         } else {
             favoriteImView.setBgView(R.drawable.shenghuo1_bg);
         }
-        favoriteImView.setIconView(R.drawable.shenghuo1_logo);
+        Drawable cacheDrawable1 =
+                new AsyncImageLoader(mContext).loadDrawable(mZhihuiGroup.getGroupIcon(), favoriteImView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable1 != null) {
+            favoriteImView.setIconView(cacheDrawable1);
+        } else {
+            favoriteImView.setIconView(R.drawable.shenghuo1_logo);
+        }
         favoriteImView.setmNameView(mZhihuiGroup.getGroupText());
     }
 
     private void setMyFavoriteView() {
 
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mZhihuiModule1.getModuleBg(), myFavoriteView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            myFavoriteView.setBgView(cacheDrawable);
-//        } else {
-//            myFavoriteView.setBgView(R.drawable.zhihuifocus1);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mZhihuiModule1.getModuleIcon(), myFavoriteView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            myFavoriteView.setIconView(cacheDrawable1);
-//        } else {
-//            myFavoriteView.setIconView(R.drawable.zhihuifocus1);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule1.getModuleBg(), myFavoriteView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            myFavoriteView.setBgView(cacheDrawable);
+        } else {
+            myFavoriteView.setBgView(R.drawable.zhihui1_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule1.getModuleIcon(), myFavoriteView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            myFavoriteView.setIconView(cacheDrawable1);
+        } else {
+            myFavoriteView.setIconView(R.drawable.zhihui1_icon);
+        }
 
         String key = mZhihuiModule1.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
@@ -1505,264 +1561,224 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             myFavoriteView.setIconView(app.getIcon());
-        } else {
-            myFavoriteView.setIconView(R.drawable.zhihui1_icon);
+            myFavoriteView.setmNameView(app.getTitle());
+        }else {
+            myFavoriteView.setmNameView(mZhihuiModule1.getModuleText());
         }
-        myFavoriteView.setBgView(R.drawable.zhihui1_bg);
-//        myFavoriteView.setIconView(R.drawable.zhihui1_icon);
-        myFavoriteView.setmNameView(mZhihuiModule1.getModuleText());
     }
 
     private void setPlayhistoryView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mZhihuiModule2.getModuleBg(), playhistoryView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            playhistoryView.setBgView(cacheDrawable);
-//        } else {
-//            playhistoryView.setBgView(R.drawable.zhihuifocus2);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mZhihuiModule2.getModuleIcon(), playhistoryView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            playhistoryView.setIconView(cacheDrawable1);
-//        } else {
-//            playhistoryView.setIconView(R.drawable.zhihuifocus2);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule2.getModuleBg(), playhistoryView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            playhistoryView.setBgView(cacheDrawable);
+        } else {
+            playhistoryView.setBgView(R.drawable.zhihui2_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule2.getModuleIcon(), playhistoryView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            playhistoryView.setIconView(cacheDrawable1);
+        } else {
+            playhistoryView.setIconView(R.drawable.zhihui2_icon);
+        }
         String key = mZhihuiModule2.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             playhistoryView.setIconView(app.getIcon());
-        } else {
-            playhistoryView.setIconView(R.drawable.zhihui2_icon);
+            playhistoryView.setmNameView(app.getTitle());
+        }else {
+            playhistoryView.setmNameView(mZhihuiModule2.getModuleText());
         }
-        playhistoryView.setBgView(R.drawable.zhihui2_bg);
-//        playhistoryView.setIconView(R.drawable.zhihui2_icon);
-        playhistoryView.setmNameView(mZhihuiModule2.getModuleText());
     }
 
     private void setFavpersonView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mZhihuiModule3.getModuleBg(), favpersonView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            favpersonView.setBgView(cacheDrawable);
-//        } else {
-//            favpersonView.setBgView(R.drawable.zhihuifocus3);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mZhihuiModule3.getModuleIcon(), favpersonView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            favpersonView.setIconView(cacheDrawable1);
-//        } else {
-//            favpersonView.setIconView(R.drawable.zhihuifocus3);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleBg(), favpersonView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            favpersonView.setBgView(cacheDrawable);
+        } else {
+            favpersonView.setBgView(R.drawable.zhihui3_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleIcon(), favpersonView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            favpersonView.setIconView(cacheDrawable1);
+        } else {
+            favpersonView.setIconView(R.drawable.zhihui3_icon);
+        }
         String key = mZhihuiModule3.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             favpersonView.setIconView(app.getIcon());
-        } else {
-            favpersonView.setIconView(R.drawable.zhihui3_icon);
+            favpersonView.setmNameView(app.getTitle());
+        }else {
+            favpersonView.setmNameView(mZhihuiModule3.getModuleText());
         }
-        favpersonView.setBgView(R.drawable.zhihui3_bg);
-//        favpersonView.setIconView(R.drawable.zhihui3_icon);
-        favpersonView.setmNameView(mZhihuiModule3.getModuleText());
     }
 
     private void setLocalView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mZhihuiModule4.getModuleBg(), localView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            localView.setBgView(cacheDrawable);
-//        } else {
-//            localView.setBgView(R.drawable.zhihuifocus4);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mZhihuiModule4.getModuleIcon(), localView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            localView.setIconView(cacheDrawable1);
-//        } else {
-//            localView.setIconView(R.drawable.zhihuifocus4);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule4.getModuleBg(), localView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            localView.setBgView(cacheDrawable);
+        } else {
+            localView.setBgView(R.drawable.zhihui4_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule4.getModuleIcon(), localView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            localView.setIconView(cacheDrawable1);
+        } else {
+            localView.setIconView(R.drawable.zhihui4_icon);
+        }
         String key = mZhihuiModule4.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             localView.setIconView(app.getIcon());
-        } else {
-            localView.setIconView(R.drawable.zhihui4_icon);
+            localView.setmNameView(app.getTitle());
+        }else {
+            localView.setmNameView(mZhihuiModule4.getModuleText());
         }
-        localView.setBgView(R.drawable.zhihui4_bg);
-//        localView.setIconView(R.drawable.zhihui4_icon);
-        localView.setmNameView(mZhihuiModule4.getModuleText());
     }
 
     //setting
     private void setSettingImView() {
-        File settingImViewFile = new File(IMGPATH_STRING + "settingnofocus1.png");
-        if (settingImViewFile.exists()) {
-            Bitmap bm = BitmapFactory.decodeFile(IMGPATH_STRING + "settingnofocus1.png");
-            Drawable drawable = new BitmapDrawable(bm);
-            settingImView.setBackgroundDrawable(drawable);
+
+        Drawable cacheDrawable =
+                new AsyncImageLoader(mContext).loadDrawable(mSettingGroup.getGroupBg(), settingImView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable != null) {
+            settingImView.setBgView(cacheDrawable);
         } else {
             settingImView.setBgView(R.drawable.shezhi1_bg);
         }
-        settingImView.setIconView(R.drawable.shezhi1_logo);
+        Drawable cacheDrawable1 =
+                new AsyncImageLoader(mContext).loadDrawable(mSettingGroup.getGroupIcon(), settingImView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+                    @Override
+                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageDrawable(imageDrawable);
+                    }
+                });
+        if (cacheDrawable1 != null) {
+            settingImView.setIconView(cacheDrawable1);
+        } else {
+            settingImView.setIconView(R.drawable.shezhi1_logo);
+        }
+
         settingImView.setmNameView(mSettingGroup.getGroupText());
     }
 
     private void setSettingBaseView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mSettingModue1.getModuleBg(), settingBaseView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            settingBaseView.setBgView(cacheDrawable);
-//        } else {
-//            settingBaseView.setBgView(R.drawable.setting_focus1);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mSettingModue1.getModuleIcon(), settingBaseView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            settingBaseView.setIconView(cacheDrawable1);
-//        } else {
-//            settingBaseView.setIconView(R.drawable.setting_focus1);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue1.getModuleBg(), settingBaseView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            settingBaseView.setBgView(cacheDrawable);
+        } else {
+            settingBaseView.setBgView(R.drawable.setting_item_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue1.getModuleIcon(), settingBaseView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            settingBaseView.setIconView(cacheDrawable1);
+        } else {
+            settingBaseView.setIconView(R.drawable.setting1_icon);
+        }
         String key = mSettingModue1.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             settingBaseView.setIconView(app.getIcon());
-        } else {
-            settingBaseView.setIconView(R.drawable.setting1_icon);
+            settingBaseView.setmNameView(app.getTitle());
+        }else{
+            settingBaseView.setmNameView(mSettingModue1.getModuleText());
         }
-        settingBaseView.setBgView(R.drawable.setting_item_bg);
-//        settingBaseView.setIconView(R.drawable.setting1_icon);
-        settingBaseView.setmNameView(mSettingModue1.getModuleText());
+
     }
 
     private void setSettingDispalyView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mSettingModue2.getModuleBg(), settingDispalyView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            settingDispalyView.setBgView(cacheDrawable);
-//        } else {
-//            settingDispalyView.setBgView(R.drawable.settingfocus3);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mSettingModue2.getModuleIcon(), settingDispalyView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            settingDispalyView.setIconView(cacheDrawable1);
-//        } else {
-//            settingDispalyView.setIconView(R.drawable.settingfocus3);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue2.getModuleBg(), settingDispalyView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            settingDispalyView.setBgView(cacheDrawable);
+        } else {
+            settingDispalyView.setBgView(R.drawable.setting_item_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue2.getModuleIcon(), settingDispalyView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            settingDispalyView.setIconView(cacheDrawable1);
+        } else {
+            settingDispalyView.setIconView(R.drawable.setting2_icon);
+        }
 
         String key = mSettingModue2.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
@@ -1770,212 +1786,166 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             settingDispalyView.setIconView(app.getIcon());
-        } else {
-            settingDispalyView.setIconView(R.drawable.setting2_icon);
+            settingDispalyView.setmNameView(app.getTitle());
+        }else {
+            settingDispalyView.setmNameView(mSettingModue2.getModuleText());
         }
-        settingDispalyView.setBgView(R.drawable.setting_item_bg);
-//        settingDispalyView.setIconView(R.drawable.setting2_icon);
-        settingDispalyView.setmNameView(mSettingModue2.getModuleText());
+
     }
 
     private void setSettingNetView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mSettingModue3.getModuleBg(), settingNetView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            settingNetView.setBgView(cacheDrawable);
-//        } else {
-//            settingNetView.setBgView(R.drawable.settingfocus5);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mSettingModue3.getModuleIcon(), settingNetView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            settingNetView.setIconView(cacheDrawable1);
-//        } else {
-//            settingNetView.setIconView(R.drawable.settingfocus5);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue3.getModuleBg(), settingNetView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            settingNetView.setBgView(cacheDrawable);
+        } else {
+            settingNetView.setBgView(R.drawable.setting_item_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue3.getModuleIcon(), settingNetView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            settingNetView.setIconView(cacheDrawable1);
+        } else {
+            settingNetView.setIconView(R.drawable.setting3_icon);
+        }
         String key = mSettingModue3.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             settingNetView.setIconView(app.getIcon());
-        } else {
-            settingNetView.setIconView(R.drawable.setting3_icon);
+            settingNetView.setmNameView(app.getTitle());
+        }else{
+            settingNetView.setmNameView(mSettingModue3.getModuleText());
         }
-        settingNetView.setBgView(R.drawable.setting_item_bg);
-//        settingNetView.setIconView(R.drawable.setting3_icon);
-        settingNetView.setmNameView(mSettingModue3.getModuleText());
+
     }
 
     private void setSettingUpdateView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mSettingModue4.getModuleBg(), settingUpdateView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            settingUpdateView.setBgView(cacheDrawable);
-//        } else {
-//            settingUpdateView.setBgView(R.drawable.settingfocus2);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mSettingModue4.getModuleIcon(), settingUpdateView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            settingUpdateView.setIconView(cacheDrawable1);
-//        } else {
-//            settingUpdateView.setIconView(R.drawable.settingfocus2);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue4.getModuleBg(), settingUpdateView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            settingUpdateView.setBgView(cacheDrawable);
+        } else {
+            settingUpdateView.setBgView(R.drawable.setting_item_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue4.getModuleIcon(), settingUpdateView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            settingUpdateView.setIconView(cacheDrawable1);
+        } else {
+            settingUpdateView.setIconView(R.drawable.setting4_icon);
+        }
         String key = mSettingModue4.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             settingUpdateView.setIconView(app.getIcon());
+            settingUpdateView.setmNameView(app.getTitle());
         } else {
-            settingUpdateView.setIconView(R.drawable.setting4_icon);
+            settingUpdateView.setmNameView(mSettingModue4.getModuleText());
         }
-        settingUpdateView.setBgView(R.drawable.setting_item_bg);
-//        settingUpdateView.setIconView(R.drawable.setting4_icon);
-        settingUpdateView.setmNameView(mSettingModue4.getModuleText());
     }
 
     private void setSettingMoreView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mSettingModue5.getModuleBg(), settingMoreView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            settingMoreView.setBgView(cacheDrawable);
-//        } else {
-//            settingMoreView.setBgView(R.drawable.settingfocus4);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mSettingModue5.getModuleIcon(), settingMoreView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            settingMoreView.setIconView(cacheDrawable1);
-//        } else {
-//            settingMoreView.setIconView(R.drawable.settingfocus4);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue5.getModuleBg(), settingMoreView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            settingMoreView.setBgView(cacheDrawable);
+        } else {
+            settingMoreView.setBgView(R.drawable.setting_item_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue5.getModuleIcon(), settingMoreView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            settingMoreView.setIconView(cacheDrawable1);
+        } else {
+            settingMoreView.setIconView(R.drawable.setting5_icon);
+        }
         String key = mSettingModue5.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             settingMoreView.setIconView(app.getIcon());
+            settingMoreView.setmNameView(app.getTitle());
         } else {
-            settingMoreView.setIconView(R.drawable.setting5_icon);
+
+            settingMoreView.setmNameView(mSettingModue5.getModuleText());
         }
-        settingMoreView.setBgView(R.drawable.setting_item_bg);
-//        settingMoreView.setIconView(R.drawable.setting5_icon);
-        settingMoreView.setmNameView(mSettingModue5.getModuleText());
     }
 
     private void setSettingErweiView() {
-//        Drawable cacheDrawable = mAsyncImageLoader.loadDrawable(mSettingModue6.getModuleBg(), settingErweiView.getBgView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable != null) {
-//            settingErweiView.setBgView(cacheDrawable);
-//        } else {
-//            settingErweiView.setBgView(R.drawable.settingfocus6);
-//        }
-//
-//        Drawable cacheDrawable1 = mAsyncImageLoader.loadDrawable(mSettingModue6.getModuleIcon(), settingErweiView.getIconView(), new AsyncImageLoader.ImageCallback() {
-//
-//            @Override
-//            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-//                if (imageDrawable != null) {
-//                    imageView.setImageDrawable(imageDrawable);
-//                } else {
-//                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-//                            imageUrl));
-//                }
-//            }
-//        });
-//        if (cacheDrawable1 != null) {
-//            settingErweiView.setIconView(cacheDrawable1);
-//        } else {
-//            settingErweiView.setIconView(R.drawable.settingfocus6);
-//        }
+        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue6.getModuleBg(), settingErweiView.getBgView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable != null) {
+            settingErweiView.setBgView(cacheDrawable);
+        } else {
+            settingErweiView.setBgView(R.drawable.setting_item_bg);
+        }
+
+        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue6.getModuleIcon(), settingErweiView.getIconView(), new AsyncImageLoader.ImageCallback() {
+
+            @Override
+            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageDrawable(imageDrawable);
+            }
+        });
+        if (cacheDrawable1 != null) {
+            settingErweiView.setIconView(cacheDrawable1);
+        } else {
+            settingErweiView.setIconView(R.drawable.setting6_icon);
+        }
         String key = mSettingModue6.moduleCode;
         String pkg = ToolUtils.getValueFromSP(mContext, key);
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             settingErweiView.setIconView(app.getIcon());
-        } else {
-            settingErweiView.setIconView(R.drawable.setting6_icon);
+            settingErweiView.setmNameView(app.getTitle());
+        }else{
+            settingErweiView.setmNameView(mSettingModue6.getModuleText());
         }
-        settingErweiView.setBgView(R.drawable.setting_item_bg);
-//        settingErweiView.setIconView(R.drawable.setting6_icon);
-        settingErweiView.setmNameView(mSettingModue6.getModuleText());
+
     }
 
     private void initHomeView() {
@@ -1996,7 +1966,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         focusBkImageView = (ImageView) findViewById(R.id.mainmenu_focusbk);
 
         //channel
-        channelImView = (com.luntech.launcher.view.QisItem) findViewById(R.id.channel);
+        channelImView = (com.luntech.launcher.view.GroupItem) findViewById(R.id.channel);
         channelImView.setOnFocusChangeListener(this);
         channelImView_unfold = (com.luntech.launcher.view.QisItem) findViewById(R.id.channel_unfold);
         channelImView_unfold.setOnFocusChangeListener(this);
@@ -2005,7 +1975,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
 
         //vod
-        vodImView = (com.luntech.launcher.view.QisItem) findViewById(R.id.vod);
+        vodImView = (com.luntech.launcher.view.GroupItem) findViewById(R.id.vod);
         vodImView.setOnFocusChangeListener(this);
         vodImView_unfold = (com.luntech.launcher.view.QisItem) findViewById(R.id.vod_unfold);
         vodImView_unfold.setOnFocusChangeListener(this);
@@ -2013,7 +1983,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         setVodImView_unfoldView();
 
         //app
-        applicationImView = (com.luntech.launcher.view.QisItem) findViewById(R.id.application);
+        applicationImView = (com.luntech.launcher.view.GroupItem) findViewById(R.id.application);
         app_unfold_Layout = (LinearLayout) findViewById(R.id.app_unfold);
         apprecomView1 = (com.luntech.launcher.view.QisItem) findViewById(R.id.app_recom1);
         apprecomView1.setOnFocusChangeListener(this);
@@ -2027,7 +1997,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         setApprecomView3();
 
         //zhihui
-        favoriteImView = (com.luntech.launcher.view.QisItem) findViewById(R.id.favorite);
+        favoriteImView = (com.luntech.launcher.view.GroupItem) findViewById(R.id.favorite);
         favorite_unfold_Layout = (LinearLayout) findViewById(R.id.favorite_unfold);
         myFavoriteView = (com.luntech.launcher.view.QisItem) findViewById(R.id.myfavorite);
         myFavoriteView.setOnFocusChangeListener(this);
@@ -2044,7 +2014,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         setLocalView();
 
         //setting
-        settingImView = (com.luntech.launcher.view.QisItem) findViewById(R.id.setting);
+        settingImView = (com.luntech.launcher.view.GroupItem) findViewById(R.id.setting);
         setting_unfold_layout = (LinearLayout) findViewById(R.id.setting_unfold_layout);
         settingBaseView = (com.luntech.launcher.view.QisItem) findViewById(R.id.setting_base);
         settingBaseView.setOnFocusChangeListener(this);
@@ -2089,8 +2059,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     protected void onDestroy() {
-        android.os.Process.killProcess(android.os.Process.myPid());
-
+//        android.os.Process.killProcess(android.os.Process.myPid());
         super.onDestroy();
     }
 
@@ -2178,13 +2147,14 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (isSelected && app != null && mSelectedApp != null) {
             String value = mToolUtils.getConfigured(mContext, app.getPackageName());
             if (!TextUtils.isEmpty(value)) {
-                if (value.equals(mSelectedApp.getModuleCode())) {
-                    mToolUtils.clearConfiguredPkg(mContext, app.getPackageName());
-                } else {
-                    Log.d("jzh", "setResult cancel for duplicate ");
-                    Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                Log.d("jzh", "setResult cancel for duplicate ");
+                Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (mToolUtils.isExsitsKey(mContext, mSelectedApp.getModuleCode())) {
+                String key = mToolUtils.getConfigured(mContext, mSelectedApp.getModuleCode());
+//                mToolUtils.clearConfiguredPkg(mContext, mSelectedApp.getModuleCode());
+                mToolUtils.clearConfiguredPkg(mContext, key);
             }
             mToolUtils.setConfigured(mContext, app.getPackageName(), mSelectedApp.getModuleCode());
             mToolUtils.setConfiguredPkg(mContext, mSelectedApp.getModuleCode(), app.getPackageName());

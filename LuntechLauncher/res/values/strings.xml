@@ -30,7 +30,7 @@
     <string name="date_time_format_time_short_12">h:mm</string>
     <string name="date_time_format_time_am_pm">h:mm a</string>
     <string name="date_time_format_am_pm">a</string>
-    <string name="date_time_format_date_short_full">MM-dd-yy</string>
+    <string name="date_time_format_date_short_full">MM-dd-yyyy</string>
     <string name="date_time_format_month_day">MMM d</string>
     <string name="date_time_format_month_year">MMM yyyy</string>
     <string name="date_time_format_date_long">MMM dd, yyyy</string>

@@ -314,9 +314,9 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
 
                         synchronized (mState) {
                             mState.setDate(mTimeManager.formatDateTime(time,
-                                    TimeManager.DateTimeFormat.DATE_CURRENT_FORMAT));
+                                    TimeManager.DateTimeFormat.DATE_SHORT_FULL));
                             mState.setTime(mTimeManager.formatDateTime(time,
-                                    TimeManager.DateTimeFormat.TIME_AM_PM));
+                                    TimeManager.DateTimeFormat.TIME_SHORT));
                             if (mState.hasChanges(TvStatus.DATE_TIME_INFO)) {
                                 notifyStateChange();
                             }

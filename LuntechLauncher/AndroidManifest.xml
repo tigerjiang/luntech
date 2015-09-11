@@ -4,7 +4,7 @@
     package="com.luntech.launcher"
     android:sharedUserId="android.uid.system"
     android:process="system"
-    android:versionCode="201507"
+    android:versionCode="201509"
     android:versionName="1.0">
 
     <uses-sdk
@@ -59,7 +59,8 @@
     <uses-permission android:name="android.permission.SYSTEM_OVERLAY_WINDOW" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS"/>
-"
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    "
 
     <application
         android:name=".LauncherApplication"
@@ -266,7 +267,7 @@
                 <action android:name="com.luntech.action.GET_AD" />
                 <action android:name="com.luntech.action.GEAT_SAVER" />
                 <action android:name="com.luntech.action.SHOW_SAVER" />
-
+                <action android:name="com.luntech.action.START"/>
 
             </intent-filter>
         </receiver>

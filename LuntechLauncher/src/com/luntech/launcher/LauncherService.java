@@ -36,7 +36,8 @@ public class LauncherService extends Service {
     private static final boolean DEBUG = true;
     private static final int NEW_INTENT_RECEIVED = 1001;
     private static final String KEY_AUTO_TIME = "auto_time";
-    private static final int SYNC_DELAY_TIME = 5*60*1000;
+    private static final String KEY_AUTO_TIME_ZONE = "auto_time_zone";
+    private static final int SYNC_DELAY_TIME = 1 * 60 * 1000;
     private LauncherHandler mLauncherHandler;
 
     private Context mContext;
@@ -53,6 +54,8 @@ public class LauncherService extends Service {
         Log.d(TAG, "The service is onCreate.");
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         mContext = LauncherApplication.getAppContext();
+        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
+        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME_ZONE, 1);
         super.onCreate();
     }
 
@@ -146,7 +149,7 @@ public class LauncherService extends Service {
                         // capture the category config
                         new FetchTask(config_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mAdConfigureFile,
                                 LauncherHandler.RETURN_SYSTEM_CONFIG_CODE).execute();
-                    } else if (Launcher.CAPTURE_CATEGORY_config_ACTION.equals(action)) {
+                    } else if (Launcher.CAPTURE_CATEGORY_CONFIG_ACTION.equals(action)) {
                         String httpArg = commonArg + "&type=" + Launcher.mType;
                         String app_url = HttpUtils.HTTP_CONFIG_APP_URL + httpArg;
                         Logger.e("request url " + app_url);
@@ -170,7 +173,7 @@ public class LauncherService extends Service {
 
 
                     } else if (Launcher.SHOW_SCREENSAVER_ACTION.equals(action)) {
-                        Log.d("show", "SHOW_SCREEN_SAVER");
+                        Log.d(TAG, "SHOW_SCREEN_SAVER");
                         mLauncherHandler.post(new Runnable() {
                             @Override
                             public void run() {
@@ -215,8 +218,13 @@ public class LauncherService extends Service {
                     break;
                 case START_SCREEN_SAVER:
                     Log.d("show", "SHOW_SCREEN_SAVER");
-                    Intent saverIntent = new Intent(mContext, ScreenSaverActivity.class);
-                    startActivity(saverIntent);
+                    if(ToolUtils.isApplicationBroughtToBackground(mContext)){
+                        Log.d(TAG,"current task is background. can't show screensaver");
+                    }else{
+                        Intent saverIntent = new Intent(mContext, ScreenSaverActivity.class);
+                        saverIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(saverIntent);
+                    }
                     break;
                 case RETURN_HIDDEN_CONFIG_CODE:
                     break;
@@ -257,11 +265,17 @@ public class LauncherService extends Service {
                     Log.d(TAG, "ad " + adContent);
                     break;
                 case SYNC_YIME:
-//                    if (Settings.Global.getInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0) == 0) {
-//                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
-//                    } else {
-//                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0);
-//                    }
+                    if (Settings.Global.getInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0) == 0) {
+                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
+                    } else {
+                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 0);
+                    }
+
+                    if (Settings.Global.getInt(mContext.getContentResolver(), KEY_AUTO_TIME_ZONE, 0) == 0) {
+                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME_ZONE, 1);
+                    } else {
+                        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME_ZONE, 0);
+                    }
                     final Message msg1 = mLauncherHandler.obtainMessage();
                     msg.what = LauncherHandler.SYNC_YIME;
                     mLauncherHandler.sendMessageAtTime(msg1, SYNC_DELAY_TIME);
@@ -377,7 +391,7 @@ public class LauncherService extends Service {
                             if (time.equals(storeTime)) {
                                 Log.d(TAG, "Desn't need get config from server,Beacuse of the time is same as local "
                                         + storeTime);
-                                return;
+                                break;
                             } else {
                                 ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
                                         time);
@@ -511,15 +525,18 @@ public class LauncherService extends Service {
 
     private void parseScreenSaverCover() {
         String screenSaverConfig = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.SCREENSAVER_CONFIGURE_FILE;
+        Log.d(TAG, " screenSaverConfig" + screenSaverConfig);
         File configFile = new File(screenSaverConfig);
         if (configFile.exists()) {
             String resourcesPath = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.FILE_SCREENSAVER;
+            Log.d(TAG, " resourcesPath" + resourcesPath);
             File resourcesFile = new File(resourcesPath);
             if (resourcesFile.exists() && resourcesFile.isDirectory()) {
                 for (File file : resourcesFile.listFiles()) {
                     Launcher.sScreenSaverFileList.add(file.getAbsolutePath());
                 }
-                Message msg = mLauncherHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
+                Log.d(TAG, " Launcher.sScreenSaverFileList " + Launcher.sScreenSaverFileList.toString());
+                Message msg = mLauncherHandler.obtainMessage(LauncherHandler.START_SCREEN_SAVER);
                 mLauncherHandler.sendMessage(msg);
             } else {
 

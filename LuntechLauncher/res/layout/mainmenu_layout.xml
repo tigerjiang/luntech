@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <com.luntech.launcher.view.QisItem
+        <com.luntech.launcher.view.GroupItem
             android:id="@+id/channel"
             android:layout_width="103px"
             android:layout_height="560px"
@@ -31,7 +31,7 @@
             android:visibility="gone" />
 
 
-        <com.luntech.launcher.view.QisItem
+        <com.luntech.launcher.view.GroupItem
             android:id="@+id/vod"
             android:layout_width="103px"
             android:layout_height="560px"
@@ -51,7 +51,7 @@
 
             />
 
-        <com.luntech.launcher.view.QisItem
+        <com.luntech.launcher.view.GroupItem
             android:id="@+id/favorite"
             android:layout_width="103px"
             android:layout_height="560px"
@@ -62,7 +62,7 @@
             android:layout_width="660px"
             android:layout_height="wrap_content" />
 
-        <com.luntech.launcher.view.QisItem
+        <com.luntech.launcher.view.GroupItem
             android:id="@+id/application"
             android:layout_width="103px"
             android:layout_height="560px"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"  />
 
 
-        <com.luntech.launcher.view.QisItem
+        <com.luntech.launcher.view.GroupItem
             android:id="@+id/setting"
             android:layout_width="103px"
             android:layout_height="560px"

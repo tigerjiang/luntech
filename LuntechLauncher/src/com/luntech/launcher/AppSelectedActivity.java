@@ -53,19 +53,6 @@ public class AppSelectedActivity extends Activity {
         mAppList = mAppManager.getSelectedApplications();
         sortByInstallTime(mAppList);
         int listSize = mAppList.size();
-//        for(int i =0;i<listSize;i++){
-//            final ApplicationInfo app = mAppList.get(i);
-//            Button btn = new Button(mContext);
-//            btn.setText(app.getTitle());
-//            btn.setBackgroundResource(R.drawable.focus_selector);
-//            btn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Toast.makeText(mContext, app.getTitle(), Toast.LENGTH_LONG).show();
-//                }
-//            });
-//            mContentLayout.addView(btn);
-//        }
         for (int i = 0; i < listSize; i++) {
             AppItemView appItemView = new AppItemView(mContext, mAppList.get(i));
             appItemView.setFocusable(true);

@@ -45,7 +45,10 @@ public class Launcher extends Activity {
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
     public static int sVersionCode;
-    public static final long REQUEST_DELAY_TIME = 10 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_ONE_MINUTES = 1 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_THREE_MINUTES = 3 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_FIVE_MINUTES = 5 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_SEVEN_MINUTES = 7 * 60 * 1000;
     public static final long SHOW_DELAY_TIME = 10 * 1000;
     public static final long DISMISS_DELAY_TIME = 3 * 1000;
     public static long showScreenSaverTime = 5 * 60 * 1000;
@@ -64,12 +67,14 @@ public class Launcher extends Activity {
 
     public static final String SCREENSAVER_CONFIGURE_FILE = "screensaver_config.xml";
 
-    public static final String CAPTURE_CATEGORY_config_ACTION = "com.luntech.action.GET_APP";
+    public static final String CAPTURE_CATEGORY_CONFIG_ACTION = "com.luntech.action.GET_APP";
 
     public static final String CAPTURE_UPDATE_CONFIGURE_ACTION = "com.luntech.action.GET_UPDATE";
     public static final String CAPTURE_AD_CONFIGURE_ACTION = "com.luntech.action.GET_AD";
     public static final String CAPTURE_SCREENSAVER_CONFIGURE_ACTION = "com.luntech.action.GEAT_SAVER";
     public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
+    public static final String APP_START_ACTION = "com.luntech.action.START";
+
 
     public static final String IPTV_THEME = "IPTV";
 
@@ -139,6 +144,7 @@ public class Launcher extends Activity {
         }
         themeIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(themeIntent);
+        sendBroadcast(new Intent(APP_START_ACTION));
     }
 
     @Override
@@ -168,16 +174,40 @@ public class Launcher extends Activity {
             return;
         }
         final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        final Runnable runable = new Runnable() {
 
             @Override
             public void run() {
-//                sendBroadcast(new Intent(CAPTURE_CATEGORY_config_ACTION));
-//                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
-//                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
-//                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
+
+                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
+
+
             }
-        }, REQUEST_DELAY_TIME);
+        };
+        if (runable != null) {
+            handler.removeCallbacks(runable);
+            handler.postDelayed(runable
+                    , REQUEST_DELAY_TIME_ONE_MINUTES);
+        }
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendBroadcast(new Intent(CAPTURE_CATEGORY_CONFIG_ACTION));
+            }
+        }, REQUEST_DELAY_TIME_THREE_MINUTES);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendBroadcast(new Intent(CAPTURE_AD_CONFIGURE_ACTION));
+            }
+        }, REQUEST_DELAY_TIME_FIVE_MINUTES);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendBroadcast(new Intent(CAPTURE_SCREENSAVER_CONFIGURE_ACTION));
+            }
+        }, REQUEST_DELAY_TIME_SEVEN_MINUTES);
 
     }
 
@@ -344,26 +374,26 @@ public class Launcher extends Activity {
     }
 
     protected void notifyAllModuleList() {
-        for (int j = 0; j < mGroups.size(); j++) {
-            Group group = mGroups.get(j);
-            ArrayList<Module> modules = group.mModules;
-            for (int i = 0; i < modules.size(); i++) {
-                final Module module = modules.get(i);
-                String key = module.moduleCode;
-                String pkg = mToolUtils.getConfiguredPkg(mContext, key);
-                Log.d(TAG, "key  for " + key + pkg);
-                if (!TextUtils.isEmpty(pkg)) {
-                    ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
-                    if (app != null) {
-                        module.moduleIconDrawable = app.getIcon();
-                        module.moduleText = app.getTitle();
-                        module.mApps.get(0).componentName = app.mComponent;
-                    } else {
-                        mToolUtils.clearConfiguredPkg(mContext, key);
-                    }
-                }
-            }
-        }
+//        for (int j = 0; j < mGroups.size(); j++) {
+//            Group group = mGroups.get(j);
+//            ArrayList<Module> modules = group.mModules;
+//            for (int i = 0; i < modules.size(); i++) {
+//                final Module module = modules.get(i);
+//                String key = module.moduleCode;
+//                String pkg = mToolUtils.getConfiguredPkg(mContext, key);
+//                Log.d(TAG, "key  for " + key + pkg);
+//                if (!TextUtils.isEmpty(pkg)) {
+//                    ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
+//                    if (app != null) {
+//                        module.moduleIconDrawable = app.getIcon();
+//                        module.moduleText = app.getTitle();
+//                        module.mApps.get(0).componentName = app.mComponent;
+//                    } else {
+//                        mToolUtils.clearConfiguredPkg(mContext, key);
+//                    }
+//                }
+//            }
+//        }
     }
 
 

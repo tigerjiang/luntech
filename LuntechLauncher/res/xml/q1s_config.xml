@@ -223,7 +223,7 @@
             code="Q1S_5_2"
             replace="1"
             type="5">
-            <m_text>显示设置</m_text>
+            <m_text>关于我们</m_text>
             <m_bg>55dd85a28a776.png</m_bg>
             <m_icon>55dd85c1488e1.png</m_icon>
             <m_shadow />
@@ -295,7 +295,7 @@
             code="Q1S_5_6"
             replace="1"
             type="5">
-            <m_text>多屏互动二维码</m_text>
+            <m_text>多屏互动</m_text>
             <m_bg>55dd86f73c835.png</m_bg>
             <m_icon>55dd87008d816.png</m_icon>
             <m_shadow />

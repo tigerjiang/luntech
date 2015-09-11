@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="103px"
+    android:layout_height="wrap_content"
+     >
+    <ImageView
+        android:id="@+id/group_bg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/dianbo1_bg" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+         >
+        <ImageView
+            android:id="@+id/group_icon"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:layout_gravity="center"
+            android:layout_marginTop="150px"
+            />
+
+        <TextView
+            android:id="@+id/group_label"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/global_category_app_shadow_height"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:text="@string/categore_app_1_label"
+            android:textColor="@color/white"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="20px"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

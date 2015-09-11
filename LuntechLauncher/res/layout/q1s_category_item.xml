@@ -26,10 +26,9 @@
         <TextView
             android:id="@+id/module_label"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/global_category_app_shadow_height"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:gravity="center"
-            android:text="@string/categore_app_1_label"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:textSize="@dimen/global_text_size_large"

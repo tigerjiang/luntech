@@ -6,22 +6,24 @@
     <dimen name="global_margin_right">65px</dimen>
     <dimen name="global_margin_top">15px</dimen>
     <dimen name="global_margin_bottom">35px</dimen>
-    <dimen name="global_thumb_1_width">720px</dimen>
-    <dimen name="global_thumb_1_height">406px</dimen>
-    <dimen name="global_thumb_2_width">418px</dimen>
-    <dimen name="global_thumb_2_height">210px</dimen>
-    <dimen name="global_thumb_3_width">418px</dimen>
-    <dimen name="global_thumb_3_height">210px</dimen>
+
+    <dimen name="global_thumb_1_width">799px</dimen>
+    <dimen name="global_thumb_1_height">452px</dimen>
+
+    <dimen name="global_thumb_2_width">339px</dimen>
+    <dimen name="global_thumb_2_height">240px</dimen>
+    <dimen name="global_thumb_3_width">339px</dimen>
+    <dimen name="global_thumb_3_height">240px</dimen>
     <dimen name="global_thumb_shadow_height">48px</dimen>
-    <dimen name="global_category_item_width">154px</dimen>
-    <dimen name="global_category_item_height">128px</dimen>
+    <dimen name="global_category_item_width">153px</dimen>
+    <dimen name="global_category_item_height">82px</dimen>
     <dimen name="global_horizontal_devider_height">12px</dimen>
-    <dimen name="global_vertical_devider_height">10px</dimen>
+    <dimen name="global_vertical_devider_height">5px</dimen>
     <dimen name="global_category_app_logo_margin_top">7px</dimen>
     <dimen name="global_category_layout_wiith">1150px</dimen>
     <dimen name="global_category_layout_height">130px</dimen>
-    <dimen name="global_category_app_logo_width">96px</dimen>
-    <dimen name="global_category_app_logo_height">88px</dimen>
+    <dimen name="global_category_app_logo_width">54px</dimen>
+    <dimen name="global_category_app_logo_height">54px</dimen>
     <dimen name="global_category_app_shadow_height">40px</dimen>
     <dimen name="global_ad_layout_width">900px</dimen>
     <dimen name="global_ad_layout_height">40px</dimen>
@@ -30,8 +32,12 @@
     <dimen name="global_ad_content_devider_2">8px</dimen>
     <dimen name="global_status_layout_width">1150px</dimen>
     <dimen name="global_status_layout_height">54px</dimen>
+
+    <dimen name="global_setting_layout_width">184px</dimen>
+    <dimen name="global_setting_layout_height">184px</dimen>
     <dimen name="global_status_horizontal_devider_1">16px</dimen>
     <dimen name="global_status_horizontal_devider_2">12px</dimen>
+    <dimen name="custom_devider">-20px</dimen>
     <dimen name="global_iptv_logo_layout_height">54px</dimen>
     <dimen name="global_iptv_logo_layout_width">158px</dimen>
     <dimen name="global_vertical_devider_height_1">30px</dimen>
@@ -39,6 +45,8 @@
     <dimen name="global_text_size_large">26px</dimen>
     <dimen name="global_text_size_small">16px</dimen>
     <dimen name="global_text_size_middle">20px</dimen>
+
+
     <dimen name="popup_width">750px</dimen>
     <dimen name="popup_height">410px</dimen>
     <!-- secondary menu -->

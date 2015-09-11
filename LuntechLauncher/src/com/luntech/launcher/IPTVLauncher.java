@@ -60,7 +60,6 @@ public class IPTVLauncher extends Launcher {
     private TextView mThumb_3_label;
 
 
-    AsyncImageLoader mAsyncImageLoader;
     private Handler mHandler;
 
     private int mGridPosition = 0;
@@ -77,7 +76,7 @@ public class IPTVLauncher extends Launcher {
         setContentView(R.layout.iptv_home_layout);
         AppManager.create(this);
         initHandler();
-        initParams();;
+        initParams();
         parseGroupsFromDB();
         initView();
         initScreenSaverTime();
@@ -111,10 +110,19 @@ public class IPTVLauncher extends Launcher {
 
         mAdvertisementView = (TextView) findViewById(R.id.ad_content_1);
         mAppManager = AppManager.getInstance();
+        mAppManager.getAllApplications();
         mAppManager.getSelectedApplications();
         mGridView = (GridView) findViewById(R.id.category_layout);
-        String adContent = ToolUtils.getValueFromSP(mContext, ADVERTISEMENT_KEY);
+        String adContent = ToolUtils.getCommonValueFromSP(mContext, ADVERTISEMENT_KEY);
+        StringBuilder adSb = new StringBuilder();
+        Log.d(TAG, "ad" + adContent);
         if (!TextUtils.isEmpty(adContent)) {
+            adSb.append(adContent);
+            if (adContent.length() < 255) {
+                for (int i = 0; i < 1000; i++) {
+                    adSb.append(" ");
+                }
+            }
             mAdvertisementView.setText(adContent);
         }
 
@@ -134,9 +142,18 @@ public class IPTVLauncher extends Launcher {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                App app = ((Module) parent.getItemAtPosition(position)).mApps.get(0);
+                mSelectedApp = (Module) parent.getItemAtPosition(position);
+                App app = mSelectedApp.mApps.get(0);
                 Logger.d(" clicke app for " + app.toString());
-                ToolUtils.safeStartApk(mContext, app);
+                if (mToolUtils.isExsitsKey(mContext, mSelectedApp.getModuleCode())) {
+                    String pkg = mToolUtils.getConfiguredPkg(mContext, mSelectedApp.getModuleCode());
+                    AppManager appManager = AppManager.getInstance();
+                    appManager.getAllApplications();
+                    ApplicationInfo descApp = appManager.getInfoFromAllActivitys(pkg);
+                    descApp.startApplication(mContext);
+                } else {
+                    ToolUtils.safeStartApk(IPTVLauncher.this, app);
+                }
                 mGridPosition = position;
             }
         });
@@ -163,33 +180,32 @@ public class IPTVLauncher extends Launcher {
         mSecondApp = mModules.get(1);
         mThirdApp = mModules.get(2);
         refreshFeatureMenuView();
-        mAsyncImageLoader = new AsyncImageLoader(mContext);
-        mAsyncImageLoader.loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
+        Drawable icon = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
+                imageView.setImageDrawable(imageDrawable);
             }
         });
+        if (icon == null) {
+            mThumb_1_view.setImageResource(R.drawable.global_thumb_1_logo);
+        } else {
+            mThumb_1_view.setImageDrawable(icon);
+        }
         // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
         // module1.getModuleIcon()));
-        mAsyncImageLoader.loadDrawable(mFirstApp.getModuleShadow(), mThumb_1_shadow, new ImageCallback() {
+        Drawable shadow = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleShadow(), mThumb_1_shadow, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
+                imageView.setImageDrawable(imageDrawable);
             }
         });
+        if (shadow == null) {
+            mThumb_1_shadow.setImageResource(R.drawable.global_thumb_1_shadow);
+        } else {
+            mThumb_1_shadow.setImageDrawable(shadow);
+        }
         mThumb_1_label.setText(mFirstApp.getModuleText());
         mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -217,30 +233,32 @@ public class IPTVLauncher extends Launcher {
         });
         // mThumb_2_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
         // module2.getModuleIcon()));
-        mAsyncImageLoader.loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
+        Drawable icon2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
+                imageView.setImageDrawable(imageDrawable);
             }
         });
-        mAsyncImageLoader.loadDrawable(mSecondApp.getModuleShadow(), mThumb_2_shadow, new ImageCallback() {
+        if (icon2 == null) {
+            mThumb_2_view.setImageResource(R.drawable.global_thumb_2_logo);
+        } else {
+            mThumb_2_view.setImageDrawable(icon2);
+        }
+        // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module1.getModuleIcon()));
+        Drawable shadow2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleShadow(), mThumb_2_shadow, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
+                imageView.setImageDrawable(imageDrawable);
             }
         });
+        if (shadow2 == null) {
+            mThumb_2_shadow.setImageResource(R.drawable.global_thumb_2_shadow);
+        } else {
+            mThumb_2_shadow.setImageDrawable(shadow2);
+        }
         mThumb_2_label.setText(mSecondApp.getModuleText());
         mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -261,30 +279,32 @@ public class IPTVLauncher extends Launcher {
             }
         });
 
-        mAsyncImageLoader.loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
+        Drawable icon3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
+                imageView.setImageDrawable(imageDrawable);
             }
         });
-        mAsyncImageLoader.loadDrawable(mThirdApp.getModuleShadow(), mThumb_3_shadow, new ImageCallback() {
+        if (icon3 == null) {
+            mThumb_3_view.setImageResource(R.drawable.global_thumb_3_logo);
+        } else {
+            mThumb_3_view.setImageDrawable(icon3);
+        }
+        // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+        // module1.getModuleIcon()));
+        Drawable shadow3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleShadow(), mThumb_3_shadow, new ImageCallback() {
 
             @Override
             public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
-                } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-                            imageUrl));
-                }
+                imageView.setImageDrawable(imageDrawable);
             }
         });
+        if (shadow3 == null) {
+            mThumb_3_shadow.setImageResource(R.drawable.global_thumb_3_shadow);
+        } else {
+            mThumb_3_shadow.setImageDrawable(shadow3);
+        }
         mThumb_3_label.setText(mThirdApp.getModuleText());
         mThumb_3_layout.setOnClickListener(new View.OnClickListener() {
 
@@ -364,8 +384,8 @@ public class IPTVLauncher extends Launcher {
 //                    final DialogFragment newFragment = AppDialogFragment.newInstance(IPTVLauncher.this);
 //                    newFragment.show(getFragmentManager(), "dialog");
                     Intent intent = new Intent();
-                    intent.setClass(mContext,AppSelectedActivity.class);
-                    startActivityForResult(intent,1);
+                    intent.setClass(mContext, AppSelectedActivity.class);
+                    startActivityForResult(intent, 1);
                     return true;
                 }
             } else if (keyCode == KeyEvent.KEYCODE_DPAD_RIGHT) {
@@ -422,13 +442,14 @@ public class IPTVLauncher extends Launcher {
         if (isSelected && app != null && mSelectedApp != null) {
             String value = mToolUtils.getConfigured(mContext, app.getPackageName());
             if (!TextUtils.isEmpty(value)) {
-                if (value.equals(mSelectedApp.getModuleCode())) {
-                    mToolUtils.clearConfiguredPkg(mContext, app.getPackageName());
-                } else {
-                    Log.d("jzh", "setResult cancel for duplicate ");
-                    Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                Log.d("jzh", "setResult cancel for duplicate ");
+                Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (mToolUtils.isExsitsKey(mContext, mSelectedApp.getModuleCode())) {
+                String key = mToolUtils.getConfigured(mContext, mSelectedApp.getModuleCode());
+//                mToolUtils.clearConfiguredPkg(mContext, mSelectedApp.getModuleCode());
+                mToolUtils.clearConfiguredPkg(mContext, key);
             }
             mToolUtils.setConfigured(mContext, app.getPackageName(), mSelectedApp.getModuleCode());
             mToolUtils.setConfiguredPkg(mContext, mSelectedApp.getModuleCode(), app.getPackageName());
@@ -503,8 +524,11 @@ public class IPTVLauncher extends Launcher {
                     break;
                 case SHOW_SCREEN_SAVER:
                     Log.d("show", "SHOW_SCREEN_SAVER");
-                    Intent intent = new Intent(mContext, ScreenSaverActivity.class);
-                    startActivity(intent);
+                    if (ToolUtils.isApplicationBroughtToBackground(mContext)) {
+                        Log.d("show", "current task  is background, can't bring up the screensaver");
+                    } else {
+                        sendBroadcast(new Intent(SHOW_SCREENSAVER_ACTION));
+                    }
                     break;
             }
             super.handleMessage(msg);
@@ -521,6 +545,12 @@ public class IPTVLauncher extends Launcher {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    protected void onDestroy() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+
+        super.onDestroy();
     }
 
     @Override
