@@ -42,6 +42,7 @@ public class Launcher extends Activity {
     private ChangeReceiver mChangeReceiver;
     private Configuration mConfig = new Configuration();
 
+    private static boolean sIsConnectedToServer = false;
     public static PackageInfo sPackageInfo;
     public static String sPackageName;
     public static int sVersionCode;
@@ -170,9 +171,15 @@ public class Launcher extends Activity {
 
     protected void initPrecondition() {
 
-        if (!HttpUtils.checkConnectivity(mContext)) {
+        if (sIsConnectedToServer) {
+            Log.d(TAG, "Has request server, doesn't need try again!");
             return;
         }
+        if (!HttpUtils.checkConnectivity(mContext)) {
+            sIsConnectedToServer = false;
+            return;
+        }
+        sIsConnectedToServer = true;
         final Handler handler = new Handler();
         final Runnable runable = new Runnable() {
 
@@ -187,7 +194,7 @@ public class Launcher extends Activity {
         if (runable != null) {
             handler.removeCallbacks(runable);
             handler.postDelayed(runable
-                    , REQUEST_DELAY_TIME_ONE_MINUTES);
+                    , REQUEST_DELAY_TIME_THREE_MINUTES);
         }
 
         handler.postDelayed(new Runnable() {
@@ -195,7 +202,7 @@ public class Launcher extends Activity {
             public void run() {
                 sendBroadcast(new Intent(CAPTURE_CATEGORY_CONFIG_ACTION));
             }
-        }, REQUEST_DELAY_TIME_THREE_MINUTES);
+        }, REQUEST_DELAY_TIME_ONE_MINUTES);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -315,50 +322,7 @@ public class Launcher extends Activity {
     }
 
 
-    protected void setResult(ApplicationInfo app, boolean isSelected) {
-        if (isSelected && app != null && mSelectedApp != null) {
-            String value = mToolUtils.getConfigured(mContext, app.getPackageName());
-            if (!TextUtils.isEmpty(value)) {
-                if (value.equals(mSelectedApp.getModuleCode())) {
-                    mToolUtils.clearConfiguredPkg(mContext, app.getPackageName());
-                } else {
-                    Log.d("jzh", "setResult cancel for duplicate ");
-                    Toast.makeText(mContext, R.string.duplicate_alert, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
-            mToolUtils.setConfigured(mContext, app.getPackageName(), mSelectedApp.getModuleCode());
-            mToolUtils.setConfiguredPkg(mContext, mSelectedApp.getModuleCode(), app.getPackageName());
-            mSelectedApp.moduleIconDrawable = app.getIcon();
-            mSelectedApp.moduleText = app.getTitle();
-            mSelectedApp.moduleReplace = 1;
-            mSelectedApp.mApps.get(0).componentName = app.mComponent;
-            Log.d("replace", " mSelectedApp " + mSelectedApp.toString());
-            notifyModuleList(mSelectedApp);
-            Log.d("jzh", "setResult  RESULT_OK " + app.toString());
-        } else {
-            setResult(RESULT_CANCELED, null);
-            Log.d("jzh", "setResult RESULT_CANCELED ");
-        }
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("replace", "onActivityResult");
-        switch (resultCode) {
-            case RESULT_OK:
-                String pkg = data.getStringExtra("app");
-                ApplicationInfo app = AppManager.getInstance().getInfoFromAllActivitys(pkg);
-                setResult(app, true);
-                Log.d("replace", "launcher " + app.toString());
-                break;
-            case RESULT_CANCELED:
-                break;
-            default:
-                break;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }
 
     protected void notifyModuleList(Module newModule) {
         for (int j = 0; j < mGroups.size(); j++) {

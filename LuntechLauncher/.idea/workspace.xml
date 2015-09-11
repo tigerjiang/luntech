@@ -41,21 +41,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Launcher.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Launcher.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/Launcher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="389" column="57" selection-start-line="389" selection-start-column="57" selection-end-line="389" selection-end-column="57" />
+            <state vertical-scroll-proportion="0.15566836">
+              <caret line="191" column="13" selection-start-line="191" selection-start-column="13" selection-end-line="191" selection-end-column="13" />
               <folding>
-                <element signature="e#7018#7192#0" expanded="true" />
-                <element signature="e#7191#7192#0" expanded="true" />
-                <element signature="e#7405#7574#0" expanded="true" />
-                <element signature="e#7573#7574#0" expanded="true" />
-                <element signature="e#7639#7805#0" expanded="true" />
-                <element signature="e#7804#7805#0" expanded="true" />
-                <element signature="e#7869#8044#0" expanded="true" />
-                <element signature="e#8043#8044#0" expanded="true" />
-                <element signature="e#12780#12804#0" expanded="true" />
+                <element signature="e#7291#7465#0" expanded="true" />
+                <element signature="e#7680#7849#0" expanded="true" />
+                <element signature="e#7848#7849#0" expanded="true" />
+                <element signature="e#7912#8078#0" expanded="true" />
+                <element signature="e#8077#8078#0" expanded="true" />
+                <element signature="e#8142#8317#0" expanded="true" />
+                <element signature="e#8316#8317#0" expanded="true" />
+                <element signature="e#11766#12010#0" expanded="true" />
+                <element signature="e#12009#12010#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,13 +63,13 @@
       </file>
       <file leaf-file-name="iptv_home_layout.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/iptv_home_layout.xml">
-          <provider editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="158" column="38" selection-start-line="158" selection-start-column="38" selection-end-line="158" selection-end-column="38" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.580646">
+              <caret line="181" column="20" selection-start-line="181" selection-start-column="20" selection-end-line="181" selection-end-column="20" />
               <folding />
             </state>
           </provider>
-          <provider selected="true" editor-type-id="android-designer">
+          <provider editor-type-id="android-designer">
             <state />
           </provider>
         </entry>
@@ -77,8 +77,8 @@
       <file leaf-file-name="IPTVLauncher.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/IPTVLauncher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="113" selection-end-column="46" />
+            <state vertical-scroll-proportion="-6.327869">
+              <caret line="484" column="30" selection-start-line="484" selection-start-column="14" selection-end-line="484" selection-end-column="30" />
               <folding>
                 <element signature="e#5193#6173#0" expanded="true" />
                 <element signature="e#6172#6173#0" expanded="true" />
@@ -112,6 +112,26 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="Activity.class" pinned="false" current-in-tab="false">
+        <entry file="jar://$USER_HOME$/Android/Sdk/platforms/android-19/android.jar!/android/app/Activity.class">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-3.3965516">
+              <caret line="677" column="19" selection-start-line="677" selection-start-column="19" selection-end-line="677" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TvStatusBar.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/TvStatusBar.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0">
+              <caret line="564" column="29" selection-start-line="564" selection-start-column="16" selection-end-line="564" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="LauncherService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/LauncherService.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -125,119 +145,105 @@
       <file leaf-file-name="Q1SLauncher.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/Q1SLauncher.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="150" column="41" selection-start-line="150" selection-start-column="41" selection-end-line="150" selection-end-column="41" />
+            <state vertical-scroll-proportion="-5.836066">
+              <caret line="2162" column="13" selection-start-line="2162" selection-start-column="13" selection-end-line="2162" selection-end-column="13" />
               <folding>
-                <element signature="e#14435#14458#0" expanded="true" />
-                <element signature="e#14556#14579#0" expanded="true" />
-                <element signature="e#43267#43291#0" expanded="true" />
-                <element signature="e#50498#50782#0" expanded="true" />
-                <element signature="e#50781#50782#0" expanded="true" />
-                <element signature="e#51860#52144#0" expanded="true" />
-                <element signature="e#52143#52144#0" expanded="true" />
-                <element signature="e#53040#53324#0" expanded="true" />
-                <element signature="e#53323#53324#0" expanded="true" />
-                <element signature="e#53639#53923#0" expanded="true" />
-                <element signature="e#53922#53923#0" expanded="true" />
-                <element signature="e#54361#54645#0" expanded="true" />
-                <element signature="e#54644#54645#0" expanded="true" />
-                <element signature="e#56427#56711#0" expanded="true" />
-                <element signature="e#56710#56711#0" expanded="true" />
-                <element signature="e#57150#57394#0" expanded="true" />
-                <element signature="e#57393#57394#0" expanded="true" />
-                <element signature="e#57711#57955#0" expanded="true" />
-                <element signature="e#57954#57955#0" expanded="true" />
-                <element signature="e#58808#59052#0" expanded="true" />
-                <element signature="e#59051#59052#0" expanded="true" />
-                <element signature="e#59369#59613#0" expanded="true" />
-                <element signature="e#59612#59613#0" expanded="true" />
-                <element signature="e#60467#60711#0" expanded="true" />
-                <element signature="e#60710#60711#0" expanded="true" />
-                <element signature="e#61028#61272#0" expanded="true" />
-                <element signature="e#61271#61272#0" expanded="true" />
-                <element signature="e#62157#62705#0" expanded="true" />
-                <element signature="e#62704#62705#0" expanded="true" />
-                <element signature="e#63764#64008#0" expanded="true" />
-                <element signature="e#64007#64008#0" expanded="true" />
-                <element signature="e#64330#64574#0" expanded="true" />
-                <element signature="e#64573#64574#0" expanded="true" />
-                <element signature="e#65444#65688#0" expanded="true" />
-                <element signature="e#65687#65688#0" expanded="true" />
-                <element signature="e#66013#66257#0" expanded="true" />
-                <element signature="e#66256#66257#0" expanded="true" />
-                <element signature="e#67127#67371#0" expanded="true" />
-                <element signature="e#67370#67371#0" expanded="true" />
-                <element signature="e#67690#67934#0" expanded="true" />
-                <element signature="e#67933#67934#0" expanded="true" />
-                <element signature="e#68786#69030#0" expanded="true" />
-                <element signature="e#69029#69030#0" expanded="true" />
-                <element signature="e#69337#69581#0" expanded="true" />
-                <element signature="e#69580#69581#0" expanded="true" />
-                <element signature="e#71066#71350#0" expanded="true" />
-                <element signature="e#71349#71350#0" expanded="true" />
-                <element signature="e#71787#72031#0" expanded="true" />
-                <element signature="e#72030#72031#0" expanded="true" />
-                <element signature="e#72361#72605#0" expanded="true" />
-                <element signature="e#72604#72605#0" expanded="true" />
-                <element signature="e#73486#73730#0" expanded="true" />
-                <element signature="e#73729#73730#0" expanded="true" />
-                <element signature="e#74069#74313#0" expanded="true" />
-                <element signature="e#74312#74313#0" expanded="true" />
-                <element signature="e#75203#75447#0" expanded="true" />
-                <element signature="e#75446#75447#0" expanded="true" />
-                <element signature="e#75774#76018#0" expanded="true" />
-                <element signature="e#76017#76018#0" expanded="true" />
-                <element signature="e#76892#77136#0" expanded="true" />
-                <element signature="e#77135#77136#0" expanded="true" />
-                <element signature="e#77472#77716#0" expanded="true" />
-                <element signature="e#77715#77716#0" expanded="true" />
-                <element signature="e#80299#80543#0" expanded="true" />
-                <element signature="e#80542#80543#0" expanded="true" />
-                <element signature="e#80876#81120#0" expanded="true" />
-                <element signature="e#81119#81120#0" expanded="true" />
-                <element signature="e#90134#90158#0" expanded="true" />
+                <element signature="e#14620#14643#0" expanded="true" />
+                <element signature="e#14741#14764#0" expanded="true" />
+                <element signature="e#43452#43476#0" expanded="true" />
+                <element signature="e#50683#50967#0" expanded="true" />
+                <element signature="e#50966#50967#0" expanded="true" />
+                <element signature="e#52045#52329#0" expanded="true" />
+                <element signature="e#52328#52329#0" expanded="true" />
+                <element signature="e#53225#53509#0" expanded="true" />
+                <element signature="e#53508#53509#0" expanded="true" />
+                <element signature="e#53824#54108#0" expanded="true" />
+                <element signature="e#54107#54108#0" expanded="true" />
+                <element signature="e#54546#54830#0" expanded="true" />
+                <element signature="e#54829#54830#0" expanded="true" />
+                <element signature="e#55722#56270#0" expanded="true" />
+                <element signature="e#56269#56270#0" expanded="true" />
+                <element signature="e#56612#56896#0" expanded="true" />
+                <element signature="e#56895#56896#0" expanded="true" />
+                <element signature="e#57335#57579#0" expanded="true" />
+                <element signature="e#57578#57579#0" expanded="true" />
+                <element signature="e#58993#59237#0" expanded="true" />
+                <element signature="e#59236#59237#0" expanded="true" />
+                <element signature="e#59554#59798#0" expanded="true" />
+                <element signature="e#59797#59798#0" expanded="true" />
+                <element signature="e#60652#60896#0" expanded="true" />
+                <element signature="e#60895#60896#0" expanded="true" />
+                <element signature="e#61213#61457#0" expanded="true" />
+                <element signature="e#61456#61457#0" expanded="true" />
+                <element signature="e#62342#62890#0" expanded="true" />
+                <element signature="e#62889#62890#0" expanded="true" />
+                <element signature="e#63949#64193#0" expanded="true" />
+                <element signature="e#64192#64193#0" expanded="true" />
+                <element signature="e#64515#64759#0" expanded="true" />
+                <element signature="e#64758#64759#0" expanded="true" />
+                <element signature="e#65629#65873#0" expanded="true" />
+                <element signature="e#65872#65873#0" expanded="true" />
+                <element signature="e#66198#66442#0" expanded="true" />
+                <element signature="e#66441#66442#0" expanded="true" />
+                <element signature="e#67312#67556#0" expanded="true" />
+                <element signature="e#67555#67556#0" expanded="true" />
+                <element signature="e#67875#68119#0" expanded="true" />
+                <element signature="e#68118#68119#0" expanded="true" />
+                <element signature="e#68971#69215#0" expanded="true" />
+                <element signature="e#69214#69215#0" expanded="true" />
+                <element signature="e#69522#69766#0" expanded="true" />
+                <element signature="e#69765#69766#0" expanded="true" />
+                <element signature="e#70635#70919#0" expanded="true" />
+                <element signature="e#70918#70919#0" expanded="true" />
+                <element signature="e#71251#71535#0" expanded="true" />
+                <element signature="e#71534#71535#0" expanded="true" />
+                <element signature="e#71972#72216#0" expanded="true" />
+                <element signature="e#72215#72216#0" expanded="true" />
+                <element signature="e#73671#73915#0" expanded="true" />
+                <element signature="e#73914#73915#0" expanded="true" />
+                <element signature="e#74254#74498#0" expanded="true" />
+                <element signature="e#74497#74498#0" expanded="true" />
+                <element signature="e#75388#75632#0" expanded="true" />
+                <element signature="e#75631#75632#0" expanded="true" />
+                <element signature="e#75959#76203#0" expanded="true" />
+                <element signature="e#76202#76203#0" expanded="true" />
+                <element signature="e#77077#77321#0" expanded="true" />
+                <element signature="e#77320#77321#0" expanded="true" />
+                <element signature="e#77657#77901#0" expanded="true" />
+                <element signature="e#77900#77901#0" expanded="true" />
+                <element signature="e#78787#79031#0" expanded="true" />
+                <element signature="e#79030#79031#0" expanded="true" />
+                <element signature="e#79361#79605#0" expanded="true" />
+                <element signature="e#79604#79605#0" expanded="true" />
+                <element signature="e#80484#80728#0" expanded="true" />
+                <element signature="e#80727#80728#0" expanded="true" />
+                <element signature="e#81061#81305#0" expanded="true" />
+                <element signature="e#81304#81305#0" expanded="true" />
+                <element signature="e#89251#89252#0" expanded="true" />
+                <element signature="e#89298#89299#0" expanded="true" />
+                <element signature="e#89740#89741#0" expanded="true" />
+                <element signature="e#89771#89772#0" expanded="true" />
+                <element signature="e#90388#90412#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dimens.xml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/res/values/dimens.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.6940874">
-              <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="AppManager.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/secondary/AppManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-1.7868853">
-              <caret line="177" column="33" selection-start-line="177" selection-start-column="33" selection-end-line="177" selection-end-column="33" />
-              <folding>
-                <element signature="e#1889#1914#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="QisItem.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/QisItem.java">
+      <file leaf-file-name="TvStatus.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/TvStatus.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="40" column="55" selection-start-line="40" selection-start-column="55" selection-end-line="40" selection-end-column="55" />
+              <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="q1s_category_item.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/layout/q1s_category_item.xml">
+      <file leaf-file-name="q1s_home_layout.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/layout/q1s_home_layout.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-13.548388">
-              <caret line="28" column="47" selection-start-line="28" selection-start-column="47" selection-end-line="28" selection-end-column="47" />
+            <state vertical-scroll-proportion="-4.354839">
+              <caret line="9" column="38" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -246,15 +252,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ToolUtils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/ToolUtils.java">
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="601" column="16" selection-start-line="601" selection-start-column="16" selection-end-line="601" selection-end-column="16" />
-              <folding>
-                <element signature="e#2723#2742#0" expanded="true" />
-                <element signature="e#7930#7949#0" expanded="true" />
-              </folding>
+              <caret line="90" column="51" selection-start-line="90" selection-start-column="51" selection-end-line="90" selection-end-column="51" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -1077,10 +1080,10 @@
         <option value="$PROJECT_DIR$/res/layout/app_item_icon.xml" />
         <option value="$PROJECT_DIR$/res/layout/q1s_category_item.xml" />
         <option value="$PROJECT_DIR$/src/com/luntech/launcher/LauncherService.java" />
-        <option value="$PROJECT_DIR$/src/com/luntech/launcher/Launcher.java" />
         <option value="$PROJECT_DIR$/src/com/luntech/launcher/IPTVLauncher.java" />
-        <option value="$PROJECT_DIR$/src/com/luntech/launcher/Q1SLauncher.java" />
         <option value="$PROJECT_DIR$/res/values/dimens.xml" />
+        <option value="$PROJECT_DIR$/src/com/luntech/launcher/Q1SLauncher.java" />
+        <option value="$PROJECT_DIR$/src/com/luntech/launcher/Launcher.java" />
       </list>
     </option>
   </component>
@@ -1537,7 +1540,7 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3268921" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3252818" sideWeight="0.49411765" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3252818" sideWeight="0.49411765" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32941177" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
@@ -1654,16 +1657,11 @@
           <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/res/drawable-mdpi/zhibo1_bg.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/setting_menu_layout.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="7.7419353">
@@ -1696,16 +1694,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/q1s_home_layout.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.806452">
-          <caret line="18" column="34" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/mainmenu_layout.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-4.83871">
@@ -1732,13 +1720,6 @@
       </provider>
       <provider editor-type-id="android-designer">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/TvStatus.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
       </provider>
     </entry>
     <entry file="jar://$USER_HOME$/Android/Sdk/platforms/android-19/android.jar!/android/os/Message.class">
@@ -1806,17 +1787,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/TvStatusBar.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="316" column="70" selection-start-line="316" selection-start-column="70" selection-end-line="316" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/TimeManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.6229508">
           <caret line="68" column="8" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="8" />
+          <folding>
+            <element signature="e#2839#2875#0" expanded="false" />
+            <element signature="e#2889#2928#0" expanded="false" />
+            <element signature="e#2942#2978#0" expanded="false" />
+            <element signature="e#2992#3023#0" expanded="false" />
+            <element signature="e#3037#3078#0" expanded="false" />
+            <element signature="e#3092#3127#0" expanded="false" />
+            <element signature="e#3141#3177#0" expanded="false" />
+            <element signature="e#3191#3226#0" expanded="false" />
+            <element signature="e#3240#3270#0" expanded="false" />
+            <element signature="e#3284#3321#0" expanded="false" />
+            <element signature="e#3335#3382#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1863,14 +1850,6 @@
     <entry file="file://$PROJECT_DIR$/res/drawable-mdpi/vod_bg.png">
       <provider selected="true" editor-type-id="images">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="6" column="31" selection-start-line="6" selection-start-column="31" selection-end-line="6" selection-end-column="31" />
-          <folding />
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/setting/UpdateActivity.java">
@@ -2031,14 +2010,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/LauncherService.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="151" column="64" selection-start-line="151" selection-start-column="64" selection-end-line="151" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/ToolUtils.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -2048,35 +2019,6 @@
             <element signature="e#7930#7949#0" expanded="true" />
           </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/Launcher.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="389" column="57" selection-start-line="389" selection-start-column="57" selection-end-line="389" selection-end-column="57" />
-          <folding>
-            <element signature="e#7018#7192#0" expanded="true" />
-            <element signature="e#7191#7192#0" expanded="true" />
-            <element signature="e#7405#7574#0" expanded="true" />
-            <element signature="e#7573#7574#0" expanded="true" />
-            <element signature="e#7639#7805#0" expanded="true" />
-            <element signature="e#7804#7805#0" expanded="true" />
-            <element signature="e#7869#8044#0" expanded="true" />
-            <element signature="e#8043#8044#0" expanded="true" />
-            <element signature="e#12780#12804#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/iptv_home_layout.xml">
-      <provider editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="158" column="38" selection-start-line="158" selection-start-column="38" selection-end-line="158" selection-end-column="38" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/secondary/AppManager.java">
@@ -2089,10 +2031,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/IPTVLauncher.java">
+    <entry file="file://$PROJECT_DIR$/res/values/dimens.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="111" column="0" selection-start-line="111" selection-start-column="0" selection-end-line="113" selection-end-column="46" />
+          <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="90" column="51" selection-start-line="90" selection-start-column="51" selection-end-line="90" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/LauncherService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="151" column="64" selection-start-line="151" selection-start-column="64" selection-end-line="151" selection-end-column="64" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/iptv_home_layout.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.580646">
+          <caret line="181" column="20" selection-start-line="181" selection-start-column="20" selection-end-line="181" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/q1s_home_layout.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-4.354839">
+          <caret line="9" column="38" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Android/Sdk/platforms/android-19/android.jar!/android/app/Activity.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.3965516">
+          <caret line="677" column="19" selection-start-line="677" selection-start-column="19" selection-end-line="677" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/IPTVLauncher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-6.327869">
+          <caret line="484" column="30" selection-start-line="484" selection-start-column="14" selection-end-line="484" selection-end-column="30" />
           <folding>
             <element signature="e#5193#6173#0" expanded="true" />
             <element signature="e#6172#6173#0" expanded="true" />
@@ -2127,86 +2123,120 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/Q1SLauncher.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="150" column="41" selection-start-line="150" selection-start-column="41" selection-end-line="150" selection-end-column="41" />
+        <state vertical-scroll-proportion="-5.836066">
+          <caret line="2162" column="13" selection-start-line="2162" selection-start-column="13" selection-end-line="2162" selection-end-column="13" />
           <folding>
-            <element signature="e#14435#14458#0" expanded="true" />
-            <element signature="e#14556#14579#0" expanded="true" />
-            <element signature="e#43267#43291#0" expanded="true" />
-            <element signature="e#50498#50782#0" expanded="true" />
-            <element signature="e#50781#50782#0" expanded="true" />
-            <element signature="e#51860#52144#0" expanded="true" />
-            <element signature="e#52143#52144#0" expanded="true" />
-            <element signature="e#53040#53324#0" expanded="true" />
-            <element signature="e#53323#53324#0" expanded="true" />
-            <element signature="e#53639#53923#0" expanded="true" />
-            <element signature="e#53922#53923#0" expanded="true" />
-            <element signature="e#54361#54645#0" expanded="true" />
-            <element signature="e#54644#54645#0" expanded="true" />
-            <element signature="e#56427#56711#0" expanded="true" />
-            <element signature="e#56710#56711#0" expanded="true" />
-            <element signature="e#57150#57394#0" expanded="true" />
-            <element signature="e#57393#57394#0" expanded="true" />
-            <element signature="e#57711#57955#0" expanded="true" />
-            <element signature="e#57954#57955#0" expanded="true" />
-            <element signature="e#58808#59052#0" expanded="true" />
-            <element signature="e#59051#59052#0" expanded="true" />
-            <element signature="e#59369#59613#0" expanded="true" />
-            <element signature="e#59612#59613#0" expanded="true" />
-            <element signature="e#60467#60711#0" expanded="true" />
-            <element signature="e#60710#60711#0" expanded="true" />
-            <element signature="e#61028#61272#0" expanded="true" />
-            <element signature="e#61271#61272#0" expanded="true" />
-            <element signature="e#62157#62705#0" expanded="true" />
-            <element signature="e#62704#62705#0" expanded="true" />
-            <element signature="e#63764#64008#0" expanded="true" />
-            <element signature="e#64007#64008#0" expanded="true" />
-            <element signature="e#64330#64574#0" expanded="true" />
-            <element signature="e#64573#64574#0" expanded="true" />
-            <element signature="e#65444#65688#0" expanded="true" />
-            <element signature="e#65687#65688#0" expanded="true" />
-            <element signature="e#66013#66257#0" expanded="true" />
-            <element signature="e#66256#66257#0" expanded="true" />
-            <element signature="e#67127#67371#0" expanded="true" />
-            <element signature="e#67370#67371#0" expanded="true" />
-            <element signature="e#67690#67934#0" expanded="true" />
-            <element signature="e#67933#67934#0" expanded="true" />
-            <element signature="e#68786#69030#0" expanded="true" />
-            <element signature="e#69029#69030#0" expanded="true" />
-            <element signature="e#69337#69581#0" expanded="true" />
-            <element signature="e#69580#69581#0" expanded="true" />
-            <element signature="e#71066#71350#0" expanded="true" />
-            <element signature="e#71349#71350#0" expanded="true" />
-            <element signature="e#71787#72031#0" expanded="true" />
-            <element signature="e#72030#72031#0" expanded="true" />
-            <element signature="e#72361#72605#0" expanded="true" />
-            <element signature="e#72604#72605#0" expanded="true" />
-            <element signature="e#73486#73730#0" expanded="true" />
-            <element signature="e#73729#73730#0" expanded="true" />
-            <element signature="e#74069#74313#0" expanded="true" />
-            <element signature="e#74312#74313#0" expanded="true" />
-            <element signature="e#75203#75447#0" expanded="true" />
-            <element signature="e#75446#75447#0" expanded="true" />
-            <element signature="e#75774#76018#0" expanded="true" />
-            <element signature="e#76017#76018#0" expanded="true" />
-            <element signature="e#76892#77136#0" expanded="true" />
-            <element signature="e#77135#77136#0" expanded="true" />
-            <element signature="e#77472#77716#0" expanded="true" />
-            <element signature="e#77715#77716#0" expanded="true" />
-            <element signature="e#80299#80543#0" expanded="true" />
-            <element signature="e#80542#80543#0" expanded="true" />
-            <element signature="e#80876#81120#0" expanded="true" />
-            <element signature="e#81119#81120#0" expanded="true" />
-            <element signature="e#90134#90158#0" expanded="true" />
+            <element signature="e#14620#14643#0" expanded="true" />
+            <element signature="e#14741#14764#0" expanded="true" />
+            <element signature="e#43452#43476#0" expanded="true" />
+            <element signature="e#50683#50967#0" expanded="true" />
+            <element signature="e#50966#50967#0" expanded="true" />
+            <element signature="e#52045#52329#0" expanded="true" />
+            <element signature="e#52328#52329#0" expanded="true" />
+            <element signature="e#53225#53509#0" expanded="true" />
+            <element signature="e#53508#53509#0" expanded="true" />
+            <element signature="e#53824#54108#0" expanded="true" />
+            <element signature="e#54107#54108#0" expanded="true" />
+            <element signature="e#54546#54830#0" expanded="true" />
+            <element signature="e#54829#54830#0" expanded="true" />
+            <element signature="e#55722#56270#0" expanded="true" />
+            <element signature="e#56269#56270#0" expanded="true" />
+            <element signature="e#56612#56896#0" expanded="true" />
+            <element signature="e#56895#56896#0" expanded="true" />
+            <element signature="e#57335#57579#0" expanded="true" />
+            <element signature="e#57578#57579#0" expanded="true" />
+            <element signature="e#58993#59237#0" expanded="true" />
+            <element signature="e#59236#59237#0" expanded="true" />
+            <element signature="e#59554#59798#0" expanded="true" />
+            <element signature="e#59797#59798#0" expanded="true" />
+            <element signature="e#60652#60896#0" expanded="true" />
+            <element signature="e#60895#60896#0" expanded="true" />
+            <element signature="e#61213#61457#0" expanded="true" />
+            <element signature="e#61456#61457#0" expanded="true" />
+            <element signature="e#62342#62890#0" expanded="true" />
+            <element signature="e#62889#62890#0" expanded="true" />
+            <element signature="e#63949#64193#0" expanded="true" />
+            <element signature="e#64192#64193#0" expanded="true" />
+            <element signature="e#64515#64759#0" expanded="true" />
+            <element signature="e#64758#64759#0" expanded="true" />
+            <element signature="e#65629#65873#0" expanded="true" />
+            <element signature="e#65872#65873#0" expanded="true" />
+            <element signature="e#66198#66442#0" expanded="true" />
+            <element signature="e#66441#66442#0" expanded="true" />
+            <element signature="e#67312#67556#0" expanded="true" />
+            <element signature="e#67555#67556#0" expanded="true" />
+            <element signature="e#67875#68119#0" expanded="true" />
+            <element signature="e#68118#68119#0" expanded="true" />
+            <element signature="e#68971#69215#0" expanded="true" />
+            <element signature="e#69214#69215#0" expanded="true" />
+            <element signature="e#69522#69766#0" expanded="true" />
+            <element signature="e#69765#69766#0" expanded="true" />
+            <element signature="e#70635#70919#0" expanded="true" />
+            <element signature="e#70918#70919#0" expanded="true" />
+            <element signature="e#71251#71535#0" expanded="true" />
+            <element signature="e#71534#71535#0" expanded="true" />
+            <element signature="e#71972#72216#0" expanded="true" />
+            <element signature="e#72215#72216#0" expanded="true" />
+            <element signature="e#73671#73915#0" expanded="true" />
+            <element signature="e#73914#73915#0" expanded="true" />
+            <element signature="e#74254#74498#0" expanded="true" />
+            <element signature="e#74497#74498#0" expanded="true" />
+            <element signature="e#75388#75632#0" expanded="true" />
+            <element signature="e#75631#75632#0" expanded="true" />
+            <element signature="e#75959#76203#0" expanded="true" />
+            <element signature="e#76202#76203#0" expanded="true" />
+            <element signature="e#77077#77321#0" expanded="true" />
+            <element signature="e#77320#77321#0" expanded="true" />
+            <element signature="e#77657#77901#0" expanded="true" />
+            <element signature="e#77900#77901#0" expanded="true" />
+            <element signature="e#78787#79031#0" expanded="true" />
+            <element signature="e#79030#79031#0" expanded="true" />
+            <element signature="e#79361#79605#0" expanded="true" />
+            <element signature="e#79604#79605#0" expanded="true" />
+            <element signature="e#80484#80728#0" expanded="true" />
+            <element signature="e#80727#80728#0" expanded="true" />
+            <element signature="e#81061#81305#0" expanded="true" />
+            <element signature="e#81304#81305#0" expanded="true" />
+            <element signature="e#89251#89252#0" expanded="true" />
+            <element signature="e#89298#89299#0" expanded="true" />
+            <element signature="e#89740#89741#0" expanded="true" />
+            <element signature="e#89771#89772#0" expanded="true" />
+            <element signature="e#90388#90412#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/values/dimens.xml">
+    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/TvStatus.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6940874">
-          <caret line="39" column="35" selection-start-line="39" selection-start-column="35" selection-end-line="39" selection-end-column="35" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/view/TvStatusBar.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="564" column="29" selection-start-line="564" selection-start-column="16" selection-end-line="564" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/Launcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15566836">
+          <caret line="191" column="13" selection-start-line="191" selection-start-column="13" selection-end-line="191" selection-end-column="13" />
+          <folding>
+            <element signature="e#7291#7465#0" expanded="true" />
+            <element signature="e#7680#7849#0" expanded="true" />
+            <element signature="e#7848#7849#0" expanded="true" />
+            <element signature="e#7912#8078#0" expanded="true" />
+            <element signature="e#8077#8078#0" expanded="true" />
+            <element signature="e#8142#8317#0" expanded="true" />
+            <element signature="e#8316#8317#0" expanded="true" />
+            <element signature="e#11766#12010#0" expanded="true" />
+            <element signature="e#12009#12010#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

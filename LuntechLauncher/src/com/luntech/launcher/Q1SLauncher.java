@@ -5,8 +5,10 @@ import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
@@ -43,6 +45,7 @@ import com.hisense.network.utils.EpgDataInfoLoader.HiLauncherLoader;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
+import com.luntech.launcher.view.TvStatusBar;
 
 
 import java.io.File;
@@ -92,6 +95,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     private LinearLayout mFeatureMenuLayout;
     private TextView mFeatureView;
+    private Configuration mConfig = new Configuration();
 
     private AppManager mAppManager;
     //private ImageView settingImView_unfold;
@@ -1959,6 +1963,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
                 e.printStackTrace();
             }
         }
+        mStatusBar = (TvStatusBar) findViewById(R.id.status_layout);
 
         mFeatureMenuLayout = (LinearLayout) findViewById(R.id.feature_layout);
         mFeatureView = (TextView) findViewById(R.id.feature_menu);
@@ -2173,4 +2178,16 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        int changes = newConfig.diff(mConfig);
+        if ((changes & ActivityInfo.CONFIG_LOCALE) != 0) {
+            mStatusBar.searchWeather(getUserCity());
+            Log.d("jzh", "local change----------------" + getUserCity());
+        }
+        // set our copy of the configuration for comparing with in
+        // onConfigurationChanged
+        mConfig.setTo(getResources().getConfiguration());
+    }
 }
