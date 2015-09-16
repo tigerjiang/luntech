@@ -70,15 +70,18 @@ public class GeneralSettingFragment extends Fragment {
                     new AlertDialog.Builder(mContext).setSingleChoiceItems(R.array.screensaver_array, index, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    Launcher.sCloseScreenSaver = false;
                                     if (which == 0) {
-
+                                        Launcher.sCloseScreenSaver = true;
                                         ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(0));
                                     } else if (which == 1) {
                                         ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(1));
                                     } else if (which == 2) {
                                         ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(2));
+                                    } else if (which == 3) {
+                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(3));
                                     }
-                                    Launcher.showScreenSaverTime = (which + 1) * 5 * 60 * 1000;
+                                    Launcher.showScreenSaverTime = (which) * 5 * 60 * 1000;
                                     dialog.dismiss();
                                 }
                             }
@@ -119,8 +122,8 @@ public class GeneralSettingFragment extends Fragment {
                             }
                     ).create().show();
 
-                }else if (position == 4) {
-                    Intent intent = new Intent(mContext,SetCity.class);
+                } else if (position == 4) {
+                    Intent intent = new Intent(mContext, SetCity.class);
                     startActivity(intent);
                 }
             }

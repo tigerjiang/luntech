@@ -215,6 +215,7 @@
         <item>选择城市</item>
     </string-array>
     <string-array name="screensaver_array">
+        <item>关闭</item>
         <item>5分钟</item>
         <item>10分钟</item>
         <item>15分钟</item>

@@ -21,7 +21,6 @@
         android:id="@+id/select_apps"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/devider2"
         android:layout_below="@+id/title"
         android:layout_marginTop="10dp"
         android:alwaysDrawnWithCache="true"

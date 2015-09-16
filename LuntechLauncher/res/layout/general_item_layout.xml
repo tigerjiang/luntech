@@ -7,7 +7,9 @@
     <TextView
         android:id="@+id/chooser_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="6px"
+        android:layout_marginLeft="30px"
         android:textColor="#ffffffff"
         android:textSize="28sp"
         android:gravity="left|center_vertical"
@@ -18,7 +20,7 @@
         android:layout_width="53.0px"
         android:layout_height="53.0px"
         android:layout_gravity="right|center"
-        android:layout_marginRight="30.0px"
+        android:layout_marginRight="15.0px"
         android:padding="10.0px"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_arrow_right" />

@@ -53,6 +53,7 @@ public class Launcher extends Activity {
     public static final long SHOW_DELAY_TIME = 10 * 1000;
     public static final long DISMISS_DELAY_TIME = 3 * 1000;
     public static long showScreenSaverTime = 5 * 60 * 1000;
+    public static boolean sCloseScreenSaver = false;
 
     public static final String IPTV_CATEGORY_FILE = "iptv_network_config.xml";
     public static final String IPTV_AD_CONFIGURE_FILE = "iptv_ad_config.xml";
@@ -160,7 +161,13 @@ public class Launcher extends Activity {
         if (!TextUtils.isEmpty(time)) {
             for (int i = 0; i < arrayTime.length; i++) {
                 if (time.equals(arrayTime[i])) {
-                    showScreenSaverTime = (i + 1) * 5 * 60 * 1000;
+                    if (i == 0) {
+                        Log.e(TAG, "screen saver is off!");
+                        sCloseScreenSaver = true;
+                    } else {
+                        sCloseScreenSaver = false;
+                        showScreenSaverTime = i * 5 * 60 * 1000;
+                    }
                 }
             }
         } else {
@@ -171,30 +178,31 @@ public class Launcher extends Activity {
 
     protected void initPrecondition() {
 
-        if (sIsConnectedToServer) {
-            Log.d(TAG, "Has request server, doesn't need try again!");
-            return;
-        }
+
         if (!HttpUtils.checkConnectivity(mContext)) {
             sIsConnectedToServer = false;
             return;
         }
-        sIsConnectedToServer = true;
+
         final Handler handler = new Handler();
-        final Runnable runable = new Runnable() {
+        if (sIsConnectedToServer) {
+            Log.d(TAG, "Has request server, doesn't need try again!");
+        }else {
+            final Runnable runable = new Runnable() {
 
-            @Override
-            public void run() {
+                @Override
+                public void run() {
+                    sIsConnectedToServer = true;
+                    sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
 
-                sendBroadcast(new Intent(CAPTURE_UPDATE_CONFIGURE_ACTION));
 
-
+                }
+            };
+            if (runable != null) {
+                handler.removeCallbacks(runable);
+                handler.postDelayed(runable
+                        , REQUEST_DELAY_TIME_THREE_MINUTES);
             }
-        };
-        if (runable != null) {
-            handler.removeCallbacks(runable);
-            handler.postDelayed(runable
-                    , REQUEST_DELAY_TIME_THREE_MINUTES);
         }
 
         handler.postDelayed(new Runnable() {

@@ -375,9 +375,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
 
     private void restartSendShowScreenSaver() {
-        Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
-        mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
-        mHandler.sendMessageDelayed(msg, showScreenSaverTime);
+        if (!sCloseScreenSaver) {
+            Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
+            mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
+            mHandler.sendMessageDelayed(msg, showScreenSaverTime);
+        }
     }
 
 

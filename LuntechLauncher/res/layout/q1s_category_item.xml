@@ -20,14 +20,16 @@
             android:id="@+id/module_icon"
             android:layout_width="108px"
             android:layout_height="103px"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/global_category_app_logo_margin_top"
-            />
+            android:scaleType="centerInside" />
 
         <TextView
             android:id="@+id/module_label"
-            android:layout_width="match_parent"
+            android:layout_width="160px"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:textColor="@color/white"
             android:textStyle="bold"
