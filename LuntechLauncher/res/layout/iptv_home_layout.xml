@@ -163,7 +163,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/global_ad_layout_height"
         android:layout_below="@+id/category_layout"
-        android:layout_marginTop="@dimen/custom_devider"
+        android:layout_marginTop="-6px"
         android:layout_marginLeft="23px"
         android:layout_marginRight="16px"
         android:background="@drawable/ad_information_bg"

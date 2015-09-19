@@ -371,7 +371,7 @@ public class ToolUtils {
 
     public static void parseCustomConfigureFromInputStream(Context context,
                                                            InputStream is) {
-        sDBdao.delete();
+//        sDBdao.delete();
         Group group = null;
         Module module = null;
         ArrayList<App> apps = new ArrayList<App>();

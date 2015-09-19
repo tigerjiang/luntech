@@ -26,6 +26,8 @@
         android:layout_height="@dimen/global_category_app_shadow_height"
         android:layout_marginLeft="@dimen/global_vertical_devider_height"
         android:layout_toRightOf="@+id/app_logo"
+        android:singleLine="true"
+        android:ellipsize="end"
         android:gravity="center"
         android:layout_centerVertical="true"
         android:text="@string/categore_app_1_label"

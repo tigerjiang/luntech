@@ -380,4 +380,7 @@ public class Launcher extends Activity {
         Log.d(TAG, "onDestroy()");
         super.onDestroy();
     }
+    public static String getCustomType(){
+        return mType;
+    }
 }

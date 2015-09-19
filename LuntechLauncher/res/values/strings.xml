@@ -206,6 +206,9 @@
     <string name="select_alert">请选择要使用电视桌面</string>
     <string name="no_permission">没有权限</string>
     <string name="no_feature">功能暂未开发...</string>
+    <string name="reboot_alert">需要重启应用修改才能生效，是否重启应用?</string>
+    <string name="current_theme">已在当前主题</string>
+
 
     <string-array name="general_item">
         <item>屏保设置</item>
@@ -213,6 +216,7 @@
         <item>选择桌面</item>
         <item>更换主题</item>
         <item>选择城市</item>
+        <item>恢复默认设置</item>
     </string-array>
     <string-array name="screensaver_array">
         <item>关闭</item>

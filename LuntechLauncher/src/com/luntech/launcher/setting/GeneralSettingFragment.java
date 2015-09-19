@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
@@ -19,9 +20,11 @@ import android.widget.Toast;
 
 import com.luntech.launcher.IPTVLauncher;
 import com.luntech.launcher.Launcher;
+import com.luntech.launcher.Module;
 import com.luntech.launcher.Q1SLauncher;
 import com.luntech.launcher.R;
 import com.luntech.launcher.ToolUtils;
+import com.luntech.launcher.db.DBDao;
 
 import org.w3c.dom.Text;
 
@@ -36,6 +39,7 @@ public class GeneralSettingFragment extends Fragment {
     private Context mContext;
     private List<String> mTimes;
     private List<String> mThemes;
+
 
     public static GeneralSettingFragment newInstance() {
         GeneralSettingFragment generalFragment = new GeneralSettingFragment();
@@ -103,11 +107,17 @@ public class GeneralSettingFragment extends Fragment {
                     if (TextUtils.isEmpty(theme)) {
                         ToolUtils.storeCommonValueIntoSP(mContext, "theme", "IPTV");
                     }
-                    int i = mThemes.indexOf(theme);
+                    final int i = mThemes.indexOf(theme);
                     final Intent themeIntent = new Intent();
                     new AlertDialog.Builder(mContext).setSingleChoiceItems(R.array.theme_array, i, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    if (i == which) {
+                                        Toast.makeText(mContext, R.string.current_theme, Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                        return;
+                                    }
+
                                     if (which == 0) {
                                         ToolUtils.storeCommonValueIntoSP(mContext, "theme", mThemes.get(0));
                                         themeIntent.setClass(mContext, IPTVLauncher.class);
@@ -115,6 +125,7 @@ public class GeneralSettingFragment extends Fragment {
                                         ToolUtils.storeCommonValueIntoSP(mContext, "theme", mThemes.get(1));
                                         themeIntent.setClass(mContext, Q1SLauncher.class);
                                     }
+                                    getActivity().finish();
                                     themeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                     startActivity(themeIntent);
                                     dialog.dismiss();
@@ -125,10 +136,43 @@ public class GeneralSettingFragment extends Fragment {
                 } else if (position == 4) {
                     Intent intent = new Intent(mContext, SetCity.class);
                     startActivity(intent);
+                } else if (position == 5) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setMessage(R.string.reboot_alert);
+                    builder.setPositiveButton(R.string.ok,
+                            new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    clearCustomCache();
+                                    getActivity().finish();
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    arg0.dismiss();
+                                }
+                            });
+                    builder.setNegativeButton(R.string.cancel, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                    dialog.show();
+
                 }
             }
 
         });
+    }
+
+    private void clearCustomCache() {
+        DBDao dao = new DBDao(mContext);
+        ArrayList<Module> modules = dao.fetchAllModulesByGroup(Launcher.getCustomType());
+        ToolUtils tools = ToolUtils.getInstance(mContext);
+        for (Module m : modules) {
+            if (tools.isExsitsKey(mContext, m.getModuleCode())) {
+                String key = tools.getConfigured(mContext, m.getModuleCode());
+                tools.clearConfiguredPkg(mContext, m.getModuleCode());
+                tools.clearConfiguredPkg(mContext, key);
+            }
+        }
+
     }
 
     private void initItems() {
@@ -180,5 +224,6 @@ public class GeneralSettingFragment extends Fragment {
         public long getItemId(int id) {
             return id;
         }
+
     }
 }
