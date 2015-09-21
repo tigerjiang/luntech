@@ -22,7 +22,7 @@
         <com.luntech.launcher.view.QisItem
             android:id="@+id/channel_unfold"
             android:layout_width="660px"
-            android:layout_height="373px"
+            android:layout_height="365px"
             android:layout_marginTop="36px"
             android:clickable="true"
             android:focusable="true"
@@ -40,7 +40,7 @@
         <com.luntech.launcher.view.QisItem
             android:id="@+id/vod_unfold"
             android:layout_width="660px"
-            android:layout_height="373px"
+            android:layout_height="365px"
             android:layout_marginLeft="2px"
             android:layout_marginTop="36px"
             android:clickable="true"

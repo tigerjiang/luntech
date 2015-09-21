@@ -77,6 +77,7 @@ public class Launcher extends Activity {
     public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
     public static final String APP_START_ACTION = "com.luntech.action.START";
 
+    public static final String HAS_CHECK_UPDATE = "has_check_update";
 
     public static final String IPTV_THEME = "IPTV";
 
@@ -131,6 +132,7 @@ public class Launcher extends Activity {
             e.printStackTrace();
         }
         mToolUtils = ToolUtils.getInstance(LauncherApplication.getAppContext());
+        ToolUtils.storeCommonValueIntoSP(mContext,HAS_CHECK_UPDATE,"0");
         mThemeType = ToolUtils.getCommonValueFromSP(mContext, THEME_KEY);
         AppManager.create(this);
         if (TextUtils.isEmpty(mThemeType)) {
@@ -180,7 +182,6 @@ public class Launcher extends Activity {
 
 
         if (!HttpUtils.checkConnectivity(mContext)) {
-            sIsConnectedToServer = false;
             return;
         }
 

@@ -491,7 +491,7 @@ public class ToolUtils {
 
                             @Override
                             public void onCompleted(final File file) {
-                                storeCommonValueIntoSP(context, Launcher.FULL_BG_KEY,
+                                storeValueIntoSP(context, Launcher.FULL_BG_KEY,
                                         file.getAbsolutePath());
                             }
                         };
@@ -859,6 +859,7 @@ public class ToolUtils {
 
                 if (TextUtils.isEmpty(app.appUrl)) {
                     Toast.makeText(context, R.string.app_no_fund, Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setMessage(R.string.app_background_download);

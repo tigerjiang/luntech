@@ -3,681 +3,24 @@
     <group
         code="IPTV_1"
         group_flag="1"
-        moveable="0">
-        <g_text>
-            电视直播
-        </g_text>
-
-        <g_bg>
-            global_thumb_1_logo
-        </g_bg>
-
-        <g_icon>
-            global_thumb_1_logo
-        </g_icon>
-
+        moveable="1">
+        <g_text><![CDATA[电视直播]]></g_text>
+        <g_bg>55f2d2d742cd2.jpg</g_bg>
+        <g_icon>55bee00ce979f.png</g_icon>
         <module
             code="IPTV_1"
             replace="0"
             type="5">
-            <m_text>
-                电视直播
-            </m_text>
-
-            <m_bg>
-                global_thumb_1_logo
-            </m_bg>
-
-            <m_icon>
-                global_thumb_1_logo
-            </m_icon>
-
-            <m_shadow>
-                global_thumb_1_shadow
-            </m_shadow>
-
+            <m_text>电视直播</m_text>
+            <m_bg>55ff5d26369db.png</m_bg>
+            <m_icon>55ff5d3ca83fb.png</m_icon>
+            <m_shadow>55ff5d585a0b0.png</m_shadow>
             <apps>
                 <app>
                     <a_name></a_name>
-
-                    <a_package>
-                        com.xike.xkliveplay
-                    </a_package>
-
-                    <a_activity>
-                        com.xike.xkliveplay/.activity.launch.ActivityLaunch
-                    </a_activity>
-
+                    <a_package>com.xike.xkliveplay</a_package>
+                    <a_activity>com.xike.xkliveplay/.activity.launch.ActivityLaunch</a_activity>
                     <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_2"
-        group_flag="1"
-        moveable="0">
-        <g_text>
-            红石崖在线
-        </g_text>
-
-        <g_bg>
-            global_thumb_2_logo
-        </g_bg>
-
-        <g_icon>
-            global_thumb_2_logo
-        </g_icon>
-
-        <module
-            code="IPTV_2"
-            replace="0"
-            type="5">
-            <m_text>
-                红石崖在线
-            </m_text>
-
-            <m_bg>
-                global_thumb_2_logo
-            </m_bg>
-
-            <m_icon>
-                global_thumb_2_logo
-            </m_icon>
-
-            <m_shadow>
-                global_thumb_2_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package></a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_3"
-        group_flag="1"
-        moveable="0">
-        <g_text>
-            物业服务
-        </g_text>
-
-        <g_bg>
-            global_thumb_3_logo
-        </g_bg>
-
-        <g_icon>
-            global_thumb_3_logo
-        </g_icon>
-
-        <module
-            code="IPTV_3"
-            replace="0"
-            type="5">
-            <m_text>
-                物业服务
-            </m_text>
-
-            <m_bg>
-                global_thumb_3_logo
-            </m_bg>
-
-            <m_icon>
-                global_thumb_3_logo
-            </m_icon>
-
-            <m_shadow>
-                global_thumb_3_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package></a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_4"
-        group_flag="1"
-        moveable="1">
-        <g_text>
-            影视点播
-        </g_text>
-
-        <g_bg>
-            categore_app_1_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_1_logo
-        </g_icon>
-
-        <module
-            code="IPTV_4"
-            replace="1"
-            type="5">
-            <m_text>
-                影视点播
-            </m_text>
-
-            <m_bg>
-                categore_app_1_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_1_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_1_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package>
-                        cn.com.wasu.main
-                    </a_package>
-
-                    <a_activity>
-                        cn.com.wasu.main/.WasuTVMainActivity
-                    </a_activity>
-
-                    <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_5"
-        group_flag="1"
-        moveable="1">
-        <g_text>
-            智慧社区
-        </g_text>
-
-        <g_bg>
-            categore_app_2_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_2_logo
-        </g_icon>
-
-        <module
-            code="IPTV_5"
-            replace="1"
-            type="2">
-            <m_text>
-                智慧社区
-            </m_text>
-
-            <m_bg>
-                categore_app_2_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_2_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_2_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name>
-                        音乐+
-                    </a_name>
-
-                    <a_package>
-                        com.luntech.launcher
-                    </a_package>
-
-                    <a_activity>
-                        com.luntech.launcher/.secondary.LongTaiAppsGridActivity
-                    </a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20130923/1379903967.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20130923/1379903971.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        QQ音乐
-                    </a_name>
-
-                    <a_package>
-                        com.tencent.qqmusicpad
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20131213/1386915594.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20131213/1386915590.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        多米音乐
-                    </a_name>
-
-                    <a_package>
-                        com.hycstv.android
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20130923/1379903604.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20130923/1379903608.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        博雅斗地主
-                    </a_name>
-
-                    <a_package>
-                        com.boyaa.lordland.sina
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20131111/1384153100.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20131111/1384153171.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        百度音乐
-                    </a_name>
-
-                    <a_package>
-                        com.happy000.rushCy
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20131115/1384504486.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20131115/1384504533.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        屋顶狂奔
-                    </a_name>
-
-                    <a_package>
-                        fishnoodle.canabalt
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20140102/1388643384.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20140102/1388643362.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        音悦TV
-                    </a_name>
-
-                    <a_package>
-                        com.airplayme.android.tvbox
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20131014/1381738766.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20131014/1381738787.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        涂鸦泡泡
-                    </a_name>
-
-                    <a_package>
-                        com.yingzheng.dooblebubbleEn
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20131015/1381800651.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20131015/1381800690.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        海洋音乐
-                    </a_name>
-
-                    <a_package>
-                        com.omusic.tv
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20131115/1384504361.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20131115/1384504365.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        E生活管家
-                    </a_name>
-
-                    <a_package>
-                        com.luntech.maplivingarea
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20150303/1425363846.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20150303/1425363873.apk
-                    </a_url>
-                </app>
-                <app>
-                    <a_name>
-                        华数影视
-                    </a_name>
-
-                    <a_package>
-                        cn.com.wasu.main
-                    </a_package>
-
-                    <a_activity></a_activity>
-
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20141210/1418178250.png
-                    </a_icon>
-
-                    <a_url>
-                        http://market.4006169169.com/Public/Upload/soft/20141210/1418178260.apk
-                    </a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_6"
-        group_flag="1"
-        moveable="1">
-        <g_text>
-            智能家居
-        </g_text>
-
-        <g_bg>
-            categore_app_3_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_3_logo
-        </g_icon>
-
-        <module
-            code="IPTV_6"
-            replace="1"
-            type="3">
-            <m_text>
-                智能家居
-            </m_text>
-
-            <m_bg>
-                categore_app_3_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_3_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_3_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package>
-                        com.eastsoft.android.ihome
-                    </a_package>
-
-                    <a_activity>
-                        com.eastsoft.android.ihome/.login.Launcher
-                    </a_activity>
-
-                    <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_7"
-        group_flag="1"
-        moveable="1">
-        <g_text>
-            应用市场
-        </g_text>
-
-        <g_bg>
-            categore_app_4_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_4_logo
-        </g_icon>
-
-        <module
-            code="IPTV_7"
-            replace="1"
-            type="4">
-            <m_text>
-                应用市场
-            </m_text>
-
-            <m_bg>
-                categore_app_4_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_4_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_4_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package>
-                        com.luntech.zhihemarket
-                    </a_package>
-
-                    <a_activity>
-                        com.luntech.zhihemarket/.LoginActivity
-                    </a_activity>
-
-                    <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_8"
-        group_flag="1"
-        moveable="1">
-        <g_text>
-            更多应用
-        </g_text>
-
-        <g_bg>
-            categore_app_5_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_5_logo
-        </g_icon>
-
-        <module
-            code="IPTV_8"
-            replace="1"
-            type="5">
-            <m_text>
-                更多应用
-            </m_text>
-
-            <m_bg>
-                categore_app_5_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_5_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_5_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package>
-                        com.luntech.launcher
-                    </a_package>
-
-                    <a_activity>
-                        com.luntech.launcher/.secondary.ApplicationsGridActivity
-                    </a_activity>
-
-                    <a_icon></a_icon>
-
-                    <a_url></a_url>
-                </app>
-            </apps>
-        </module>
-    </group>
-    <group
-        code="IPTV_9"
-        group_flag="1"
-        moveable="1">
-        <g_text>
-            本地播放
-        </g_text>
-
-        <g_bg>
-            categore_app_6_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_6_logo
-        </g_icon>
-
-        <module
-            code="IPTV_9"
-            replace="1"
-            type="1">
-            <m_text>
-                本地播放
-            </m_text>
-
-            <m_bg>
-                categore_app_6_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_6_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_6_shadow
-            </m_shadow>
-
-            <apps>
-                <app>
-                    <a_name></a_name>
-
-                    <a_package>
-                        com.softwinner.TvdFileManager
-                    </a_package>
-
-                    <a_activity>
-                        com.softwinner.TvdFileManager/.MainUI
-                    </a_activity>
-
-                    <a_icon></a_icon>
-
                     <a_url></a_url>
                 </app>
             </apps>
@@ -687,56 +30,238 @@
         code="IPTV_10"
         group_flag="1"
         moveable="1">
-        <g_text>
-            系统设置
-        </g_text>
-
-        <g_bg>
-            categore_app_7_bg
-        </g_bg>
-
-        <g_icon>
-            categore_app_7_logo
-        </g_icon>
-
+        <g_text><![CDATA[系统设置]]></g_text>
+        <g_bg>55bd9af080cf6.png</g_bg>
+        <g_icon>55ab05c0af9e6.png</g_icon>
         <module
             code="IPTV_10"
             replace="1"
             type="5">
-            <m_text>
-                系统设置
-            </m_text>
-
-            <m_bg>
-                categore_app_7_bg
-            </m_bg>
-
-            <m_icon>
-                categore_app_7_logo
-            </m_icon>
-
-            <m_shadow>
-                categore_app_7_shadow
-            </m_shadow>
-
+            <m_text>系统设置</m_text>
+            <m_bg>55d54437cc6ad.png</m_bg>
+            <m_icon>55bd9c9b201d9.png</m_icon>
+            <m_shadow>55d54118999bd.png</m_shadow>
             <apps>
                 <app>
                     <a_name></a_name>
-
-                    <a_package>
-                        com.luntech.launcher
-                    </a_package>
-
-                    <a_activity>
-                        com.luntech.launcher/.setting.SettingActivity
-                    </a_activity>
-
+                    <a_package>com.luntech.launcher</a_package>
+                    <a_activity>com.luntech.launcher/.setting.SettingActivity</a_activity>
                     <a_icon></a_icon>
-
                     <a_url></a_url>
                 </app>
             </apps>
         </module>
     </group>
-
+    <group
+        code="IPTV_2"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[政务信息]]></g_text>
+        <g_bg>55beba1f28d7f.jpg</g_bg>
+        <g_icon>55f278f131ea4.jpg</g_icon>
+        <module
+            code="IPTV_2"
+            replace="0"
+            type="5">
+            <m_text>政务信息</m_text>
+            <m_bg>55ff7755e8917.jpg</m_bg>
+            <m_icon>55ff775815e48.jpg</m_icon>
+            <m_shadow>55bd9bcb9e671.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.xike.xkliveplay</a_package>
+                    <a_activity></a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_3"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[物业服务]]></g_text>
+        <g_bg>55bd9a347f8bd.png</g_bg>
+        <g_icon>55bd9a39851c4.png</g_icon>
+        <module
+            code="IPTV_3"
+            replace="1"
+            type="5">
+            <m_text>物业服务</m_text>
+            <m_bg>55d5322f6589f.jpg</m_bg>
+            <m_icon>55d5323546b88.jpg</m_icon>
+            <m_shadow>55bd9b86f28fa.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.xike.xkliveplay</a_package>
+                    <a_activity></a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_4"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[影视点播]]></g_text>
+        <g_bg>55bd9a4a5b791.png</g_bg>
+        <g_icon>55bd9a4f9dbb7.png</g_icon>
+        <module
+            code="IPTV_4"
+            replace="1"
+            type="1">
+            <m_text>影视点播</m_text>
+            <m_bg>55d5440e59516.png</m_bg>
+            <m_icon>55bd9ba3b5aa9.png</m_icon>
+            <m_shadow>55d540d22c0e3.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name>屋顶狂奔</a_name>
+                    <a_package>fishnoodle.canabalt</a_package>
+                    <a_activity></a_activity>
+                    <a_icon>
+                        http://market.4006169169.com/Public/Upload/soft_icon/20140102/1388643384.png
+                    </a_icon>
+                    <a_url>http://market.4006169169.com/Public/Upload/soft/20140102/1388643362.apk
+                    </a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_5"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[智慧社区]]></g_text>
+        <g_bg>55bd9a97c71f9.png</g_bg>
+        <g_icon>55bd9a9dea68f.png</g_icon>
+        <module
+            code="IPTV_5"
+            replace="1"
+            type="5">
+            <m_text>e生活管家</m_text>
+            <m_bg>55d544148485d.png</m_bg>
+            <m_icon>55bd9c102a67c.png</m_icon>
+            <m_shadow>55d540dc23e08.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.luntech.launcher</a_package>
+                    <a_activity>com.luntech.launcher/.secondary.LongTaiAppsGridActivity</a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_6"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[智能家居]]></g_text>
+        <g_bg>55bd9aa946e6a.png</g_bg>
+        <g_icon>55bd9aaf07ee5.png</g_icon>
+        <module
+            code="IPTV_6"
+            replace="1"
+            type="5">
+            <m_text>智能家居</m_text>
+            <m_bg>55ff5d6ac62ad.png</m_bg>
+            <m_icon>55bd9c315c1f6.png</m_icon>
+            <m_shadow>55d540e6779c3.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.eastsoft.android.ihome</a_package>
+                    <a_activity>com.eastsoft.android.ihome/.login.Launcher</a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_7"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[应用市场]]></g_text>
+        <g_bg>55bd9abd9db7f.png</g_bg>
+        <g_icon>55bd9ac4171d6.png</g_icon>
+        <module
+            code="IPTV_7"
+            replace="1"
+            type="5">
+            <m_text>应用市场</m_text>
+            <m_bg>55ff5d723d441.png</m_bg>
+            <m_icon>55bd9c540e92c.png</m_icon>
+            <m_shadow>55d540f26eb0d.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.luntech.zhihemarket</a_package>
+                    <a_activity>com.luntech.zhihemarket/.LoginActivity</a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_8"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[更多应用]]></g_text>
+        <g_bg>55bd9ad208cc2.png</g_bg>
+        <g_icon>55bd9ada53f82.png</g_icon>
+        <module
+            code="IPTV_8"
+            replace="1"
+            type="5">
+            <m_text>更多应用</m_text>
+            <m_bg>55d5442d087ab.png</m_bg>
+            <m_icon>55bd9c6a8b5d3.png</m_icon>
+            <m_shadow>55d54104f23ba.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.luntech.launcher</a_package>
+                    <a_activity>com.luntech.launcher/.secondary.ApplicationsGridActivity
+                    </a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
+    <group
+        code="IPTV_9"
+        group_flag="1"
+        moveable="1">
+        <g_text><![CDATA[本地播放]]></g_text>
+        <g_bg>55ab059596716.png</g_bg>
+        <g_icon>55ab059d9e54b.png</g_icon>
+        <module
+            code="IPTV_9"
+            replace="1"
+            type="5">
+            <m_text>本地播放</m_text>
+            <m_bg>55d54432c9963.png</m_bg>
+            <m_icon>55bd9c7fe808a.png</m_icon>
+            <m_shadow>55d541100dcfc.png</m_shadow>
+            <apps>
+                <app>
+                    <a_name></a_name>
+                    <a_package>com.softwinner.TvdFileManager</a_package>
+                    <a_activity>com.softwinner.TvdFileManager/.MainUI</a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
+                </app>
+            </apps>
+        </module>
+    </group>
 </response>
