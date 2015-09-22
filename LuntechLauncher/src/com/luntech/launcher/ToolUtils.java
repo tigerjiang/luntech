@@ -524,6 +524,53 @@ public class ToolUtils {
         return AdContent.toString();
     }
 
+
+    public static  void parseHiddenConfigureFromConfig(final Context context, InputStream is) {
+        StringBuffer hiddenContent = new StringBuffer();
+        try {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            XmlPullParser parser = factory.newPullParser();
+            parser.setInput(is, "utf-8");
+            while (parser.getEventType() != XmlResourceParser.END_DOCUMENT) {
+                if (parser.getEventType() == XmlResourceParser.START_TAG) {
+                    String name = parser.getName();
+                    Log.d(TAG, name);
+                    if (name.equals("time")) {
+                        String time = parser.nextText().trim();
+                        String storeTime = ToolUtils.getValueFromSP(context, "hidden_time");
+                        if (!TextUtils.isEmpty(storeTime)) {
+                            if (time.equals(storeTime)) {
+                                Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
+                                        + storeTime);
+                                break;
+                            } else {
+                                ToolUtils.storeValueIntoSP(context, "hidden_time", time);
+                            }
+                        } else {
+                            ToolUtils.storeValueIntoSP(context, "hidden_time", time);
+                        }
+                    } else if (name.equals("package_name")) {
+                        String content = parser.nextText().trim();
+                        hiddenContent.append(content).append(",");
+                    }
+                } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
+                    String name = parser.getName();
+                }
+                parser.next();
+            }
+
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "XmlPullParserException occurs " + e);
+        } catch (IOException e) {
+            Log.e(TAG, "packagefilter occurs " + e);
+        }
+
+        String tmp = hiddenContent.toString();
+        String content = tmp.substring(0,tmp.lastIndexOf(","));
+        ToolUtils.storeValueIntoSP(context, "hidden_app", content);
+        Log.d(TAG, "hidden app " + content);
+    }
+
     public static void getCustomConfigureFromConfig(Context context, InputStream is) {
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();

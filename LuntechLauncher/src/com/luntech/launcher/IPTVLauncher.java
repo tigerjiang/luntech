@@ -150,9 +150,9 @@ public class IPTVLauncher extends Launcher {
                     AppManager appManager = AppManager.getInstance();
                     appManager.getAllApplications();
                     ApplicationInfo descApp = appManager.getInfoFromAllActivitys(pkg);
-                    if(descApp!=null){
+                    if (descApp != null) {
                         descApp.startApplication(mContext);
-                    }else{
+                    } else {
                         mToolUtils.clearConfiguredPkg(mContext, mSelectedApp.getModuleCode());
                         mToolUtils.clearConfiguredPkg(mContext, pkg);
                         ToolUtils.safeStartApk(IPTVLauncher.this, app);
@@ -577,7 +577,7 @@ public class IPTVLauncher extends Launcher {
 
 
     private void restartSendShowScreenSaver() {
-        if(!sCloseScreenSaver){
+        if (!sCloseScreenSaver) {
             Message msg = mHandler.obtainMessage(LauncherHandler.SHOW_SCREEN_SAVER);
             mHandler.removeMessages(LauncherHandler.SHOW_SCREEN_SAVER);
             mHandler.sendMessageDelayed(msg, showScreenSaverTime);
@@ -601,6 +601,7 @@ public class IPTVLauncher extends Launcher {
         mFilePrefix = getFilePrefix();
         mType = getType();
         mAdConfigureFile = getAdConfigureFile();
+        mHiddenFile = getHiddenConfigureFile();
     }
 
     public String getType() {
@@ -617,5 +618,9 @@ public class IPTVLauncher extends Launcher {
 
     public String getCategoryFileName() {
         return Launcher.IPTV_CATEGORY_FILE;
+    }
+
+    public String getHiddenConfigureFile() {
+        return IPTV_HIDDEN_FILE;
     }
 }

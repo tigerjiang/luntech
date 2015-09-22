@@ -59,11 +59,13 @@ public class Launcher extends Activity {
     public static final String IPTV_AD_CONFIGURE_FILE = "iptv_ad_config.xml";
     public static final String IPTV_FILE_PREFIX = "launcher_iptv";
     public static final String IPTV_TYPE = "iptv";
+    public static final String IPTV_HIDDEN_FILE = "iptv_hidden_config.xml";
 
     public static final String Q1S_TYPE = "q1s";
     public static final String Q1S_CATEGORY_FILE = "q1s_network_config.xml";
     public static final String Q1S_AD_CONFIGURE_FILE = "q1s_ad_config.xml";
     public static final String Q1S_FILE_PREFIX = "launcher_q1s";
+    public static final String Q1S_HIDDEN_FILE = "q1s_hidden_config.xml";
     public static final String THEME_KEY = "theme";
     public static final String UPDATE_CONFIGURE_FILE = "update_config.xml";
 
@@ -73,6 +75,7 @@ public class Launcher extends Activity {
 
     public static final String CAPTURE_UPDATE_CONFIGURE_ACTION = "com.luntech.action.GET_UPDATE";
     public static final String CAPTURE_AD_CONFIGURE_ACTION = "com.luntech.action.GET_AD";
+    public static final String CAPTURE_HIDDEN_CONFIGURE_ACTION = "com.luntech.action.HIDDEN_APP";
     public static final String CAPTURE_SCREENSAVER_CONFIGURE_ACTION = "com.luntech.action.GEAT_SAVER";
     public static final String SHOW_SCREENSAVER_ACTION = "com.luntech.action.SHOW_SAVER";
     public static final String APP_START_ACTION = "com.luntech.action.START";
@@ -85,6 +88,7 @@ public class Launcher extends Activity {
     protected String mThemeType;
 
     public static String mAdConfigureFile = IPTV_AD_CONFIGURE_FILE;
+    protected static String mHiddenFile = IPTV_HIDDEN_FILE;
     protected static String mCategoryFile = IPTV_CATEGORY_FILE;
     protected static String mFilePrefix = IPTV_FILE_PREFIX;
     protected static String mType = IPTV_TYPE;
@@ -212,6 +216,14 @@ public class Launcher extends Activity {
                 sendBroadcast(new Intent(CAPTURE_CATEGORY_CONFIG_ACTION));
             }
         }, REQUEST_DELAY_TIME_ONE_MINUTES);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                sendBroadcast(new Intent(CAPTURE_HIDDEN_CONFIGURE_ACTION));
+            }
+        }, REQUEST_DELAY_TIME_ONE_MINUTES);
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

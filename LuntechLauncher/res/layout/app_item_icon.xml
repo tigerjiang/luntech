@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150px"
-    android:layout_height="150px"
+    android:layout_width="110px"
+    android:layout_height="110px"
     android:gravity="center" >
 
     <ImageView
         android:id="@+id/app_icon"
-        android:layout_width="80px"
-        android:layout_height="80px"
+        android:layout_width="72px"
+        android:layout_height="72px"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/global_category_app_logo_margin_top" />
 
@@ -20,7 +20,8 @@
         android:layout_below="@+id/app_icon"
         android:gravity="center"
         android:text="@string/categore_app_1_label"
+        android:singleLine="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/global_text_size_small" />
+        android:textSize="@dimen/global_text_size_middle" />
 
 </RelativeLayout>

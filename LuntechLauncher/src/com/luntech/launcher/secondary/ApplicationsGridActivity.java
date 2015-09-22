@@ -61,7 +61,7 @@ public class ApplicationsGridActivity extends Activity {
      */
     
     public void onAppManagerReady() {
-        mAppList = mAppManager.getAllAppsApplications();
+        mAppList = mAppManager.getAllAppsApplications(ApplicationsGridActivity.this);
         Log.d(TAG, mAppList.toString());
         sortByInstallTime(mAppList);
         Log.d(TAG, mAppList.toString());

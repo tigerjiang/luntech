@@ -157,6 +157,14 @@ public class LauncherService extends Service {
                         new FetchTask(app_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mCategoryFile,
                                 LauncherHandler.RETURN_CATEGORY_CONFIG_CODE).execute();
 
+                    } else if (Launcher.CAPTURE_HIDDEN_CONFIGURE_ACTION.equals(action)) {
+                        String httpArg =  "&package_name=" + Launcher.mType+"&version=" + Launcher.sVersionCode;
+                        String hidden_url = HttpUtils.HTTP_HIDDEN_APP_URL + httpArg;
+                        Logger.e("request url hidden_url " + hidden_url);
+                        // capture the category config
+                        new FetchTask(hidden_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mHiddenFile,
+                                LauncherHandler.RETURN_HIDDEN_CONFIG_CODE).execute();
+
                     } else if (Launcher.CAPTURE_SCREENSAVER_CONFIGURE_ACTION.equals(action)) {
                         String screensaver_url = HttpUtils.HTTP_SCREEN_SAVER_URL;
                         Logger.e("request url " + screensaver_url);
@@ -227,6 +235,8 @@ public class LauncherService extends Service {
                     }
                     break;
                 case RETURN_HIDDEN_CONFIG_CODE:
+                    ToolUtils.parseHiddenConfigureFromConfig(mContext,
+                            new ByteArrayInputStream(mResult.getBytes()));
                     break;
                 case RETURN_UPDATE_CONFIG_CODE:
                     try {
@@ -303,7 +313,7 @@ public class LauncherService extends Service {
                             if (time.equals(storeTime)) {
                                 Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
                                         + storeTime);
-                                return;
+                                break;
                             } else {
                                 ToolUtils.storeCommonValueIntoSP(context, "screen_saver_time", time);
                             }
@@ -358,7 +368,7 @@ public class LauncherService extends Service {
                         };
                         DownloadTask downloadTask = new DownloadTask(Launcher.DOWNLOAD_TO_PATH, downloadUrl, listener);
                         new Thread(downloadTask).start();
-                        return;
+                        break;
                     }
                 } else if (parser.getEventType() == XmlResourceParser.END_TAG) {
                     String name = parser.getName();

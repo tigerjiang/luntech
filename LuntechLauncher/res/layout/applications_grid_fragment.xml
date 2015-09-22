@@ -10,7 +10,7 @@
         android:layout_height="100dp"
         android:gravity="center"
         android:text="@string/apps_title"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textSize="@dimen/custom_title_size"
         android:textColor="@android:color/white" />
 
     <ImageView

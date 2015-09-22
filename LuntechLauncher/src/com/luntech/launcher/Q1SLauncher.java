@@ -2195,6 +2195,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         mFilePrefix = getFilePrefix();
         mType = getType();
         mAdConfigureFile = getAdConfigureFile();
+        mHiddenFile = getHiddenConfigureFile();
     }
 
     public String getType() {
@@ -2203,6 +2204,10 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     public String getAdConfigureFile() {
         return Q1S_AD_CONFIGURE_FILE;
+    }
+
+    public String getHiddenConfigureFile() {
+        return Q1S_HIDDEN_FILE;
     }
 
     public String getFilePrefix() {

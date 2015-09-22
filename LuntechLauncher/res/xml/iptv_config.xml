@@ -121,14 +121,11 @@
             <m_shadow>55d540d22c0e3.png</m_shadow>
             <apps>
                 <app>
-                    <a_name>屋顶狂奔</a_name>
-                    <a_package>fishnoodle.canabalt</a_package>
-                    <a_activity></a_activity>
-                    <a_icon>
-                        http://market.4006169169.com/Public/Upload/soft_icon/20140102/1388643384.png
-                    </a_icon>
-                    <a_url>http://market.4006169169.com/Public/Upload/soft/20140102/1388643362.apk
-                    </a_url>
+                    <a_name></a_name>
+                    <a_package>cn.com.wasu.main</a_package>
+                    <a_activity>cn.com.wasu.main/.WasuTVMainActivity</a_activity>
+                    <a_icon></a_icon>
+                    <a_url></a_url>
                 </app>
             </apps>
         </module>
