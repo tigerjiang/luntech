@@ -599,7 +599,7 @@ public class ToolUtils {
         return sp.getString(name, null);
     }
 
-    public void clearConfiguredPkg(Context context, String key) {
+    public static void  clearConfiguredPkg(Context context, String key) {
         SharedPreferences sp = null;
         if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
             sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);

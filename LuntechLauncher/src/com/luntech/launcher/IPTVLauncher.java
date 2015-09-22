@@ -150,7 +150,13 @@ public class IPTVLauncher extends Launcher {
                     AppManager appManager = AppManager.getInstance();
                     appManager.getAllApplications();
                     ApplicationInfo descApp = appManager.getInfoFromAllActivitys(pkg);
-                    descApp.startApplication(mContext);
+                    if(descApp!=null){
+                        descApp.startApplication(mContext);
+                    }else{
+                        mToolUtils.clearConfiguredPkg(mContext, mSelectedApp.getModuleCode());
+                        mToolUtils.clearConfiguredPkg(mContext, pkg);
+                        ToolUtils.safeStartApk(IPTVLauncher.this, app);
+                    }
                 } else {
                     ToolUtils.safeStartApk(IPTVLauncher.this, app);
                 }

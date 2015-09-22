@@ -45,6 +45,7 @@ import com.hisense.network.utils.EpgDataInfoLoader.HiLauncherLoader;
 import com.luntech.launcher.secondary.AppManager;
 import com.luntech.launcher.secondary.ApplicationInfo;
 import com.luntech.launcher.view.AppDialogFragment;
+import com.luntech.launcher.view.QisItem;
 import com.luntech.launcher.view.TvStatusBar;
 
 
@@ -754,7 +755,13 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             AppManager appManager = AppManager.getInstance();
             appManager.getAllApplications();
             ApplicationInfo descApp = appManager.getInfoFromAllActivitys(pkg);
-            descApp.startApplication(mContext);
+            if(descApp!=null){
+                descApp.startApplication(mContext);
+            }else{
+                mToolUtils.clearConfiguredPkg(mContext, mSelectedApp.getModuleCode());
+                mToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.safeStartApk(Q1SLauncher.this, app);
+            }
         } else {
             ToolUtils.safeStartApk(Q1SLauncher.this, app);
         }
@@ -1282,7 +1289,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            channelImView_unfold.setIconView(app.getIcon());
+            if(app!=null){
+                channelImView_unfold.setIconView(app.getIcon());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+            }
 //            channelImView_unfold.setmNameView(app.getTitle());
         }else {
 //            channelImView_unfold.setmNameView(mVodModule.getModuleText());
@@ -1341,7 +1353,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            vodImView_unfold.setIconView(app.getIcon());
+            if(app!=null){
+                vodImView_unfold.setIconView(app.getIcon());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+            }
 //            vodImView_unfold.setmNameView(app.getTitle());
         }else {
 //            vodImView_unfold.setmNameView(mVodModule.getModuleText());
@@ -1414,8 +1431,14 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            apprecomView1.setIconView(app.getIcon());
-            apprecomView1.setmNameView(app.getTitle());
+            if(app!=null){
+                apprecomView1.setIconView(app.getIcon());
+                apprecomView1.setmNameView(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                apprecomView1.setmNameView(mAppModule1.getModuleText());
+            }
         }else {
             apprecomView1.setmNameView(mAppModule1.getModuleText());
         }
@@ -1451,8 +1474,15 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            apprecomView2.setIconView(app.getIcon());
-            apprecomView2.setmNameView(app.getTitle());
+            if(app!=null){
+                apprecomView2.setIconView(app.getIcon());
+                apprecomView2.setmNameView(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                apprecomView2.setmNameView(mAppModule3.getModuleText());
+            }
+
         }else {
 
             apprecomView2.setmNameView(mAppModule3.getModuleText());
@@ -1489,8 +1519,15 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            apprecomView3.setIconView(app.getIcon());
-            apprecomView3.setmNameView(app.getTitle());
+            if(app!=null){
+                apprecomView3.setIconView(app.getIcon());
+                apprecomView3.setmNameView(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                apprecomView3.setmNameView(mAppModule2.getModuleText());
+            }
+
         }else {
             apprecomView3.setmNameView(mAppModule2.getModuleText());
         }
@@ -1566,8 +1603,15 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            myFavoriteView.setIconView(app.getIcon());
-            myFavoriteView.setmNameView(app.getTitle());
+            if(app!=null){
+                myFavoriteView.setIconView(app.getIcon());
+                myFavoriteView.setmNameView(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                myFavoriteView.setmNameView(mZhihuiModule1.getModuleText());
+            }
+
         }else {
             myFavoriteView.setmNameView(mZhihuiModule1.getModuleText());
         }
@@ -1604,12 +1648,23 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            playhistoryView.setIconView(app.getIcon());
-            playhistoryView.setmNameView(app.getTitle());
+            setCustomQ1SItem(key,pkg,playhistoryView,app,mZhihuiModule2.getModuleText());
+
         }else {
             playhistoryView.setmNameView(mZhihuiModule2.getModuleText());
         }
     }
+    private void setCustomQ1SItem(String key1, String key2,QisItem item,ApplicationInfo app, CharSequence text){
+        if(app!=null){
+            item.setIconView(app.getIcon());
+            item.setmNameView(app.getTitle());
+        }else{
+            ToolUtils.clearConfiguredPkg(mContext, key1);
+            ToolUtils.clearConfiguredPkg(mContext, key2);
+            item.setmNameView(text);
+        }
+    }
+
 
     private void setFavpersonView() {
         Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleBg(), favpersonView.getBgView(), new AsyncImageLoader.ImageCallback() {
@@ -1642,8 +1697,14 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            favpersonView.setIconView(app.getIcon());
-            favpersonView.setmNameView(app.getTitle());
+            if(app!=null){
+                favpersonView.setIconView(app.getIcon());
+                favpersonView.setmNameView(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                favpersonView.setmNameView(mZhihuiModule3.getModuleText());
+            }
         }else {
             favpersonView.setmNameView(mZhihuiModule3.getModuleText());
         }
@@ -1680,8 +1741,15 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            localView.setIconView(app.getIcon());
-            localView.setmNameView(app.getTitle());
+            if(app!=null){
+                localView.setIconView(app.getIcon());
+                localView.setmNameView(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                localView.setmNameView(mZhihuiModule4.getModuleText());
+            }
+
         }else {
             localView.setmNameView(mZhihuiModule4.getModuleText());
         }
@@ -1791,8 +1859,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            settingDispalyView.setIconView(app.getIcon());
-            settingDispalyView.setmNameView(app.getTitle());
+            setCustomQ1SItem(key, pkg, settingDispalyView, app, mSettingModue2.getModuleText());
         }else {
             settingDispalyView.setmNameView(mSettingModue2.getModuleText());
         }
@@ -1830,8 +1897,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            settingNetView.setIconView(app.getIcon());
-            settingNetView.setmNameView(app.getTitle());
+            setCustomQ1SItem(key, pkg, settingNetView, app, mSettingModue3.getModuleText());
         }else{
             settingNetView.setmNameView(mSettingModue3.getModuleText());
         }
@@ -1869,8 +1935,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            settingUpdateView.setIconView(app.getIcon());
-            settingUpdateView.setmNameView(app.getTitle());
+            setCustomQ1SItem(key, pkg, settingUpdateView, app, mSettingModue4.getModuleText());
         } else {
             settingUpdateView.setmNameView(mSettingModue4.getModuleText());
         }
@@ -1907,8 +1972,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            settingMoreView.setIconView(app.getIcon());
-            settingMoreView.setmNameView(app.getTitle());
+            setCustomQ1SItem(key, pkg, settingMoreView, app, mSettingModue5.getModuleText());
         } else {
 
             settingMoreView.setmNameView(mSettingModue5.getModuleText());
@@ -1946,8 +2010,7 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            settingErweiView.setIconView(app.getIcon());
-            settingErweiView.setmNameView(app.getTitle());
+            setCustomQ1SItem(key, pkg, settingErweiView, app, mSettingModue6.getModuleText());
         }else{
             settingErweiView.setmNameView(mSettingModue6.getModuleText());
         }

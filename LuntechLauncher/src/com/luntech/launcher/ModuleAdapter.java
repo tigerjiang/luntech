@@ -75,8 +75,28 @@ public class ModuleAdapter extends BaseAdapter {
         if (!TextUtils.isEmpty(pkg)) {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
-            holder.appLogoView.setImageDrawable(app.getIcon());
-            holder.mAppLabel.setText(app.getTitle());
+            if(app!=null){
+                holder.appLogoView.setImageDrawable(app.getIcon());
+                holder.mAppLabel.setText(app.getTitle());
+            }else{
+                ToolUtils.clearConfiguredPkg(mContext, pkg);
+                ToolUtils.clearConfiguredPkg(mContext, key);
+                Drawable icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
+                        holder.appLogoView, new ImageCallback() {
+
+                            @Override
+                            public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                                                    String imageUrl) {
+                                imageView.setImageDrawable(imageDrawable);
+                            }
+                        });
+                if (icon == null) {
+                    holder.appLogoView.setImageResource(iconIds.get(position));
+                } else {
+                    holder.appLogoView.setImageDrawable(icon);
+                }
+                holder.mAppLabel.setText(module.getModuleText());
+            }
         } else {
             Drawable icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
                     holder.appLogoView, new ImageCallback() {

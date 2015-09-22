@@ -151,8 +151,8 @@
             <apps>
                 <app>
                     <a_name></a_name>
-                    <a_package>com.luntech.launcher</a_package>
-                    <a_activity>com.luntech.launcher/.secondary.LongTaiAppsGridActivity</a_activity>
+                    <a_package>com.skzh.elifetv</a_package>
+                    <a_activity>com.skzh.elifetv/.ui.GovernInfoActivity</a_activity>
                     <a_icon></a_icon>
                     <a_url></a_url>
                 </app>

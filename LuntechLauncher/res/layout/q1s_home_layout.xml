@@ -43,7 +43,7 @@
         android:layout_height="@dimen/global_ad_layout_height"
         android:layout_below="@+id/middle_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="300dp"
 
         android:layout_marginLeft="300dp"
         android:background="@color/transparent"
