@@ -344,7 +344,7 @@ public class ToolUtils {
                         module.addApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         sDBdao.deleteApp(module.getModuleCode());
-                        for(App a:module.mApps){
+                        for (App a : module.mApps) {
                             sDBdao.deleteApp(a);
                             sDBdao.insertApp(a);
                         }
@@ -451,7 +451,7 @@ public class ToolUtils {
                         module.addApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
                         sDBdao.deleteApp(module.getModuleCode());
-                        for(App a:module.mApps){
+                        for (App a : module.mApps) {
                             sDBdao.deleteApp(a);
                             sDBdao.insertApp(a);
                         }
@@ -532,7 +532,7 @@ public class ToolUtils {
     }
 
 
-    public static  void parseHiddenConfigureFromConfig(final Context context, InputStream is) {
+    public static void parseHiddenConfigureFromConfig(final Context context, InputStream is) {
         StringBuffer hiddenContent = new StringBuffer();
         try {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -565,17 +565,18 @@ public class ToolUtils {
                 }
                 parser.next();
             }
-
+            if (hiddenContent.length() > 0) {
+                String tmp = hiddenContent.toString();
+                String content = tmp.substring(0, tmp.lastIndexOf(","));
+                ToolUtils.storeValueIntoSP(context, "hidden_app", content);
+                Log.d(TAG, "hidden app " + content);
+            }
         } catch (XmlPullParserException e) {
             Log.e(TAG, "XmlPullParserException occurs " + e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.e(TAG, "packagefilter occurs " + e);
         }
-
-        String tmp = hiddenContent.toString();
-        String content = tmp.substring(0,tmp.lastIndexOf(","));
-        ToolUtils.storeValueIntoSP(context, "hidden_app", content);
-        Log.d(TAG, "hidden app " + content);
+;
     }
 
     public static void getCustomConfigureFromConfig(Context context, InputStream is) {
@@ -653,7 +654,7 @@ public class ToolUtils {
         return sp.getString(name, null);
     }
 
-    public static void  clearConfiguredPkg(Context context, String key) {
+    public static void clearConfiguredPkg(Context context, String key) {
         SharedPreferences sp = null;
         if (Launcher.mType.equals(Launcher.Q1S_TYPE)) {
             sp = context.getSharedPreferences(Q1S_CUSTOM_INFO, Context.MODE_PRIVATE);
@@ -901,7 +902,7 @@ public class ToolUtils {
             Intent intent = new Intent();
             intent.setComponent(app.getComponentName());
             String activityName = app.getComponentName().getClassName();
-            if(("com.skzh.elifetv.MainActivity").equals(activityName)){
+            if (("com.skzh.elifetv.MainActivity").equals(activityName)) {
                 intent.putExtra("frag_index", "1");
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="20px"
         android:paddingLeft="@dimen/global_margin_left"
         android:paddingRight="@dimen/global_margin_right"
         android:paddingTop="@dimen/global_margin_top" />
@@ -42,18 +43,17 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/global_ad_layout_height"
         android:layout_below="@+id/middle_layout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="300dp"
-
-        android:layout_marginLeft="300dp"
+        android:layout_marginTop="600dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
         android:background="@color/transparent"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <TextView
             android:id="@+id/feature_menu"
             android:layout_width="match_parent"
             android:layout_height="@dimen/global_ad_layout_height"
-            android:gravity="center|left"
+            android:gravity="center"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:singleLine="true"
