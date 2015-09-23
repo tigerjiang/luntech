@@ -88,6 +88,10 @@ public class ApplicationInfo implements Parcelable, Comparable<ApplicationInfo> 
     public Intent getIntent() {
         final Intent i = Intent.makeMainActivity(mComponent);
         String packageName = mComponent.getPackageName();
+        String activityName = mComponent.getClassName();
+        if(("com.skzh.elifetv.MainActivity").equals(activityName)){
+            intent.putExtra("frag_index", "1");
+        }
         Log.d("AppCenter", "packageName is " + packageName);
         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         return i;
