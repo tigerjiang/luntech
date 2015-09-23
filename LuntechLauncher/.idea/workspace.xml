@@ -51,10 +51,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ToolUtils.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ToolUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/ToolUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.555773">
+            <state vertical-scroll-proportion="0.0">
               <caret line="904" column="51" selection-start-line="904" selection-start-column="51" selection-end-line="904" selection-end-column="51" />
               <folding />
             </state>
@@ -140,11 +140,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ApplicationInfo.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ApplicationInfo.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/secondary/ApplicationInfo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="93" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.481409">
+              <caret line="91" column="27" selection-start-line="91" selection-start-column="27" selection-end-line="91" selection-end-column="27" />
               <folding>
                 <element signature="e#1941#1942#0" expanded="true" />
                 <element signature="e#1979#1980#0" expanded="true" />
@@ -981,8 +981,8 @@
         <option value="$PROJECT_DIR$/res/layout/applications_grid_fragment.xml" />
         <option value="$PROJECT_DIR$/src/com/luntech/launcher/secondary/AppManager.java" />
         <option value="$PROJECT_DIR$/src/com/luntech/launcher/db/DBDao.java" />
-        <option value="$PROJECT_DIR$/src/com/luntech/launcher/secondary/ApplicationInfo.java" />
         <option value="$PROJECT_DIR$/src/com/luntech/launcher/ToolUtils.java" />
+        <option value="$PROJECT_DIR$/src/com/luntech/launcher/secondary/ApplicationInfo.java" />
       </list>
     </option>
   </component>
@@ -1110,6 +1110,28 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="launcher" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LuntechLauncher" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="LuntechLauncher" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="launcher" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="secondary" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1911,17 +1933,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/secondary/ApplicationInfo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="93" selection-end-column="9" />
-          <folding>
-            <element signature="e#1941#1942#0" expanded="true" />
-            <element signature="e#1979#1980#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/IPTVLauncher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1935,9 +1946,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/ToolUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.555773">
+        <state vertical-scroll-proportion="0.0">
           <caret line="904" column="51" selection-start-line="904" selection-start-column="51" selection-end-line="904" selection-end-column="51" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/luntech/launcher/secondary/ApplicationInfo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.481409">
+          <caret line="91" column="27" selection-start-line="91" selection-start-column="27" selection-end-line="91" selection-end-column="27" />
+          <folding>
+            <element signature="e#1941#1942#0" expanded="true" />
+            <element signature="e#1979#1980#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
