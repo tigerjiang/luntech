@@ -342,9 +342,12 @@ public class ToolUtils {
                         //group
                         app.setModuleCode(module.moduleCode);
                         module.addApp(app);
-                        sDBdao.deleteApp(app);
-                        sDBdao.insertApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
+                        sDBdao.deleteApp(module.getModuleCode());
+                        for(App a:module.mApps){
+                            sDBdao.deleteApp(a);
+                            sDBdao.insertApp(a);
+                        }
                         Log.d(TAG, "end apps " + app.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         module.setGroupCode(group.groupCode);
@@ -445,9 +448,13 @@ public class ToolUtils {
                         //group
                         app.setModuleCode(module.moduleCode);
                         Log.d(TAG, "end app " + app.toString());
-                        sDBdao.deleteApp(app);
-                        sDBdao.insertApp(app);
+                        module.addApp(app);
                     } else if (name.equals(App.APPS_TAG)) {
+                        sDBdao.deleteApp(module.getModuleCode());
+                        for(App a:module.mApps){
+                            sDBdao.deleteApp(a);
+                            sDBdao.insertApp(a);
+                        }
                         Log.d(TAG, "end apps " + app.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
                         module.setGroupCode(group.groupCode);
