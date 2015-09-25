@@ -902,9 +902,9 @@ public class ToolUtils {
             Intent intent = new Intent();
             intent.setComponent(app.getComponentName());
             String activityName = app.getComponentName().getClassName();
-            if (("com.skzh.elifetv.MainActivity").equals(activityName)) {
-                intent.putExtra("frag_index", "1");
-            }
+//            if (("com.skzh.elifetv.MainActivity").equals(activityName)) {
+//                intent.putExtra("frag_index", "1");
+//            }
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         } catch (Exception e) {
