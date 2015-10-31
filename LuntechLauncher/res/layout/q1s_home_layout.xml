@@ -51,7 +51,7 @@
 
         <TextView
             android:id="@+id/feature_menu"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/global_ad_layout_height"
             android:gravity="center"
             android:paddingLeft="20dp"

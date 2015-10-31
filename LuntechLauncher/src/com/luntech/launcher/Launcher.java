@@ -47,9 +47,9 @@ public class Launcher extends Activity {
     public static String sPackageName;
     public static int sVersionCode;
     public static final long REQUEST_DELAY_TIME_ONE_MINUTES = 1 * 60 * 1000;
-    public static final long REQUEST_DELAY_TIME_THREE_MINUTES = 3 * 60 * 1000;
-    public static final long REQUEST_DELAY_TIME_FIVE_MINUTES = 5 * 60 * 1000;
-    public static final long REQUEST_DELAY_TIME_SEVEN_MINUTES = 7 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_THREE_MINUTES = 2 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_FIVE_MINUTES = 3 * 60 * 1000;
+    public static final long REQUEST_DELAY_TIME_SEVEN_MINUTES = 4 * 60 * 1000;
     public static final long SHOW_DELAY_TIME = 10 * 1000;
     public static final long DISMISS_DELAY_TIME = 3 * 1000;
     public static long showScreenSaverTime = 5 * 60 * 1000;
