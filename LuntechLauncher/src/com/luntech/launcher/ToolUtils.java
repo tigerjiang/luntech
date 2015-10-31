@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -576,7 +578,7 @@ public class ToolUtils {
         } catch (Exception e) {
             Log.e(TAG, "packagefilter occurs " + e);
         }
-;
+        ;
     }
 
     public static void getCustomConfigureFromConfig(Context context, InputStream is) {
@@ -768,35 +770,55 @@ public class ToolUtils {
         }
     }
 
-    public static Drawable changeIdtoDrawable(Context context, String name) {
-        Drawable icon = null;
+    public static Bitmap changeIdtoDrawable(Context context, String name) {
+        Bitmap icon = null;
         int resId = context.getResources()
                 .getIdentifier(name, "drawable", context.getPackageName());
         if (resId == 0) {
             Log.e("jzh", context.getPackageName() + " resource not found for " + name);
         } else {
-            icon = context.getResources().getDrawable(resId);
+            icon = decodeImageFromId(context,resId);
         }
         return icon;
     }
 
-    public static Drawable changeFiletoDrawable(Context context, String fileName) {
-        Drawable icon = null;
+    public static Bitmap changeFiletoDrawable(Context context, String fileName) {
+        Bitmap icon = null;
         String path = Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.mFilePrefix + "/" + fileName;
         Log.d("jzh", "change path " + path);
         if (!TextUtils.isEmpty(path)) {
-            icon = Drawable.createFromPath(path);
+            icon = decodeImageFromPath(path);
         }
+
         return icon;
     }
 
-    public static Drawable getDrawableFromAttribute(Context context, String attribute) {
+    public static Bitmap getDrawableFromAttribute(Context context, String attribute) {
         if (attribute.endsWith(".png") | attribute.endsWith(".PNG") | attribute.endsWith(".JPG")
                 | attribute.endsWith(".jpg")) {
             return changeFiletoDrawable(context, attribute);
         } else {
             return changeIdtoDrawable(context, attribute);
         }
+    }
+
+    private static Bitmap decodeImageFromPath(String filename) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap bitmap = BitmapFactory.decodeFile(filename, options);
+        return bitmap;
+
+    }
+
+
+    private static Bitmap decodeImageFromId(Context context,int resId) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 2;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),resId, options);
+        return bitmap;
+
     }
 
     /**

@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -186,31 +187,31 @@ public class IPTVLauncher extends Launcher {
         mSecondApp = mModules.get(1);
         mThirdApp = mModules.get(2);
         refreshFeatureMenuView();
-        Drawable icon = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
+        Bitmap icon = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (icon == null) {
             mThumb_1_view.setImageResource(R.drawable.global_thumb_1_logo);
         } else {
-            mThumb_1_view.setImageDrawable(icon);
+            mThumb_1_view.setImageBitmap(icon);
         }
         // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
         // module1.getModuleIcon()));
-        Drawable shadow = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleShadow(), mThumb_1_shadow, new ImageCallback() {
+        Bitmap shadow = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleShadow(), mThumb_1_shadow, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (shadow == null) {
             mThumb_1_shadow.setImageResource(R.drawable.global_thumb_1_shadow);
         } else {
-            mThumb_1_shadow.setImageDrawable(shadow);
+            mThumb_1_shadow.setImageBitmap(shadow);
         }
         mThumb_1_label.setText(mFirstApp.getModuleText());
         mThumb_1_layout.setOnClickListener(new View.OnClickListener() {
@@ -239,31 +240,31 @@ public class IPTVLauncher extends Launcher {
         });
         // mThumb_2_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
         // module2.getModuleIcon()));
-        Drawable icon2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
+        Bitmap icon2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (icon2 == null) {
             mThumb_2_view.setImageResource(R.drawable.global_thumb_2_logo);
         } else {
-            mThumb_2_view.setImageDrawable(icon2);
+            mThumb_2_view.setImageBitmap(icon2);
         }
         // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
         // module1.getModuleIcon()));
-        Drawable shadow2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleShadow(), mThumb_2_shadow, new ImageCallback() {
+        Bitmap shadow2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleShadow(), mThumb_2_shadow, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (shadow2 == null) {
             mThumb_2_shadow.setImageResource(R.drawable.global_thumb_2_shadow);
         } else {
-            mThumb_2_shadow.setImageDrawable(shadow2);
+            mThumb_2_shadow.setImageBitmap(shadow2);
         }
         mThumb_2_label.setText(mSecondApp.getModuleText());
         mThumb_2_layout.setOnClickListener(new View.OnClickListener() {
@@ -285,31 +286,31 @@ public class IPTVLauncher extends Launcher {
             }
         });
 
-        Drawable icon3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
+        Bitmap icon3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (icon3 == null) {
             mThumb_3_view.setImageResource(R.drawable.global_thumb_3_logo);
         } else {
-            mThumb_3_view.setImageDrawable(icon3);
+            mThumb_3_view.setImageBitmap(icon3);
         }
         // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
         // module1.getModuleIcon()));
-        Drawable shadow3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleShadow(), mThumb_3_shadow, new ImageCallback() {
+        Bitmap shadow3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleShadow(), mThumb_3_shadow, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (shadow3 == null) {
             mThumb_3_shadow.setImageResource(R.drawable.global_thumb_3_shadow);
         } else {
-            mThumb_3_shadow.setImageDrawable(shadow3);
+            mThumb_3_shadow.setImageBitmap(shadow3);
         }
         mThumb_3_label.setText(mThirdApp.getModuleText());
         mThumb_3_layout.setOnClickListener(new View.OnClickListener() {

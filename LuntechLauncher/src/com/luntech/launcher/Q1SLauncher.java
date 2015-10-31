@@ -1239,12 +1239,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     //channel
     private void setChannelImView() {
 
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mChannelGroup.getGroupBg(), channelImView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable != null) {
@@ -1252,12 +1252,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             channelImView.setBgView(R.drawable.dianbo1_bg);
         }
-        Drawable cacheDrawable1 =
+        Bitmap cacheDrawable1 =
                 new AsyncImageLoader(mContext).loadDrawable(mChannelGroup.getGroupIcon(), channelImView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable1 != null) {
@@ -1270,12 +1270,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     private void setChannelImViewUnfold() {
 
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mChannelModule.getModuleBg(), channelImView_unfold.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable != null) {
@@ -1303,12 +1303,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     //vod
     private void setVodImView() {
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mVodGroup.getGroupBg(), vodImView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable != null) {
@@ -1316,12 +1316,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             vodImView.setBgView(R.drawable.zhibo1_bg);
         }
-        Drawable cacheDrawable1 =
+        Bitmap cacheDrawable1 =
                 new AsyncImageLoader(mContext).loadDrawable(mVodGroup.getGroupIcon(), vodImView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable1 != null) {
@@ -1334,12 +1334,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setVodImView_unfoldView() {
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mVodModule.getModuleBg(), vodImView_unfold.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable != null) {
@@ -1367,15 +1367,15 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     //app
     private void setApplicationImView() {
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mAppGroup.getGroupBg(), applicationImView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
                         if (imageDrawable != null) {
-                            imageView.setImageDrawable(imageDrawable);
+                            imageView.setImageBitmap(imageDrawable);
                         } else {
-                            imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageView.setImageBitmap(ToolUtils.getDrawableFromAttribute(mContext,
                                     imageUrl));
                         }
                     }
@@ -1385,12 +1385,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             applicationImView.setBgView(R.drawable.yingyong1_bg);
         }
-        Drawable cacheDrawable1 =
+        Bitmap cacheDrawable1 =
                 new AsyncImageLoader(mContext).loadDrawable(mAppGroup.getGroupIcon(), applicationImView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable1 != null) {
@@ -1402,11 +1402,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setApprecomView1() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule1.getModuleBg(), apprecomView1.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule1.getModuleBg(), apprecomView1.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1414,11 +1414,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             apprecomView1.setBgView(R.drawable.apprecom1_bg);
         }
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule1.getModuleIcon(), apprecomView1.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule1.getModuleIcon(), apprecomView1.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1445,11 +1445,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setApprecomView2() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule3.getModuleBg(), apprecomView2.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule3.getModuleBg(), apprecomView2.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1457,11 +1457,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             apprecomView2.setBgView(R.drawable.apprecom2_bg);
         }
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule3.getModuleIcon(), apprecomView2.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule3.getModuleIcon(), apprecomView2.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1490,11 +1490,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setApprecomView3() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule2.getModuleBg(), apprecomView3.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mAppModule2.getModuleBg(), apprecomView3.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1502,11 +1502,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             apprecomView3.setBgView(R.drawable.apprecom3_bg);
         }
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule2.getModuleIcon(), apprecomView3.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mAppModule2.getModuleIcon(), apprecomView3.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1536,15 +1536,15 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     //zhihui
     private void setFavoriteImView() {
 
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mZhihuiGroup.getGroupBg(), favoriteImView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
                         if (imageDrawable != null) {
-                            imageView.setImageDrawable(imageDrawable);
+                            imageView.setImageBitmap(imageDrawable);
                         } else {
-                            imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageView.setImageBitmap(ToolUtils.getDrawableFromAttribute(mContext,
                                     imageUrl));
                         }
                     }
@@ -1554,12 +1554,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             favoriteImView.setBgView(R.drawable.shenghuo1_bg);
         }
-        Drawable cacheDrawable1 =
+        Bitmap cacheDrawable1 =
                 new AsyncImageLoader(mContext).loadDrawable(mZhihuiGroup.getGroupIcon(), favoriteImView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable1 != null) {
@@ -1572,11 +1572,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
     private void setMyFavoriteView() {
 
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule1.getModuleBg(), myFavoriteView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule1.getModuleBg(), myFavoriteView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1585,11 +1585,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             myFavoriteView.setBgView(R.drawable.zhihui1_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule1.getModuleIcon(), myFavoriteView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule1.getModuleIcon(), myFavoriteView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1618,11 +1618,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setPlayhistoryView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule2.getModuleBg(), playhistoryView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule2.getModuleBg(), playhistoryView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1631,11 +1631,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             playhistoryView.setBgView(R.drawable.zhihui2_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule2.getModuleIcon(), playhistoryView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule2.getModuleIcon(), playhistoryView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1667,11 +1667,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
 
 
     private void setFavpersonView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleBg(), favpersonView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleBg(), favpersonView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1680,11 +1680,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             favpersonView.setBgView(R.drawable.zhihui3_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleIcon(), favpersonView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule3.getModuleIcon(), favpersonView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1711,11 +1711,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setLocalView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule4.getModuleBg(), localView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule4.getModuleBg(), localView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1724,11 +1724,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             localView.setBgView(R.drawable.zhihui4_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule4.getModuleIcon(), localView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mZhihuiModule4.getModuleIcon(), localView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1758,12 +1758,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     //setting
     private void setSettingImView() {
 
-        Drawable cacheDrawable =
+        Bitmap cacheDrawable =
                 new AsyncImageLoader(mContext).loadDrawable(mSettingGroup.getGroupBg(), settingImView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable != null) {
@@ -1771,12 +1771,12 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
         } else {
             settingImView.setBgView(R.drawable.shezhi1_bg);
         }
-        Drawable cacheDrawable1 =
+        Bitmap cacheDrawable1 =
                 new AsyncImageLoader(mContext).loadDrawable(mSettingGroup.getGroupIcon(), settingImView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                        imageView.setImageDrawable(imageDrawable);
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                        imageView.setImageBitmap(imageDrawable);
                     }
                 });
         if (cacheDrawable1 != null) {
@@ -1789,11 +1789,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingBaseView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue1.getModuleBg(), settingBaseView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue1.getModuleBg(), settingBaseView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1802,11 +1802,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             settingBaseView.setBgView(R.drawable.setting_item_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue1.getModuleIcon(), settingBaseView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue1.getModuleIcon(), settingBaseView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1828,11 +1828,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingDispalyView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue2.getModuleBg(), settingDispalyView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue2.getModuleBg(), settingDispalyView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1841,11 +1841,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             settingDispalyView.setBgView(R.drawable.setting_item_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue2.getModuleIcon(), settingDispalyView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue2.getModuleIcon(), settingDispalyView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1867,11 +1867,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingNetView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue3.getModuleBg(), settingNetView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue3.getModuleBg(), settingNetView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1880,11 +1880,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             settingNetView.setBgView(R.drawable.setting_item_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue3.getModuleIcon(), settingNetView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue3.getModuleIcon(), settingNetView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1905,11 +1905,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingUpdateView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue4.getModuleBg(), settingUpdateView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue4.getModuleBg(), settingUpdateView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1918,11 +1918,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             settingUpdateView.setBgView(R.drawable.setting_item_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue4.getModuleIcon(), settingUpdateView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue4.getModuleIcon(), settingUpdateView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1942,11 +1942,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingMoreView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue5.getModuleBg(), settingMoreView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue5.getModuleBg(), settingMoreView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1955,11 +1955,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             settingMoreView.setBgView(R.drawable.setting_item_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue5.getModuleIcon(), settingMoreView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue5.getModuleIcon(), settingMoreView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {
@@ -1980,11 +1980,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
     }
 
     private void setSettingErweiView() {
-        Drawable cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue6.getModuleBg(), settingErweiView.getBgView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable = new AsyncImageLoader(mContext).loadDrawable(mSettingModue6.getModuleBg(), settingErweiView.getBgView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable != null) {
@@ -1993,11 +1993,11 @@ public class Q1SLauncher extends Launcher implements View.OnFocusChangeListener,
             settingErweiView.setBgView(R.drawable.setting_item_bg);
         }
 
-        Drawable cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue6.getModuleIcon(), settingErweiView.getIconView(), new AsyncImageLoader.ImageCallback() {
+        Bitmap cacheDrawable1 = new AsyncImageLoader(mContext).loadDrawable(mSettingModue6.getModuleIcon(), settingErweiView.getIconView(), new AsyncImageLoader.ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (cacheDrawable1 != null) {

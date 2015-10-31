@@ -1,6 +1,7 @@
 package com.luntech.launcher.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -42,16 +43,16 @@ public class GroupItem extends RelativeLayout {
     }
 
 
-    public void setBgView(Drawable drawable) {
-        mBgView.setImageDrawable(drawable);
+    public void setBgView(Bitmap drawable) {
+        mBgView.setImageBitmap(drawable);
     }
 
     public void setBgView(int drawableId) {
         mBgView.setImageResource(drawableId);
     }
 
-    public void setIconView(Drawable drawable) {
-        mIconView.setImageDrawable(drawable);
+    public void setIconView(Bitmap drawable) {
+        mIconView.setImageBitmap(drawable);
     }
 
     public void setIconView(int drawableId) {

@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -73,16 +74,16 @@ public class CategoryItemAdapter extends BaseAdapter {
         if (!TextUtils.isEmpty(pkg)) {
             holder.appLogoView.setImageDrawable(module.moduleIconDrawable);
         } else {
-            Drawable icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
+            Bitmap icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
                     holder.appLogoView, new ImageCallback() {
 
                         @Override
-                        public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                        public void imageLoaded(Bitmap imageDrawable, ImageView imageView,
                                 String imageUrl) {
                             if (imageDrawable != null) {
-                                imageView.setImageDrawable(imageDrawable);
+                                imageView.setImageBitmap(imageDrawable);
                             } else {
-                                imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(
+                                imageView.setImageBitmap(ToolUtils.getDrawableFromAttribute(
                                         mContext, imageUrl));
                             }
                         }
@@ -91,11 +92,11 @@ public class CategoryItemAdapter extends BaseAdapter {
         asyncImageLoader.loadDrawable(module.getModuleBg(), holder.appBgView, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
                 if (imageDrawable != null) {
-                    imageView.setImageDrawable(imageDrawable);
+                    imageView.setImageBitmap(imageDrawable);
                 } else {
-                    imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                    imageView.setImageBitmap(ToolUtils.getDrawableFromAttribute(mContext,
                             imageUrl));
                 }
             }
@@ -104,12 +105,12 @@ public class CategoryItemAdapter extends BaseAdapter {
                 new ImageCallback() {
 
                     @Override
-                    public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                    public void imageLoaded(Bitmap imageDrawable, ImageView imageView,
                             String imageUrl) {
                         if (imageDrawable != null) {
-                            imageView.setImageDrawable(imageDrawable);
+                            imageView.setImageBitmap(imageDrawable);
                         } else {
-                            imageView.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
+                            imageView.setImageBitmap(ToolUtils.getDrawableFromAttribute(mContext,
                                     imageUrl));
                         }
                     }

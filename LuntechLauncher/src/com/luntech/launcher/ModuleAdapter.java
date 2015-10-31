@@ -2,6 +2,7 @@
 package com.luntech.launcher;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -81,50 +82,50 @@ public class ModuleAdapter extends BaseAdapter {
             }else{
                 ToolUtils.clearConfiguredPkg(mContext, pkg);
                 ToolUtils.clearConfiguredPkg(mContext, key);
-                Drawable icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
+                Bitmap icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
                         holder.appLogoView, new ImageCallback() {
 
                             @Override
-                            public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                            public void imageLoaded(Bitmap imageDrawable, ImageView imageView,
                                                     String imageUrl) {
-                                imageView.setImageDrawable(imageDrawable);
+                                imageView.setImageBitmap(imageDrawable);
                             }
                         });
                 if (icon == null) {
                     holder.appLogoView.setImageResource(iconIds.get(position));
                 } else {
-                    holder.appLogoView.setImageDrawable(icon);
+                    holder.appLogoView.setImageBitmap(icon);
                 }
                 holder.mAppLabel.setText(module.getModuleText());
             }
         } else {
-            Drawable icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
+            Bitmap icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
                     holder.appLogoView, new ImageCallback() {
 
                         @Override
-                        public void imageLoaded(Drawable imageDrawable, ImageView imageView,
+                        public void imageLoaded(Bitmap imageDrawable, ImageView imageView,
                                                 String imageUrl) {
-                            imageView.setImageDrawable(imageDrawable);
+                            imageView.setImageBitmap(imageDrawable);
                         }
                     });
             if (icon == null) {
                 holder.appLogoView.setImageResource(iconIds.get(position));
             } else {
-                holder.appLogoView.setImageDrawable(icon);
+                holder.appLogoView.setImageBitmap(icon);
             }
             holder.mAppLabel.setText(module.getModuleText());
         }
-        Drawable bg = asyncImageLoader.loadDrawable(module.getModuleBg(), holder.appBgView, new ImageCallback() {
+        Bitmap bg = asyncImageLoader.loadDrawable(module.getModuleBg(), holder.appBgView, new ImageCallback() {
 
             @Override
-            public void imageLoaded(Drawable imageDrawable, ImageView imageView, String imageUrl) {
-                imageView.setImageDrawable(imageDrawable);
+            public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
+                imageView.setImageBitmap(imageDrawable);
             }
         });
         if (bg == null) {
             holder.appBgView.setImageResource(bgIds.get(position));
         } else {
-            holder.appBgView.setImageDrawable(bg);
+            holder.appBgView.setImageBitmap(bg);
         }
 
         return convertView;

@@ -86,7 +86,7 @@ public class ImageUtil {
 		return toRoundCorner(bitmapDrawable, pixels);
 	} 
 
-    public static Drawable geRoundDrawableFromPath(String path, Context context) throws Exception {
+    public static Bitmap geRoundDrawableFromPath(String path, Context context) throws Exception {
        return  ToolUtils.getDrawableFromAttribute(context,path);
     }
 
