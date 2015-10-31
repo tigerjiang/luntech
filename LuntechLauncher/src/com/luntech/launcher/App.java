@@ -69,8 +69,12 @@ public class App {
     public void setAppActivity(String appActivity) {
         this.appActivity = appActivity;
         if (!TextUtils.isEmpty(appActivity)) {
-            String[] info = this.appActivity.split("/");
-            setComponentName(new ComponentName(info[0], info[0] + info[1]));
+            try {
+                String[] info = this.appActivity.split("/");
+                setComponentName(new ComponentName(info[0], info[0] + info[1]));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
 
         } else {
             Logger.e("activity is null");

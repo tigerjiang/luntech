@@ -459,6 +459,7 @@ public class ToolUtils {
                         }
                         Log.d(TAG, "end apps " + app.toString());
                     } else if (name.equals(Module.MODULE_TAG)) {
+                        Log.d(TAG, "end module " + module.toString());
                         module.setGroupCode(group.groupCode);
                         sDBdao.deleteModule(module);
                         sDBdao.insertModule(module);

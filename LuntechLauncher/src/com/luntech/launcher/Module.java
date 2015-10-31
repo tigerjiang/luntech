@@ -200,7 +200,7 @@ public class Module {
 
     @Override
     public String toString() {
-        return "Module [mApps=" + mApps + ", moduleCode=" + moduleCode + ", moduleReplace="
+        return "Module [ moduleCode=" + moduleCode + ", moduleReplace="
                 + moduleReplace + ", moduleType=" + moduleType + ", moduleShowText="
                 + moduleText + ", moduleBg=" + moduleBg + ", moduleIcon=" + moduleIcon
                 + ", moduleShadow=" + moduleShadow + "]";
