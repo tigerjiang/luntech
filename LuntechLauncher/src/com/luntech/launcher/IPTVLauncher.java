@@ -187,7 +187,7 @@ public class IPTVLauncher extends Launcher {
         mSecondApp = mModules.get(1);
         mThirdApp = mModules.get(2);
         refreshFeatureMenuView();
-        Bitmap icon = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleIcon(), mThumb_1_view, new ImageCallback() {
+        Bitmap icon = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleBg(), mThumb_1_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
@@ -200,7 +200,6 @@ public class IPTVLauncher extends Launcher {
             mThumb_1_view.setImageBitmap(icon);
         }
         // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-        // module1.getModuleIcon()));
         Bitmap shadow = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleShadow(), mThumb_1_shadow, new ImageCallback() {
 
             @Override
@@ -239,8 +238,7 @@ public class IPTVLauncher extends Launcher {
             }
         });
         // mThumb_2_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-        // module2.getModuleIcon()));
-        Bitmap icon2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleIcon(), mThumb_2_view, new ImageCallback() {
+        Bitmap icon2 = new AsyncImageLoader(mContext).loadDrawable(mSecondApp.getModuleBg(), mThumb_2_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
@@ -286,7 +284,7 @@ public class IPTVLauncher extends Launcher {
             }
         });
 
-        Bitmap icon3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleIcon(), mThumb_3_view, new ImageCallback() {
+        Bitmap icon3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleBg(), mThumb_3_view, new ImageCallback() {
 
             @Override
             public void imageLoaded(Bitmap imageDrawable, ImageView imageView, String imageUrl) {
@@ -299,7 +297,6 @@ public class IPTVLauncher extends Launcher {
             mThumb_3_view.setImageBitmap(icon3);
         }
         // mThumb_1_view.setImageDrawable(ToolUtils.getDrawableFromAttribute(mContext,
-        // module1.getModuleIcon()));
         Bitmap shadow3 = new AsyncImageLoader(mContext).loadDrawable(mThirdApp.getModuleShadow(), mThumb_3_shadow, new ImageCallback() {
 
             @Override

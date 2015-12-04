@@ -37,7 +37,7 @@ public class GeneralSettingFragment extends Fragment {
     private ListView mTvGeneralListView;
     private List<String> mItems;
     private Context mContext;
-    private List<String> mTimes;
+//    private List<String> mTimes;
     private List<String> mThemes;
 
 
@@ -67,42 +67,44 @@ public class GeneralSettingFragment extends Fragment {
         mTvGeneralListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
-                int index = mTimes.indexOf(time);
+//                String time = ToolUtils.getCommonValueFromSP(mContext, "saver_time");
+//                int index = mTimes.indexOf(time);
+
+//                if (position == 0) {
+//                    new AlertDialog.Builder(mContext).setSingleChoiceItems(R.array.screensaver_array, index, new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Launcher.sCloseScreenSaver = false;
+//                                    if (which == 0) {
+//                                        Launcher.sCloseScreenSaver = true;
+//                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(0));
+//                                    } else if (which == 1) {
+//                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(1));
+//                                    } else if (which == 2) {
+//                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(2));
+//                                    } else if (which == 3) {
+//                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(3));
+//                                    }
+//                                    Launcher.showScreenSaverTime = (which) * 5 * 60 * 1000;
+//                                    dialog.dismiss();
+//                                }
+//                            }
+//                    ).create().show();
+//                } else if (position == 1) {
+//                    Toast.makeText(getActivity(), R.string.no_permission, Toast.LENGTH_SHORT).show();
+//                } else if (position == 2) {
+//                    String selectAlert = getString(R.string.select_alert);
+//                    Intent intent = new Intent();
+//                    intent.setAction(Intent.ACTION_MAIN);
+//                    intent.addCategory(Intent.CATEGORY_HOME);
+//                    Intent intent2 = new Intent();
+//                    intent2.setAction(Intent.ACTION_CHOOSER);
+//                    intent2.putExtra(Intent.EXTRA_TITLE, selectAlert);
+//                    intent2.putExtra(Intent.EXTRA_INTENT, intent);
+//                    startActivity(intent2);
+//                } else
 
                 if (position == 0) {
-                    new AlertDialog.Builder(mContext).setSingleChoiceItems(R.array.screensaver_array, index, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Launcher.sCloseScreenSaver = false;
-                                    if (which == 0) {
-                                        Launcher.sCloseScreenSaver = true;
-                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(0));
-                                    } else if (which == 1) {
-                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(1));
-                                    } else if (which == 2) {
-                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(2));
-                                    } else if (which == 3) {
-                                        ToolUtils.storeCommonValueIntoSP(mContext, "saver_time", mTimes.get(3));
-                                    }
-                                    Launcher.showScreenSaverTime = (which) * 5 * 60 * 1000;
-                                    dialog.dismiss();
-                                }
-                            }
-                    ).create().show();
-                } else if (position == 1) {
-                    Toast.makeText(getActivity(), R.string.no_permission, Toast.LENGTH_SHORT).show();
-                } else if (position == 2) {
-                    String selectAlert = getString(R.string.select_alert);
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    Intent intent2 = new Intent();
-                    intent2.setAction(Intent.ACTION_CHOOSER);
-                    intent2.putExtra(Intent.EXTRA_TITLE, selectAlert);
-                    intent2.putExtra(Intent.EXTRA_INTENT, intent);
-                    startActivity(intent2);
-                } else if (position == 3) {
                     String theme = ToolUtils.getCommonValueFromSP(mContext, "theme");
                     if (TextUtils.isEmpty(theme)) {
                         ToolUtils.storeCommonValueIntoSP(mContext, "theme", "IPTV");
@@ -133,10 +135,10 @@ public class GeneralSettingFragment extends Fragment {
                             }
                     ).create().show();
 
-                } else if (position == 4) {
+                } else if (position == 1) {
                     Intent intent = new Intent(mContext, SetCity.class);
                     startActivity(intent);
-                } else if (position == 5) {
+                } else if (position == 2) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setMessage(R.string.reboot_alert);
                     builder.setPositiveButton(R.string.ok,
@@ -180,9 +182,9 @@ public class GeneralSettingFragment extends Fragment {
         mItems = new ArrayList<String>();
         mItems = Arrays.asList(array);
 
-        String[] arrayTime = getResources().getStringArray(R.array.screensaver_array);
-        mTimes = new ArrayList<String>();
-        mTimes = Arrays.asList(arrayTime);
+//        String[] arrayTime = getResources().getStringArray(R.array.screensaver_array);
+//        mTimes = new ArrayList<String>();
+//        mTimes = Arrays.asList(arrayTime);
         String[] arrayTheme = getResources().getStringArray(R.array.theme_array);
         mThemes = new ArrayList<String>();
         mThemes = Arrays.asList(arrayTheme);

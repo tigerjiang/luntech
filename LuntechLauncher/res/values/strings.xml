@@ -211,9 +211,6 @@
 
 
     <string-array name="general_item">
-        <item>屏保设置</item>
-        <item>修改默认桌面</item>
-        <item>选择桌面</item>
         <item>更换主题</item>
         <item>选择城市</item>
         <item>恢复默认设置</item>

@@ -61,7 +61,6 @@ public class ModuleAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = mLayoutInflater.inflate(R.layout.global_category_item, null);
             holder.appBgView = (ImageView) convertView.findViewById(R.id.app_bg);
-            holder.appLogoView = (ImageView) convertView.findViewById(R.id.app_logo);
             holder.mAppLabel = (TextView) convertView.findViewById(R.id.app_label);
 
             convertView.setTag(holder);
@@ -77,42 +76,13 @@ public class ModuleAdapter extends BaseAdapter {
             AppManager appManager = AppManager.getInstance();
             ApplicationInfo app = appManager.getInfoFromAllActivitys(pkg);
             if(app!=null){
-                holder.appLogoView.setImageDrawable(app.getIcon());
                 holder.mAppLabel.setText(app.getTitle());
             }else{
                 ToolUtils.clearConfiguredPkg(mContext, pkg);
                 ToolUtils.clearConfiguredPkg(mContext, key);
-                Bitmap icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
-                        holder.appLogoView, new ImageCallback() {
-
-                            @Override
-                            public void imageLoaded(Bitmap imageDrawable, ImageView imageView,
-                                                    String imageUrl) {
-                                imageView.setImageBitmap(imageDrawable);
-                            }
-                        });
-                if (icon == null) {
-                    holder.appLogoView.setImageResource(iconIds.get(position));
-                } else {
-                    holder.appLogoView.setImageBitmap(icon);
-                }
                 holder.mAppLabel.setText(module.getModuleText());
             }
         } else {
-            Bitmap icon = asyncImageLoader.loadDrawable(module.getModuleIcon(),
-                    holder.appLogoView, new ImageCallback() {
-
-                        @Override
-                        public void imageLoaded(Bitmap imageDrawable, ImageView imageView,
-                                                String imageUrl) {
-                            imageView.setImageBitmap(imageDrawable);
-                        }
-                    });
-            if (icon == null) {
-                holder.appLogoView.setImageResource(iconIds.get(position));
-            } else {
-                holder.appLogoView.setImageBitmap(icon);
-            }
             holder.mAppLabel.setText(module.getModuleText());
         }
         Bitmap bg = asyncImageLoader.loadDrawable(module.getModuleBg(), holder.appBgView, new ImageCallback() {
@@ -132,7 +102,6 @@ public class ModuleAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView appLogoView;
         ImageView appBgView;
         TextView mAppLabel;
     }
@@ -159,13 +128,6 @@ public class ModuleAdapter extends BaseAdapter {
     }
 
     static {
-        iconIds.add(R.drawable.categore_app_1_logo);
-        iconIds.add(R.drawable.categore_app_2_logo);
-        iconIds.add(R.drawable.categore_app_3_logo);
-        iconIds.add(R.drawable.categore_app_4_logo);
-        iconIds.add(R.drawable.categore_app_5_logo);
-        iconIds.add(R.drawable.categore_app_6_logo);
-        iconIds.add(R.drawable.categore_app_7_logo);
         bgIds.add(R.drawable.categore_app_1_bg);
         bgIds.add(R.drawable.categore_app_2_bg);
         bgIds.add(R.drawable.categore_app_3_bg);

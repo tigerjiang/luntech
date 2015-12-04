@@ -169,8 +169,8 @@ public class LauncherService extends Service {
                         String screensaver_url = HttpUtils.HTTP_SCREEN_SAVER_URL;
                         Logger.e("request url " + screensaver_url);
                         // capture the category config
-                        new FetchTask(screensaver_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.SCREENSAVER_CONFIGURE_FILE,
-                                LauncherHandler.RETURN_SCREENSAVER_CONFIG_CODE).execute();
+//                        new FetchTask(screensaver_url, Launcher.DOWNLOAD_TO_PATH + "/" + Launcher.SCREENSAVER_CONFIGURE_FILE,
+//                                LauncherHandler.RETURN_SCREENSAVER_CONFIG_CODE).execute();
 
                     } else if (Launcher.CAPTURE_UPDATE_CONFIGURE_ACTION.equals(action)) {
                         String update_url = HttpUtils.HTTP_UPDATE_APP_URL + commonArg;
@@ -185,7 +185,7 @@ public class LauncherService extends Service {
                         mLauncherHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                parseScreenSaverCover();
+//                                parseScreenSaverCover();
                             }
                         });
                     } else if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
@@ -219,21 +219,21 @@ public class LauncherService extends Service {
 
                         @Override
                         public void run() {
-                            getScreenSaverFromConfig(mContext,
-                                    new ByteArrayInputStream(mResult.getBytes()));
+//                            getScreenSaverFromConfig(mContext,
+//                                    new ByteArrayInputStream(mResult.getBytes()));
                         }
                     }).start();
                     break;
-                case START_SCREEN_SAVER:
-                    Log.d("show", "SHOW_SCREEN_SAVER");
-                    if(ToolUtils.isApplicationBroughtToBackground(mContext)){
-                        Log.d(TAG,"current task is background. can't show screensaver");
-                    }else{
-                        Intent saverIntent = new Intent(mContext, ScreenSaverActivity.class);
-                        saverIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(saverIntent);
-                    }
-                    break;
+//                case START_SCREEN_SAVER:
+//                    Log.d("show", "SHOW_SCREEN_SAVER");
+//                    if(ToolUtils.isApplicationBroughtToBackground(mContext)){
+//                        Log.d(TAG,"current task is background. can't show screensaver");
+//                    }else{
+//                        Intent saverIntent = new Intent(mContext, ScreenSaverActivity.class);
+//                        saverIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                        startActivity(saverIntent);
+//                    }
+//                    break;
                 case RETURN_HIDDEN_CONFIG_CODE:
                     ToolUtils.parseHiddenConfigureFromConfig(mContext,
                             new ByteArrayInputStream(mResult.getBytes()));
@@ -401,7 +401,7 @@ public class LauncherService extends Service {
                             if (time.equals(storeTime)) {
                                 Log.d(TAG, "Desn't need get config from server,Beacuse of the time is same as local "
                                         + storeTime);
-                                break;
+                                return;
                             } else {
                                 ToolUtils.storeValueIntoSP(context, CustomApplication.TIME_TAG,
                                         time);

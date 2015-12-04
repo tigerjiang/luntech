@@ -266,8 +266,8 @@
                 <action android:name="com.luntech.action.GET_APP" />
                 <action android:name="com.luntech.action.GET_UPDATE" />
                 <action android:name="com.luntech.action.GET_AD" />
-                <action android:name="com.luntech.action.GEAT_SAVER" />
-                <action android:name="com.luntech.action.SHOW_SAVER" />
+<!--                <action android:name="com.luntech.action.GEAT_SAVER" />
+                <action android:name="com.luntech.action.SHOW_SAVER" />-->
                 <action android:name="com.luntech.action.START"/>
                 <action android:name="com.luntech.action.HIDDEN_APP"/>
 

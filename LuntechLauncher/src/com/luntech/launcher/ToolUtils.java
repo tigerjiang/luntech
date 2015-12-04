@@ -552,7 +552,7 @@ public class ToolUtils {
                             if (time.equals(storeTime)) {
                                 Logger.d("Desn't need get config from server,Beacuse of the time is same as local "
                                         + storeTime);
-                                break;
+                                return;
                             } else {
                                 ToolUtils.storeValueIntoSP(context, "hidden_time", time);
                             }
