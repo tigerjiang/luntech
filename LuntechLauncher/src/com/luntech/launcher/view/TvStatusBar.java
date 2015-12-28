@@ -577,6 +577,9 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
             String url = "http://apis.baidu.com/apistore/weatherservice/cityname";
             String httpArg = "cityname=" + URLEncoder.encode(mCity);
             String jasonResult = requestWeather(url, httpArg);
+            if(TextUtils.isEmpty(jasonResult)){
+                return ;
+            }
             try {
                 JSONObject jb = new JSONObject(jasonResult);
                 Log.d(TAG, "weather " + jasonResult);
@@ -584,7 +587,16 @@ public class TvStatusBar extends RelativeLayout implements INetworkStatusListene
                 String errMessage = jb.getString("errMsg");
                 JSONObject jb1 = jb.getJSONObject("retData");
                 WeatherForm weather = new WeatherForm();
-                weather.setTemp(jb1.getString("l_tmp") + "℃" + "-" + jb1.getString("h_tmp") + "℃");
+                 String l_tmp = jb1.getString("l_tmp");
+                String h_tmp = jb1.getString("h_tmp");
+                StringBuilder sb = new StringBuilder();
+                if(!TextUtils.isEmpty(l_tmp)){
+                    sb.append(l_tmp).append("℃").append("-");
+                }
+                if(!TextUtils.isEmpty(h_tmp)){
+                    sb.append(h_tmp).append("℃");
+                }
+                weather.setTemp(sb.toString());
                 weather.setWeather(jb1.getString(URLDecoder.decode("weather")));
                 weather.setDdate(jb1.getString("date"));
                 weather.setName(jb1.getString(URLDecoder.decode("city")));

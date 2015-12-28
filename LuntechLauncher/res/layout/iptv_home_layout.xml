@@ -58,6 +58,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/global_text_size_large"
                 android:visibility="visible" />
+         <requestFocus />
         </RelativeLayout>
 
         <RelativeLayout

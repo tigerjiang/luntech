@@ -62,6 +62,7 @@ public class SettingActivity extends Activity implements OnClickListener {
         try {
             Intent pickIntent = new Intent();
             pickIntent.setClassName(pkName, className);
+            pickIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(pickIntent);
         } catch (Exception e) {
             e.printStackTrace();

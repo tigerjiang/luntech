@@ -152,12 +152,24 @@ public class Launcher extends Activity {
         }
         themeIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(themeIntent);
-        sendBroadcast(new Intent(APP_START_ACTION));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        try {
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (mStatusBar != null) {
+                        mStatusBar.searchWeather(getUserCity());
+                    }
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -185,9 +197,7 @@ public class Launcher extends Activity {
     protected void initPrecondition() {
 
 
-        if (!HttpUtils.checkConnectivity(mContext)) {
-            return;
-        }
+        if (HttpUtils.checkConnectivity(mContext)) {
 
         final Handler handler = new Handler();
         if (sIsConnectedToServer) {
@@ -238,10 +248,11 @@ public class Launcher extends Activity {
         }, REQUEST_DELAY_TIME_SEVEN_MINUTES);
 
     }
-
+}
 
     protected void parseGroupsFromDB() {
         mGroups = mdao.fetchGroups(mType.toUpperCase());
+        Log.d(TAG,"size "+mGroups.size());
         if (mGroups != null && mGroups.size() > 0) {
 
         } else {
@@ -316,19 +327,6 @@ public class Launcher extends Activity {
 
     @Override
     protected void onResume() {
-        try {
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    if (mStatusBar != null) {
-                        mStatusBar.searchWeather(getUserCity());
-                    }
-                }
-            }).start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         super.onResume();
     }
 

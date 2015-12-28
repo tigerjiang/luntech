@@ -54,8 +54,6 @@ public class LauncherService extends Service {
         Log.d(TAG, "The service is onCreate.");
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         mContext = LauncherApplication.getAppContext();
-        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME, 1);
-        Settings.Global.putInt(mContext.getContentResolver(), KEY_AUTO_TIME_ZONE, 1);
         super.onCreate();
     }
 

@@ -14,15 +14,15 @@
         android:src="@drawable/iptv_logo" >
     </ImageView>
 
-
-    <ImageView
+       <ImageView
         android:id="@+id/luntech_icon"
-        android:layout_width="35px"
+        android:layout_alignTop="@+id/iptv_icon"
+        android:layout_width="168px"
         android:layout_height="54px"
         android:layout_toRightOf="@+id/iptv_icon"
         android:layout_marginLeft="@dimen/global_horizontal_devider_height"
         android:layout_centerVertical="true"
-        android:scaleType="fitCenter"
+        android:scaleType="centerInside"
         android:src="@drawable/luntech_logo" >
     </ImageView>
 
@@ -38,7 +38,6 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="@dimen/global_vertical_devider_height_1"
             android:layout_alignParentRight="true"
             android:gravity="center"
             android:singleLine="true"

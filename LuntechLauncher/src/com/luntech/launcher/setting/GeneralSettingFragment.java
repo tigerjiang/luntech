@@ -128,7 +128,7 @@ public class GeneralSettingFragment extends Fragment {
                                         themeIntent.setClass(mContext, Q1SLauncher.class);
                                     }
                                     getActivity().finish();
-                                    themeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    themeIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(themeIntent);
                                     dialog.dismiss();
                                 }

@@ -80,8 +80,18 @@ public class IPTVLauncher extends Launcher {
         initParams();
         parseGroupsFromDB();
         initView();
-        initScreenSaverTime();
         initPrecondition();
+        boolean hasFocused = mThumb_1_layout.requestFocus();
+        Log.d(TAG,"focus " +hasFocused);
+        mThumb_1_layout.postDelayed((new Runnable() {
+            @Override
+            public void run() {
+               boolean hasFocused =  mThumb_1_layout.requestFocus();
+                mThumb_1_layout.setActivated(true);
+                boolean hasFocused1 =  mThumb_1_layout.requestFocusFromTouch();
+                Log.d(TAG,"focuse 3" + hasFocused + " "+hasFocused );
+            }
+        }),500);
     }
 
 
@@ -94,6 +104,8 @@ public class IPTVLauncher extends Launcher {
     private void initView() {
         mRootView = (RelativeLayout) findViewById(R.id.rootview_layout);
         mStatusBar = (TvStatusBar) findViewById(R.id.status_layout);
+        //mStatusBar.setFocusable(false);
+        //mStatusBar.setFocusableInTouchMode(false);
         mThumb_1_layout = (RelativeLayout) findViewById(R.id.thumb_1_layout);
         mFeatureView = (TextView) findViewById(R.id.feature_menu);
         mFeatureMenuLayout = (LinearLayout) findViewById(R.id.feature_layout);
@@ -187,6 +199,8 @@ public class IPTVLauncher extends Launcher {
         mSecondApp = mModules.get(1);
         mThirdApp = mModules.get(2);
         refreshFeatureMenuView();
+        boolean hasFocused = mThumb_1_layout.requestFocus();
+        Log.d(TAG,"focus 2" +hasFocused);
         Bitmap icon = new AsyncImageLoader(mContext).loadDrawable(mFirstApp.getModuleBg(), mThumb_1_view, new ImageCallback() {
 
             @Override
@@ -439,7 +453,7 @@ public class IPTVLauncher extends Launcher {
                 return true;
             }
         }
-        return super.onKeyDown(keyCode, event);
+        return true;//super.onKeyDown(keyCode, event);
     }
 
     public void setResult(ApplicationInfo app, boolean isSelected) {
@@ -594,6 +608,10 @@ public class IPTVLauncher extends Launcher {
 
     }
 
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event){
+      return true;
+    }   
     private void initParams() {
         mCategoryFile = getCategoryFileName();
         mFilePrefix = getFilePrefix();
